@@ -1,0 +1,3208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lisa Vandros Tendo</title>
+<meta name="description" content="Lisa Vandros Tendo: UI/UX designer, curious about AI and technology.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;500;800&display=swap" rel="stylesheet">
+<style>
+  /* Colors: white, black and one blue */
+  :root {
+    --bg: #ffffff;
+    --ink: #000000;
+    --accent: #089FDA;
+    --muted: #5B5B5B;
+    --line: #E2E2E2;
+    --soft: #F0F0F0;
+    --purple: #6D4FE0;     /* the banner mixes this with the blue */
+    --pink: #FF78BE;       /* a glow in the banner */
+    --gold: #E8B93A;       /* the gold shapes in the banner */
+    --gold-light: #F8E08E;
+    --radius: 12px;        /* pictures and covers */
+    --radius-lg: 28px;     /* the banner */
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  [hidden] { display: none !important; }
+
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+  /* ---------- Gold shapes on the page background ---------- */
+  .page-gold { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  .page-gold span { position: absolute; display: block; }
+  .pg-star,
+  .pg-diamond,
+  .pg-dot { background: linear-gradient(135deg, var(--gold-light), var(--gold)); }
+  .pg-star { clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
+  .pg-dot { border-radius: 50%; }
+  .pg-ring { border: 2px solid var(--gold); border-radius: 50%; opacity: .9; }
+  .pg-diamond { transform: rotate(45deg); }
+  main, footer { position: relative; z-index: 1; }
+
+  /* ---------- Header ---------- */
+  .site {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: .5rem 2rem;
+    padding: 2rem clamp(1rem, 4vw, 3rem);
+  }
+
+  .brand {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: clamp(1.1rem, 1.7vw, 1.4rem);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  .site nav { display: flex; flex-wrap: wrap; gap: .25rem 1.75rem; }
+  .site nav a {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 500;
+    padding: .2rem 0;
+    border-bottom: 3px solid transparent;
+  }
+  .site nav a { transition: color .15s ease, border-color .15s ease; }
+  .site nav a:hover { color: #C8961A; border-bottom-color: var(--gold); }   /* gold when you point at a page */
+  .site nav a[aria-current="page"] { border-bottom-color: var(--accent); }
+
+  /* ---------- Pages ---------- */
+  main { padding: clamp(1.75rem, 5vw, 3.5rem) clamp(1rem, 4vw, 3rem) 5rem; }   /* more space under the header */
+
+  h1 {
+    margin: 0 0 clamp(1rem, 3vw, 2rem);
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .empty { color: var(--muted); max-width: 60ch; }
+
+  /* ---------- Banner (top of the projects page) ---------- */
+  .banner {
+    position: relative;
+    overflow: hidden;              /* clips the gold shapes to the rounded corners */
+    isolation: isolate;
+    border-radius: var(--radius-lg);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: end;
+    gap: 1rem clamp(1.5rem, 5vw, 3rem);
+    min-height: min(34vh, 15rem);
+    margin: 0 0 clamp(2rem, 5vw, 3.5rem);        /* space between the banner and what comes below */
+    padding: clamp(1rem, 3vw, 1.75rem);
+    background:
+      radial-gradient(circle at 80% 6%, rgba(255,120,190,.85) 0, rgba(255,120,190,0) 38%),
+      radial-gradient(circle at 98% 100%, rgba(255,120,190,.55) 0, rgba(255,120,190,0) 30%),
+      linear-gradient(100deg, var(--purple) 0%, #5E6BE6 40%, var(--accent) 100%);
+    color: #fff;
+  }
+  .banner-copy,
+  .banner-photo { position: relative; z-index: 1; }
+
+  /* Gold shapes in the background of the banner */
+  .gold { position: absolute; z-index: 0; pointer-events: none; }
+  .gold-ring {
+    right: -2.5rem;
+    top: -4.5rem;
+    width: 14rem;
+    height: 14rem;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    opacity: .9;
+  }
+  .gold-dot {
+    right: 30%;
+    bottom: 1.25rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  }
+  .gold-star {
+    right: 38%;
+    top: 1.25rem;
+    width: 2rem;
+    height: 2rem;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  }
+  .banner-title {
+    margin: 0 0 1.1rem;
+    max-width: 30ch;
+    font-size: clamp(1.35rem, 2.8vw, 2.05rem);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+  }
+  .banner-text {
+    margin: 0 0 1.6rem;
+    max-width: 52ch;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  .banner .buttons { margin: 0; gap: .6rem; }
+  .banner .btn { padding: .75rem 1.6rem; font-size: 1.05rem; }
+  .banner .btn { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .banner .btn:hover { background: #fff; border-color: #fff; color: var(--ink); }
+  .banner .btn.plain { background: #fff; border-color: #fff; color: var(--ink); }
+  .banner .btn.plain:hover { background: #000; border-color: #000; color: #fff; }
+
+  /* "Get in touch": a raised button that floats, lifts when you hover and presses down when you click */
+  .banner .btn-3d {
+    box-shadow: 0 4px 0 rgba(30, 20, 90, .35), 0 10px 18px rgba(30, 20, 90, .25);
+    animation: float 2.6s ease-in-out infinite;
+    transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease, color .15s ease;
+  }
+  .banner .btn-3d:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 0 rgba(30, 20, 90, .35), 0 16px 24px rgba(30, 20, 90, .3);
+  }
+  .banner .btn-3d:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(30, 20, 90, .35), 0 3px 6px rgba(30, 20, 90, .25);
+  }
+  @keyframes float {
+    0%, 100% { translate: 0 0; rotate: -.5deg; }
+    50% { translate: 0 -4px; rotate: .5deg; }
+  }
+  .banner :focus-visible { outline-color: var(--ink); }
+
+  /* The software as short sticks standing on the bottom edge of the banner,
+     in the free space between the text and the profile picture */
+  .banner { --pad: clamp(1rem, 3vw, 1.75rem); --photo: clamp(9.5rem, 20vw, 13.5rem); }
+  .banner-sticks {
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    right: var(--pad);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: flex-end;
+    gap: .6rem;
+    --k: .9rem;                             /* one unit of stick height: the heights in the script are multiples of it */
+  }
+  .banner.has-photo .banner-sticks { right: calc(var(--pad) + var(--photo) + clamp(1rem, 2vw, 2rem)); }
+  .banner-sticks:empty { display: none; }
+  .stick {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 3.3rem;
+    height: calc(var(--h, 4.5) * var(--k));
+    padding: .3rem 0;
+    border: 1px solid var(--pink);
+    border-bottom: 0;
+    border-radius: 14px 14px 0 0;
+    background: linear-gradient(to top, var(--pink), #FF9BD0);   /* pink */
+    transition: transform .15s ease;
+  }
+  .stick:hover { transform: translateY(-5px); }
+  .stick.is-logo { justify-content: flex-start; padding: .4rem 0 0; }
+  .sticks-label {
+    align-self: flex-end;
+    margin: 0 .3rem 1rem 0;
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    white-space: nowrap;
+  }
+  .stick .software-icon { flex: none; width: 2.5rem; height: 2.5rem; border-radius: 13px; font-size: .9rem; }
+  .stick-name {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);              /* reads from the bottom up */
+    color: #fff;
+    font-size: .85rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    white-space: nowrap;
+  }
+
+  /* Profile picture: only there when the file exists (see profilePhoto in the script). Cropped to a circle. */
+  .banner.has-photo { grid-template-columns: minmax(0, 1fr) auto; }
+  .banner-photo:empty { display: none; }
+  .banner-photo img {
+    display: block;
+    width: var(--photo);
+    aspect-ratio: 1;
+    object-fit: cover;
+    object-position: center 20%;   /* keeps the face in the circle; change 20% if it is cut off */
+    border-radius: 50%;
+  }
+  @media (min-width: 761px) and (max-width: 1000px) {
+    .banner-copy { grid-column: 1; grid-row: 1; }
+    .banner-photo { grid-column: 2; grid-row: 1 / span 2; }
+    .banner-sticks,
+    .banner.has-photo .banner-sticks {
+      position: relative;
+      right: auto;
+      grid-column: 1;
+      grid-row: 2;
+      justify-self: start;
+      margin-bottom: calc(-1 * var(--pad));
+    }
+  }
+  @media (max-width: 760px) {
+    .banner.has-photo { grid-template-columns: minmax(0, 1fr); }
+    .banner-sticks,
+    .banner.has-photo .banner-sticks {
+      position: relative;
+      right: auto;
+      justify-self: center;
+      margin-bottom: calc(-1 * var(--pad));
+      --k: .7rem;
+    }
+    .banner-photo { order: -1; }
+    .banner-photo img { width: 9rem; }
+  }
+
+  /* ---------- Gallery (projects page + collection pages) ----------
+     Column layout:
+     - every picture gets the SAME width, so vertical and horizontal
+       pictures have the same presence
+     - every picture keeps its own proportions and is shown completely,
+       nothing is cropped (a vertical picture is simply taller)
+     - equal gaps everywhere; the columns are balanced in JS
+  */
+  .gallery {
+    --gap: 16px;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gap);
+  }
+  .gallery .col {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+  }
+
+  .tile {
+    position: relative;
+    display: block;
+    width: 100%;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--soft);      /* shows while the image loads */
+    cursor: zoom-in;
+  }
+  .tile img,
+  .tile video {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;          /* the tile has the image's own ratio, so nothing is cropped */
+  }
+  .tile img { transition: opacity .35s ease; }
+  .tile.plain:hover img { opacity: .88; }                 /* only pictures with nothing to preview */
+  .tile.is-video { background: #000; }
+
+  /* Hover preview: extra views fade in on top of the cover (see makeTile) */
+  .tile img.preview-layer { opacity: 0; background: var(--soft); }
+  .tile img.preview-layer.on { opacity: 1; }
+
+  /* Hover preview: a video plays silently inside its tile
+     (also used by a picture that has a  video:  , the video fades in over the picture) */
+  .tile.has-poster .preview-video { opacity: 0; transition: opacity .25s ease; }
+  .tile.has-poster.is-playing .preview-video { opacity: 1; }
+  .tile.is-playing .play-badge { opacity: 0; }
+
+  /* Hover preview: title and description slide up from the bottom */
+  .tile-info {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 2.75rem .9rem .85rem;
+    background: linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,0));
+    color: #fff;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity .2s ease, transform .2s ease;
+    pointer-events: none;
+  }
+  .tile-info-title { display: block; font-size: .95rem; font-weight: 500; line-height: 1.3; }
+  .tile-info-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: .2rem;
+    font-size: .8125rem;
+    font-weight: 300;
+    line-height: 1.45;
+  }
+  .tile:focus-visible .tile-info { opacity: 1; transform: none; }
+  @media (hover: hover) and (pointer: fine) {
+    .tile:hover .tile-info { opacity: 1; transform: none; }
+  }
+  .play-badge {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 56px;
+    height: 56px;
+    margin: -28px 0 0 -28px;
+    border-radius: 50%;
+    background: rgba(0,0,0,.6);
+    pointer-events: none;
+    transition: background-color .15s ease;
+  }
+  .play-badge::after {
+    content: "";
+    position: absolute;
+    left: 22px;
+    top: 16px;
+    border-style: solid;
+    border-width: 12px 0 12px 20px;
+    border-color: transparent transparent transparent #fff;
+  }
+  .tile.is-video:hover .play-badge { background: var(--accent); }
+
+  /* One small badge in the top right corner: "3 views", or "▶ + 3 images" when the tile also has a video */
+  .group-badge {
+    position: absolute;
+    right: .5rem;
+    top: .5rem;
+    padding: .3rem .55rem;
+    border-radius: 999px;
+    background: rgba(0,0,0,.75);
+    color: #fff;
+    font-size: .7rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  /* ---------- Software logos (on the sticks in the banner) ---------- */
+  .software-icon {
+    display: grid;
+    place-items: center;
+    width: 3.4rem;
+    height: 3.4rem;
+    border-radius: 15px;
+    overflow: hidden;
+    background: var(--tile, var(--purple));
+    color: var(--tile-ink, #fff);
+    font-size: 1.1rem;
+    font-weight: 800;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, .18);
+    transition: transform .15s ease;
+  }
+  .software-icon.has-logo { background: #fff; border: 1px solid var(--line); box-shadow: none; }
+  .software-icon img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .software-icon.is-untrimmed img { padding: .35rem; }   /* only when the logo could not be trimmed */
+  .software-icon.is-round { border-radius: 50%; }
+  .software-icon.is-round img { object-fit: cover; }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ---------- Filters ----------
+     Buttons in the colours of the banner. The one you have chosen turns black. */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    margin-bottom: 2rem;
+  }
+  .filter-button {
+    border: 0;
+    border-radius: 999px;
+    padding: .55rem 1.25rem;
+    font: inherit;
+    font-weight: 500;
+    color: #fff;
+    background: linear-gradient(100deg, var(--purple) 0%, #5E6BE6 45%, var(--accent) 100%);
+    cursor: pointer;
+    transition: background-color .15s ease, transform .15s ease, box-shadow .15s ease;
+  }
+  .filter-button:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(109, 79, 224, .35); }
+  .filter-button[aria-pressed="true"] { background: #000; color: #fff; transform: none; box-shadow: none; }
+
+  /* ---------- Collections page ---------- */
+  .projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: 2.5rem 1.5rem;
+  }
+  .project { display: block; color: inherit; }
+  .project > a { display: block; color: inherit; text-decoration: none; }
+  .cover {
+    border-radius: var(--radius);
+    aspect-ratio: 4 / 3;
+    background: var(--soft);
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    font-size: .875rem;
+  }
+  .cover img,
+  .cover video { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .project > a:hover .cover img { opacity: .88; }
+  .project-name {
+    display: inline-block;
+    margin-top: .75rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+  }
+  .project > a:hover .project-name { border-bottom-color: var(--accent); }
+  .project-info { margin: .15rem 0 0; color: var(--muted); font-size: .9375rem; }
+
+  /* Collections (the list and the collections inside a collection) use smaller cards */
+  #page-collections .projects {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
+    gap: 1.75rem 1rem;
+  }
+  #page-collections .project-name { margin-top: .5rem; font-size: 1rem; line-height: 1.3; }
+  #page-collections .project-info { font-size: .8125rem; }
+  .project-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: .3rem 0 0;
+    color: var(--ink);
+    font-size: .8125rem;
+    font-weight: 300;
+    line-height: 1.45;
+  }
+  @media (max-width: 480px) {
+    #page-collections .projects { grid-template-columns: repeat(auto-fill, minmax(min(100%, 140px), 1fr)); }
+  }
+
+  .projects-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .projects-header h1 { margin-bottom: 0; }
+  .header-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+  .project-action {
+    border-radius: 999px;
+    border: 2px solid var(--ink);
+    background: var(--ink);
+    color: #fff;
+    padding: .7rem 1rem;
+    font: inherit;
+    cursor: pointer;
+  }
+  .project-action:hover { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+  .project-action.secondary { background: transparent; color: var(--ink); }
+  .project-action.secondary:hover { background: var(--accent); border-color: var(--accent); }
+
+  .project-editor { margin-bottom: 3rem; max-width: 800px; }
+  .project-editor label { display: block; margin-bottom: 1rem; }
+  .project-editor input[type="text"],
+  .project-editor textarea {
+    display: block;
+    width: 100%;
+    margin-top: .4rem;
+    padding: .75rem;
+    border: 1px solid var(--line);
+    font: inherit;
+  }
+  .project-editor textarea { min-height: 120px; resize: vertical; }
+
+  .project-media-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0 2rem;
+  }
+  .media-option {
+    position: relative;
+    display: block;
+    margin: 0;
+    background: var(--soft);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .media-option.selected { border-color: var(--accent); }
+  .media-option img,
+  .media-option video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: contain;
+  }
+  .media-option input {
+    position: absolute;
+    top: .5rem;
+    left: .5rem;
+    z-index: 2;
+    width: 20px;
+    height: 20px;
+  }
+
+  .editor-buttons { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+  .project-actions { display: flex; gap: .5rem; margin-top: .75rem; }
+  .project-actions button {
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: transparent;
+    padding: .45rem .7rem;
+    font: inherit;
+    cursor: pointer;
+  }
+  .project-actions button:hover { background: var(--ink); color: #fff; }
+
+  .back {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+  }
+  .back:hover { color: var(--ink); border-bottom-color: var(--accent); }
+  #projectView h1 { margin-bottom: 1.5rem; }
+  .project-meta { margin: 0 0 1rem; color: var(--muted); }
+  .project-text { margin: 0 0 2rem; max-width: 60ch; font-size: 1.125rem; font-weight: 300; }
+
+  /* ---------- Progress (cases, before / after, updates) ---------- */
+  .section-title { margin: 0 0 1rem; font-size: 1.25rem; font-weight: 500; }
+  .case-section { margin-top: 3rem; }
+
+  .recent { list-style: none; margin: 0 0 3.5rem; padding: 0; max-width: 760px; }
+  .recent li { border-top: 1px solid var(--line); }
+  .recent li:last-child { border-bottom: 1px solid var(--line); }
+  .recent a {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: .25rem 1rem;
+    padding: .85rem 0;
+    color: inherit;
+    text-decoration: none;
+  }
+  .recent-date { color: var(--muted); font-size: .9375rem; }
+  .recent-case { display: inline-block; font-weight: 500; border-bottom: 3px solid transparent; }
+  .recent a:hover .recent-case { border-bottom-color: var(--accent); }
+  .recent-title { display: block; color: var(--muted); }
+
+  .compare-block { margin: 0 0 2.5rem; }
+  .compare-label { margin: 0 0 .6rem; font-weight: 500; }
+  .compare {
+    --r: 1.5;
+    position: relative;
+    width: min(100%, calc(80vh * var(--r)));   /* never taller than the screen, never cropped */
+    aspect-ratio: var(--r);
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--soft);
+    user-select: none;
+  }
+  .compare img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+  }
+  .compare-tag {
+    position: absolute;
+    top: .6rem;
+    padding: .3rem .6rem;
+    border-radius: 999px;
+    background: rgba(0,0,0,.7);
+    color: #fff;
+    font-size: .75rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .compare-tag.before { left: .6rem; }
+  .compare-tag.after { right: .6rem; }
+  .compare-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    margin-left: -1px;
+    background: #fff;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.25);
+    pointer-events: none;
+  }
+  .compare-line::after {
+    content: "\2194";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #fff;
+    color: #000;
+    font-size: 1.1rem;
+    box-shadow: 0 1px 6px rgba(0,0,0,.35);
+  }
+  .compare input[type="range"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    touch-action: pan-y;           /* sideways drag moves the slider, up/down still scrolls the page */
+  }
+  .compare:focus-within .compare-line::after { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  .update { padding: 1.5rem 0 2rem; border-top: 1px solid var(--line); }
+  .update-date { margin: 0 0 .25rem; color: var(--muted); font-size: .9375rem; }
+  .update-title { margin: 0 0 .5rem; font-size: 1.25rem; font-weight: 500; }
+  .update-text { margin: 0 0 1.25rem; max-width: 60ch; font-weight: 300; white-space: pre-line; }
+
+  /* ---------- About ---------- */
+  .about {
+    display: grid;
+    grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+    gap: clamp(1.5rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .about.no-photo { grid-template-columns: minmax(0, 1fr); }
+  .about.no-photo #aboutPhoto { display: none; }
+  #aboutPhoto img { display: block; width: 100%; height: auto; border-radius: var(--radius); }   /* full photo, never cropped */
+  .about p { margin: 0 0 1.25rem; max-width: 56ch; }
+  .about p:first-child { font-size: 1.25rem; font-weight: 300; }
+
+  /* ---------- Contact ---------- */
+  .contact p { margin: 0 0 2rem; max-width: 52ch; font-size: 1.25rem; font-weight: 300; }
+  .buttons { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: 3rem; }
+  .btn {
+    display: inline-block;
+    border-radius: 999px;
+    padding: .85rem 1.75rem;
+    background: var(--ink);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    border: 2px solid var(--ink);
+    transition: background-color .15s ease, color .15s ease;
+  }
+  .btn:hover { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+  .btn.plain { background: transparent; color: var(--ink); }
+  .btn.plain:hover { background: var(--accent); border-color: var(--accent); }
+
+  .details { margin: 0; max-width: 520px; }
+  .details div { display: flex; justify-content: space-between; gap: 1rem; padding: .75rem 0; border-top: 1px solid var(--line); }
+  .details dt { color: var(--muted); }
+  .details dd { margin: 0; font-weight: 500; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    padding: 1.5rem clamp(1rem, 4vw, 3rem) 2.5rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: .875rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .5rem 1rem;
+  }
+  footer a { color: inherit; }
+
+  /* ---------- Image viewer ----------
+     Column layout: [ image area (takes all the free space) ] [ thumbnails ]
+     The image is scaled to fit the area, so a tall image is always
+     shown from top to bottom, and the thumbnails never cover it.
+  */
+  .viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: rgba(0,0,0,.96);
+    display: flex;
+    flex-direction: column;
+    padding: 4rem clamp(1rem, 7vw, 5rem) 1rem;
+  }
+  .viewer-main {
+    flex: 1 1 0;
+    min-height: 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .viewer-main img {
+    border-radius: 8px;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .viewer-main video {
+    border-radius: 8px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+  }
+
+  .viewer-btn {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,.08);
+    color: #fff;
+    font: inherit;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .viewer-btn:hover { background: rgba(255,255,255,.18); }
+  .viewer-btn:focus-visible { outline: 3px solid var(--accent); }
+  .viewer-btn.close { top: 1rem; right: 1rem; }
+  .viewer-btn.prev  { left: 1rem;  top: 50%; transform: translateY(-50%); }
+  .viewer-btn.next  { right: 1rem; top: 50%; transform: translateY(-50%); }
+
+  .viewer-count {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.25rem;
+    color: rgba(255,255,255,.7);
+    font-size: .875rem;
+  }
+
+  .viewer-caption { flex: none; padding-top: .6rem; text-align: center; color: rgba(255,255,255,.85); font-size: .875rem; }
+  .viewer-info {
+    flex: none;
+    width: min(64ch, 100%);
+    max-height: 28vh;
+    margin: 0 auto;
+    padding-top: .75rem;
+    overflow-y: auto;
+    color: #fff;
+    text-align: left;
+  }
+  .viewer-title { margin: 0 0 .25rem; font-size: 1.05rem; font-weight: 500; }
+  .viewer-desc { margin: 0; font-weight: 300; line-height: 1.6; white-space: pre-line; color: rgba(255,255,255,.85); }
+  .related-views { flex: none; padding-top: .75rem; text-align: center; }
+  .related-title { color: #fff; font-size: .8rem; margin-bottom: .5rem; }
+  .related-list {
+    display: flex;
+    gap: .6rem;
+    overflow-x: auto;
+    padding: .15rem .25rem .25rem;
+  }
+  .related-thumb {
+    position: relative;
+    flex: 0 0 auto;
+    width: 82px;
+    height: 62px;
+    padding: 0;
+    border: 2px solid rgba(255,255,255,.35);
+    border-radius: 6px;
+    background: #111;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .related-thumb:first-child { margin-left: auto; }     /* centred, but the row can still scroll from its start */
+  .related-thumb:last-child { margin-right: auto; }
+  .related-thumb.active { border-color: #fff; }
+  .related-thumb:hover { border-color: #fff; }
+  .related-thumb img { display: block; width: 100%; height: 100%; object-fit: contain; }
+
+  /* The thumbnail that stands for the video gets a small play triangle */
+  .related-thumb.is-video-thumb img { opacity: .7; }
+  .related-thumb.is-video-thumb::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -9px 0 0 -6px;
+    border-style: solid;
+    border-width: 9px 0 9px 15px;
+    border-color: transparent transparent transparent #fff;
+    filter: drop-shadow(0 0 3px rgba(0,0,0,.7));
+  }
+
+  /* ---------- Group pictures (edit mode only) ---------- */
+  .group-editor { max-width: none; }
+  .group-status { margin: 0 0 1rem; max-width: 70ch; color: var(--muted); }
+  .group-picker { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: .75rem; }
+  .group-option {
+    position: relative;
+    display: block;
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    background: var(--soft);
+    border: 3px solid transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .group-option img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; }
+  .group-option.is-main { border-color: var(--accent); }
+  .group-option.is-ref { border-color: var(--ink); }
+  .group-option-tag {
+    position: absolute;
+    left: .4rem;
+    top: .4rem;
+    padding: .25rem .5rem;
+    border-radius: 999px;
+    background: rgba(0,0,0,.75);
+    color: #fff;
+    font-size: .7rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .group-option.is-main .group-option-tag { background: var(--accent); color: #000; }
+
+  .viewer-add {
+    border-radius: 999px;
+    flex: none;
+    align-self: center;
+    margin-top: .75rem;
+    padding: .5rem 1rem;
+    border: 1px solid rgba(255,255,255,.5);
+    background: transparent;
+    color: #fff;
+    font: inherit;
+    font-size: .875rem;
+    cursor: pointer;
+  }
+  .viewer-edit {
+    flex: none;
+    display: grid;
+    gap: .5rem;
+    width: min(64ch, 100%);
+    margin: .75rem auto 0;
+  }
+  .viewer-edit input,
+  .viewer-edit textarea {
+    width: 100%;
+    padding: .6rem .75rem;
+    border: 1px solid rgba(255,255,255,.4);
+    border-radius: 8px;
+    background: rgba(255,255,255,.08);
+    color: #fff;
+    font: inherit;
+    font-size: .9rem;
+  }
+  .viewer-edit textarea { resize: vertical; }
+  .viewer-edit ::placeholder { color: rgba(255,255,255,.55); }
+  .viewer-add:hover { background: var(--accent); border-color: var(--accent); color: #000; }
+
+  @media (max-width: 760px) {
+    .about { grid-template-columns: 1fr; }
+    #aboutPhoto { max-width: 300px; }
+    .viewer-btn { width: 40px; height: 40px; font-size: 1.6rem; background: rgba(255,255,255,.14); }
+    .viewer-btn.prev { left: .5rem; }
+    .viewer-btn.next { right: .5rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Gold shapes on the background of the whole page. They stay behind everything and only show between the pictures and in the margins. -->
+<div class="page-gold" aria-hidden="true">
+  <span class="pg-star"    style="left: 3%;   top: 22%; width: 1.6rem; height: 1.6rem;"></span>
+  <span class="pg-star"    style="right: 6%;  top: 78%; width: 1.8rem; height: 1.8rem;"></span>
+  <span class="pg-star"    style="right: 3%;  top: 38%; width: 1.2rem; height: 1.2rem;"></span>
+  <span class="pg-dot"     style="right: 2%;  top: 15%; width: .8rem;  height: .8rem;"></span>
+  <span class="pg-dot"     style="left: 12%;  top: 88%; width: .6rem;  height: .6rem;"></span>
+  <span class="pg-ring"    style="left: -1.5rem; top: 32%; width: 4rem; height: 4rem;"></span>
+  <span class="pg-ring"    style="right: -2rem;  top: 62%; width: 5rem; height: 5rem;"></span>
+  <span class="pg-diamond" style="right: 4%;  top: 24%; width: 1rem;   height: 1rem;"></span>
+  <span class="pg-diamond" style="left: 4%;   top: 78%; width: .9rem;  height: .9rem;"></span>
+</div>
+
+<!-- To change the name, search this file for "Lisa Vandros Tendo" and replace it. -->
+
+<header class="site">
+  <a class="brand" href="#projects">Lisa Vandros Tendo</a>
+  <nav aria-label="Pages">
+    <a href="#projects">projects</a>
+    <a href="#collections">collections</a>
+    <a href="#progress">progress</a>
+    <a href="#about">about</a>
+    <a href="#contact">contact</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- 1. Projects (main page): the photo list is near the bottom of this file -->
+  <section id="page-projects">
+
+    <!-- Banner: change the words below to change how you present yourself -->
+    <!-- Your profile picture: put a file called profile.jpg (or .png, .webp) in the img folder -->
+    <section class="banner" id="banner" aria-label="About me">
+      <span class="gold gold-ring" aria-hidden="true"></span>
+      <span class="gold gold-dot" aria-hidden="true"></span>
+      <span class="gold gold-star" aria-hidden="true"></span>
+      <div class="banner-copy">
+        <p class="banner-title">UI/UX designer, curious about AI and technology.</p>
+        <p class="banner-text">I design and build digital products, and I explore AI through short films and realistic avatar art.</p>
+        <div class="buttons">
+          <a class="btn plain btn-3d" href="#contact">Get in touch</a>
+        </div>
+      </div>
+      <ul class="banner-sticks" id="bannerSticks" aria-label="Software I work with"></ul>
+      <div class="banner-photo" id="bannerPhoto"></div>
+    </section>
+
+
+    <h1>Projects</h1>
+
+    <!-- Editing tools: only visible when you open the site with ?edit  (e.g. index.html?edit#projects) -->
+    <div class="header-actions edit-only" hidden style="margin-bottom: 1rem;">
+      <button id="groupButton" class="project-action" type="button">Group pictures</button>
+      <button id="copyWorksButton" class="project-action secondary" type="button">Copy pictures code</button>
+    </div>
+    <p class="group-status" id="worksNote" hidden></p>
+
+    <div id="groupEditor" class="project-editor group-editor" hidden>
+      <h2>Group pictures</h2>
+      <p class="group-status">Click the main picture first: it becomes the cover. Then click every picture that looks like it. Those become its reference pictures, shown when you open the main picture.</p>
+      <div class="editor-buttons">
+        <button id="lookAlikeButton" class="project-action secondary" type="button">Show look-alikes first</button>
+        <button id="addGroupButton" class="project-action" type="button">Add group</button>
+        <button id="cancelGroupButton" class="project-action secondary" type="button">Cancel</button>
+      </div>
+      <p class="group-status" id="groupStatus" style="margin-top: 1rem;"></p>
+      <div id="groupPicker" class="project-media-selector group-picker"></div>
+    </div>
+
+    <div class="filters" id="workFilters"></div>
+    <div class="gallery" id="worksGrid"></div>
+    <p class="empty" id="filterEmpty" hidden>Nothing here yet.</p>
+    <p class="empty" id="worksEmpty" hidden>No images found. Check that the file names in the list at the bottom of this file match the files in your img folder.</p>
+  </section>
+
+  <!-- 2. Collections: the list of collections is near the bottom of this file -->
+  <section id="page-collections" hidden>
+
+    <div id="projectList">
+
+      <div class="projects-header">
+        <h1>Collections</h1>
+
+        <!-- Editing tools: only visible when you open the site with ?edit  (e.g. index.html?edit#collections) -->
+        <div class="header-actions edit-only" hidden>
+          <button id="newProjectButton" class="project-action" type="button">+ New collection</button>
+          <button id="copyProjectsButton" class="project-action secondary" type="button">Copy collections code</button>
+        </div>
+      </div>
+
+      <div id="projectEditor" class="project-editor" hidden>
+        <h2 id="editorTitle">New collection</h2>
+
+        <label>
+          Collection name
+          <input id="projectName" type="text" placeholder="Enter collection name">
+        </label>
+
+        <label>
+          Year
+          <input id="projectYear" type="text" placeholder="2026">
+        </label>
+
+        <label>
+          Description
+          <textarea id="projectDescription" placeholder="Describe this collection..."></textarea>
+        </label>
+
+        <h3>Select images and videos</h3>
+        <div id="projectMediaSelector" class="project-media-selector"></div>
+
+        <div class="editor-buttons">
+          <button id="saveProjectButton" class="project-action" type="button">Save collection</button>
+          <button id="cancelProjectButton" class="project-action secondary" type="button">Cancel</button>
+        </div>
+      </div>
+
+      <div class="projects" id="projectGrid"></div>
+    </div>
+
+    <div id="projectView" hidden></div>
+
+  </section>
+
+  <!-- 3. Progress: the cases are in the list near the bottom of this file -->
+  <section id="page-progress" hidden>
+
+    <div id="progressList">
+      <h1>Progress</h1>
+
+      <div id="recentBlock" hidden>
+        <h2 class="section-title">Recently</h2>
+        <ol class="recent" id="recentList"></ol>
+      </div>
+
+      <h2 class="section-title">Cases</h2>
+      <div class="filters" id="caseFilters"></div>
+      <div class="projects" id="caseGrid"></div>
+      <p class="empty" id="casesEmpty" hidden>No cases yet.</p>
+    </div>
+
+    <div id="progressView" hidden></div>
+
+  </section>
+
+  <!-- 4. About: replace the text -->
+  <section id="page-about" hidden>
+    <h1>About</h1>
+    <div class="about no-photo" id="aboutLayout">
+      <div id="aboutPhoto"></div>
+      <div>
+        <p>Write one or two sentences here about who you are and the kind of work you love doing.</p>
+        <p>Add a few more lines about your experience: editorial, commercial, runway, brands you have worked with.</p>
+        <p>Say where you are based and where you are happy to travel.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Contact: replace the email, Instagram and TikTok links and handles -->
+  <section id="page-contact" class="contact" hidden>
+    <h1>Let's work together</h1>
+    <p>Open for editorial, commercial and runway bookings. Send a message with the date, the location and a few words about the shoot.</p>
+    <div class="buttons">
+      <a class="btn" href="mailto:hello@example.com">Email me</a>
+      <a class="btn plain" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+      <a class="btn plain" href="https://www.tiktok.com/" target="_blank" rel="noopener">TikTok</a>
+    </div>
+    <dl class="details">
+      <div><dt>Email</dt><dd>hello@example.com</dd></div>
+      <div><dt>Instagram</dt><dd>@yourname</dd></div>
+      <div><dt>TikTok</dt><dd>@yourname</dd></div>
+      <div><dt>Agency</dt><dd>Add your agency here</dd></div>
+    </dl>
+  </section>
+
+</main>
+
+<footer>
+  <span>© Lisa Vandros Tendo</span>
+  <span>
+    <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+    &nbsp;·&nbsp;
+    <!-- Private page: opens the password-protected storyboard -->
+    <a href="storyboard.html">private</a>
+  </span>
+</footer>
+
+<!-- Image viewer -->
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Image viewer" hidden>
+  <span class="viewer-count" id="vCount"></span>
+  <button class="viewer-btn close" id="vClose" type="button" aria-label="Close image">×</button>
+  <button class="viewer-btn prev" id="vPrev" type="button" aria-label="Previous image">‹</button>
+  <div class="viewer-main" id="viewerMain">
+    <img id="vImg" alt="">
+    <video id="vVideo" controls playsinline hidden></video>
+  </div>
+  <button class="viewer-btn next" id="vNext" type="button" aria-label="Next image">›</button>
+  <div class="viewer-caption" id="vCaption" hidden></div>
+  <div class="viewer-info" id="vInfo" hidden>
+    <h2 class="viewer-title" id="vTitle"></h2>
+    <p class="viewer-desc" id="vDesc"></p>
+  </div>
+  <div class="related-views" id="relatedViews" hidden>
+    <div class="related-title">Views</div>
+    <div class="related-list" id="relatedList"></div>
+  </div>
+  <div class="viewer-edit" id="vEdit" hidden>
+    <input id="vEditTitle" type="text" placeholder="Add a title" aria-label="Title">
+    <textarea id="vEditDesc" rows="2" placeholder="Add a description (optional)" aria-label="Description"></textarea>
+  </div>
+  <button class="viewer-add" id="vAddRefs" type="button" hidden>Add reference pictures</button>
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   YOUR PHOTOS
+
+   PROJECTS PAGE (the main page)
+   Put your files in the "img" folder next to this file and list them below.
+   The file ending (.jpg, .jpeg, .png, .webp) can be left out; the page will find it.
+   Photos that are listed but do not exist are skipped automatically.
+
+   VIEWS (several angles or styles of the same piece)
+   Put them together and the piece becomes ONE tile with a "3 views" badge.
+   Click it and the other views appear as thumbnails under the big image
+   (tap a thumbnail, or use the up/down arrow keys, or swipe up/down).
+   There are three ways to group, use whichever you like:
+
+   1. List the extra pictures under  views  (the easiest, any file names):
+        { src: 'img/car-front.png',
+          views: ['img/car-side.png', { src: 'img/car-back.png', label: 'Back view' }],
+          category: 'UX/UI' }
+      A view can be just a file name, or  { src, label }  to show a small caption.
+      The first picture is the cover. The extra views need no lines of their own.
+
+   2. Name the files with a number in the middle: works-1.1.png, works-1.2.png,
+      works-1.3.png become one tile automatically (the lowest number is the cover).
+
+   3. Give every picture of the piece the same  group: 'car'.
+
+   5. Keep a numbered picture on its own tile: add  solo: true  to its line, for example
+        { src: 'img/works-1.2.png', category: 'Real-characters', solo: true }
+      Without it, works-1.1.png and works-1.2.png become one tile (method 2).
+
+   4. Nothing to type at all: put more files in the img folder next to the picture,
+      with the same name plus a number and the same file ending. The page finds them itself:
+        works-8.jpeg                                (the picture in the list)
+        works-8.2.jpeg  works-8.3.jpeg  works-8.4.jpeg  ...   (found automatically)
+      It looks for .2, .3, .4 ... and stops at the first number that is missing.
+      This works for every picture, also in collections and in the updates of a case.
+
+   A group takes the category of its first picture.
+   Set  collapseGroups = false  below to turn off methods 2, 3 and 4 (method 1 always works).
+   Set  autoFindViews = false  to turn off only method 4.
+
+   GROUPING PICTURES THAT LOOK ALIKE, WITHOUT TYPING
+   Open the site with ?edit at the end of the address (index.html?edit#projects).
+   Click "Group pictures", click the main picture, then click the pictures that look like it
+   ("Show look-alikes first" sorts them for you). Add the group, then click "Copy pictures code"
+   and paste it over the worksPhotos list below. In edit mode, an opened picture also has fields
+   for a title and a description, and an "Add reference pictures" button.
+
+   VIDEOS
+   Put your video files in a folder called "video" next to this file (MP4 / H.264
+   plays everywhere; keep files small so the page stays fast), then list them
+   in the same list as the pictures:
+        { type: 'video', src: 'video/showreel.mp4', poster: 'img/showreel.jpg',
+          title: 'Showreel 2026', description: 'What this film is about.',
+          category: 'Storytelling / Movies' }
+   poster is optional: a still picture for the tile. Without it the first frame is used.
+   A video gets a play button on its tile and opens in the viewer with play controls.
+
+   A PICTURE THAT PLAYS A VIDEO WHEN YOU HOVER
+   Give a picture a  video:  and picture and video stay ONE tile:
+        { src: 'img/woman-drinking',
+          video: 'video/woman-drinking.mp4',
+          views: ['img/woman-drinking.2', 'img/woman-drinking.3'],
+          title: 'Woman drinking', category: 'Storytelling / Movies' }
+   - the picture is the cover; while you hover, the video plays silently over it
+   - one small badge in the top right corner shows there is more to see ("▶ + 3 images")
+   - when you open it, the video comes first; the thumbnails under it are the
+     pictures: the cover and the extra views (for example the look-alikes)
+   If the video file is missing the tile still shows the pictures, and if the cover
+   picture is missing the tile shows the video instead.
+   This also works for the items of a collection and of a case update.
+
+   TITLES AND DESCRIPTIONS
+   Any picture or video can have  title: '...'  and  description: '...'.
+   They are shown under the picture or video when it is opened.
+   Use \n inside the text for a new line. For a group of views, put them on the first picture.
+
+   HOVER PREVIEW
+   Nobody has to click to see what a piece is about. When the mouse rests on a tile:
+   - its title and description slide up over the picture
+   - a piece with several views shows them one after another (the badge counts 1 / 3, 2 / 3 ...)
+   - a video plays silently inside its tile
+   On a phone or tablet there is no hover, so a tap opens the piece as before.
+
+   CATEGORIES
+   Every photo has a  category: '...'.  The filter buttons on the page are the
+   list  workCategories  right below the photos, in that order. A category with no
+   photos yet (like Writing) still gets its button and says "Nothing here yet."
+
+   Tip: resize photos to about 1600 pixels on the long side. That keeps the site fast.
+------------------------------------------------------------------- */
+const worksPhotos = [
+  // ---- YOUR VIDEOS ----
+  // The woman drinking: ONE tile. The picture is the cover, the video plays over it when you hover,
+  // and the extra pictures (the look-alikes) are the views you see when you open it.
+  // CHANGE the file names to your real ones (the ending .jpg / .png can be left out).
+  { src: 'img/woman-drinking',
+    video: 'video/woman-drinking.mp4',
+    views: ['img/woman-drinking.2', 'img/woman-drinking.3', 'img/woman-drinking.4'],
+    title: 'Woman drinking',
+    category: 'Storytelling / Movies' },
+
+  // To add another video on its own, remove the // from this template and change the names:
+  // { type: 'video', src: 'video/my-video.mp4', poster: 'img/my-video.jpg',
+  //   title: 'My video', description: 'What this video is about.',
+  //   category: 'Storytelling / Movies' },
+
+  // ---- YOUR PICTURES ----
+  // solo: true = its own tile in the gallery, not a reference picture of the one next to it
+  { src: 'img/works-1.1.png',  category: 'Real-characters', solo: true },
+  { src: 'img/works-1.2.png',  category: 'Real-characters', solo: true },
+  { src: 'img/works-2.1.png',  category: 'Real-characters', solo: true },
+  { src: 'img/works-2.2.png',  category: 'Real-characters', solo: true },
+
+  { src: 'img/works-8.jpeg',   category: 'UX/UI' },
+  { src: 'img/works-9.png',    category: 'UX/UI' },
+
+  // Two videos on their own. The file ending (.mp4, .webm, .mov) can be left out.
+  { type: 'video', src: 'video/portfolio-video',
+    title: 'Portfolio video',
+    category: 'Storytelling / Movies' },
+  { type: 'video', src: 'video/portfolio-video-2',
+    title: 'Portfolio video 2',
+    category: 'Storytelling / Movies' },
+
+  { src: 'img/works-11.png',   category: 'UX/UI' },
+  { src: 'img/works-1.jpeg',   category: 'Storytelling / Movies' },
+  { src: 'img/works-2.jpeg',   category: 'Storytelling / Movies' },
+  { src: 'img/works-12.png',   category: 'UX/UI' },
+  { src: 'img/works-13.png',   category: 'UX/UI' },
+  { src: 'img/works-14.png',   category: 'UX/UI' },
+  { src: 'img/works-15.png',   category: 'UX/UI' },
+  { src: 'img/works-16.png',   category: 'UX/UI' },
+  { src: 'img/works-16.jpeg',  category: 'UX/UI' },
+  { src: 'img/works-17.jpeg',  category: 'UX/UI' },
+  { src: 'img/works-18.jpeg',  category: 'UX/UI' },
+  { src: 'img/works-19.jpeg',  category: 'UX/UI' },
+  { src: 'img/works-20.jpeg',  category: 'UX/UI' },
+  { src: 'img/works-21.png',   category: 'UX/UI' },
+  { src: 'img/works-22.png',   category: 'UX/UI' },
+  { src: 'img/works-23.png',   category: 'UX/UI' },
+  { src: 'img/works-24.png',   category: 'UX/UI' },
+  { src: 'img/works-25.png',   category: 'UX/UI' },
+];
+
+/* The filter buttons, in this order. Names must match the category names above exactly. */
+const workCategories = ['Real-characters', 'UX/UI', 'Storytelling / Movies', 'Writing'];
+
+const autoFindViews = true;         // true = look for extra numbered files by itself (see method 4 above)
+const collapseGroups = true;        // true = one tile per group, false = every file is its own tile
+const aboutPhoto = 'img/about';     // optional: img/about.jpg (or .png, .webp). Hidden if the file does not exist.
+const profilePhoto = 'img/profile'; // optional: img/profile.jpg (or .png, .webp), shown in the banner. Hidden if the file does not exist.
+
+/* ------------------------------------------------------------------
+   QUALITIES (the sticks in the banner, when bannerSticks below is 'qualities')
+   Words that describe your character, one per stick. Keep them short, about 8 letters at the most,
+   so they fit along the stick. Change, add or remove words as you like.
+------------------------------------------------------------------- */
+const qualities = ['Kind', 'Curious', 'Bold', 'Creative', 'Driven', 'Patient', 'Honest'];
+
+/* What the sticks in the banner show: 'software' (the logos) or 'qualities' (the words above) */
+const bannerSticks = 'software';
+
+/* ------------------------------------------------------------------
+   SOFTWARE I WORK WITH (shown in a column on the left side of the page)
+   One line per program. The tile shows the two letters in  short  (or the first two letters
+   of the name). To show the real logo instead, put a picture in the img folder and add
+   icon: 'img/figma' (the file ending can be left out). The empty margin around a logo is cut off
+   by itself. Add  round: true  to show a picture in a circle. A small grey word after the name
+   can be added with  note: 'basics'.  color: '#hex'  picks a colour for the tile.  Examples of lines you can add:
+        { name: 'Blender', short: 'Bl' },
+        { name: 'Figma', icon: 'img/figma' },
+        { name: 'JavaScript', short: 'JS', note: 'basics' },
+------------------------------------------------------------------- */
+/* The file names are the ones in your img folder, exactly as they are written there.
+   If a file is not found, the tile shows the letters instead. */
+const software = [
+  { name: 'Figma',       short: 'Fi', icon: 'img/figma.png' },
+  { name: 'HTML',        short: 'HT', icon: 'img/html-5.png.webp' },
+  { name: 'CSS',         short: 'CS', icon: 'img/css.png.webp' },
+  { name: 'JavaScript',  short: 'JS', note: 'basics', icon: 'img/javascript.png.jpg' },
+  { name: 'Kling AI',    short: 'KL', icon: 'img/kling.ai.png.jpeg' },
+  { name: 'Leonardo AI', short: 'Le', icon: 'img/leo.png.webp', round: true },
+  { name: 'CapCut',      short: 'CC', icon: 'img/capcut.png' }
+];
+
+/* ------------------------------------------------------------------
+   YOUR COLLECTIONS
+   One block per collection. Copy a block to add another one.
+   id         = a short name without spaces, used in the address (#collections/<id>)
+   title      = the name people see
+   year       = optional, can be left as ''
+   text       = a short description, can be left as ''
+   items      = the images (or videos) of the collection. The first one is the cover.
+                An image can have more angles:  { type: 'image', src: '...', views: ['...', '...'] }
+                Videos and descriptions work here too:
+                { type: 'video', src: 'video/a.mp4', poster: 'img/a.jpg', title: '...', description: '...' }
+                A picture can play a video on hover:
+                { type: 'image', src: 'img/a', video: 'video/a.mp4', views: ['img/a.2'] }
+   children   = optional: collections inside this collection (for example the scenes of a movie).
+                A collection with children opens to an overview of them; click one to see its items.
+                A child is written like a collection: id, title, year, text, items.
+                Its address is #collections/<id>/<child id>.
+   childLabel = optional: what the children are called on the card, for example 'scenes' or 'avatars'
+   cover      = optional cover picture for the card, for example 'img/works-4.jpeg'
+                (default: the first item, or the first item of the first child)
+
+   To add or change collections visually, open the site with ?edit at the end
+   of the address, use the buttons on the collections page, then click
+   "Copy collections code" and paste it over the list below.
+   (The edit tools change the name, year, text and items of the main collections.
+   Children are added and changed in this list.)
+------------------------------------------------------------------- */
+const collections = [
+  {
+    id: 'spring-editorial',
+    title: 'Spring Editorial',
+    year: '2026',
+    text: 'A collection of images from my Spring Editorial project.',
+    items: [
+      { type: 'image', src: 'img/works-1.jpeg' },
+      { type: 'image', src: 'img/works-2.jpeg' },
+      { type: 'image', src: 'img/works-3.jpeg' }
+    ]
+  },
+  {
+    id: 'ai-short-movie',
+    title: 'AI short movie',
+    year: '2026',
+    text: 'An overview of the scenes of my AI short movie. Choose a scene to see its images and videos.',
+    childLabel: 'scenes',
+    items: [
+      { type: 'image', src: 'img/works-4.jpeg' }
+    ],
+    // One child per scene. Rename them and put the pictures and videos of each scene in its items.
+    children: [
+      { id: 'scene-1', title: 'Scene 1', year: '2026', text: 'Describe what happens in this scene.', items: [] },
+      { id: 'scene-2', title: 'Scene 2', year: '2026', text: 'Describe what happens in this scene.', items: [] },
+      { id: 'scene-3', title: 'Scene 3', year: '2026', text: 'Describe what happens in this scene.', items: [] }
+    ]
+  },
+  {
+    id: 'realistic-avatars',
+    title: 'Creating realistic art of avatars',
+    year: '2026',
+    text: 'Realistic art of avatars. Choose an avatar to see its collection.',
+    childLabel: 'avatars',
+    items: [],
+    // One child per avatar. Rename them and put the pictures of each avatar in its items.
+    children: [
+      { id: 'avatar-1', title: 'Avatar 1', year: '2026', text: '', items: [] },
+      { id: 'avatar-2', title: 'Avatar 2', year: '2026', text: '', items: [] },
+      { id: 'avatar-3', title: 'Avatar 3', year: '2026', text: '', items: [] }
+    ]
+  },
+  {
+    id: 'learning-video-editing',
+    title: 'Learning video editing',
+    year: '2026',
+    text: 'What I am learning about video editing.',
+    items: []
+  }
+];
+
+/* ------------------------------------------------------------------
+   YOUR CASES (the progress page)
+   A case is one thing you are working on, or have worked on. Visitors choose
+   a case and see how it developed: before and after, plus your recent updates.
+   The newest updates of all cases are also listed at the top of the progress page.
+
+   id      = a short name without spaces, used in the address (#progress/<id>)
+   title   = the name people see
+   type    = the kind of case, for example 'UX/UI' or 'Real-characters'.
+             Visitors can filter the cases by type. Use the same spelling every time.
+   status  = optional, for example 'In progress' or 'Finished'
+   text    = a short description of the case
+   cover   = optional cover picture (default: the first "after" picture)
+
+   compare = before and after pairs (use pictures with the same proportions):
+             { before: 'img/site-before.png', after: 'img/site-after.png', label: 'Homepage' }
+             Visitors drag the handle to slide between the two.
+
+   updates = what you have been working on. Any order, they are sorted by date (newest first):
+             { date: '2026-09-15', title: 'Second round', text: 'What changed and why.',
+               items: [ { type: 'image', src: 'img/a.png' }, { type: 'video', src: 'video/b.mp4' } ] }
+             items work like the items of a collection: images, videos, views,
+             title and description. date must look like 2026-09-15.
+------------------------------------------------------------------- */
+const cases = [
+  {
+    id: 'example-case',
+    title: 'Example case (replace me)',
+    type: 'UX/UI',
+    status: 'In progress',
+    text: 'A short description of what this case is about and what you are working on right now.',
+    compare: [
+      { before: 'img/works-8.jpeg', after: 'img/works-9.png', label: 'Example before and after' }
+    ],
+    updates: [
+      {
+        date: '2026-09-15',
+        title: 'Second round of changes',
+        text: 'What changed this time, and why.',
+        items: [{ type: 'image', src: 'img/works-11.png' }]
+      },
+      {
+        date: '2026-09-02',
+        title: 'First sketches',
+        text: 'Where this started.',
+        items: [{ type: 'image', src: 'img/works-12.png' }]
+      }
+    ]
+  }
+];
+
+/* ------------------------------------------------------------------ */
+
+const $ = (id) => document.getElementById(id);
+const editMode = new URLSearchParams(location.search).has('edit');
+
+/* ---------- Loading images (we read the real size of every image first) ---------- */
+
+const endings = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'JPEG', 'PNG'];
+const hasEnding = (name) => /\.(jpe?g|png|webp|gif|avif)$/i.test(name);
+
+function loadImage(src) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
+async function probeImage(name) {
+  const tries = hasEnding(name) ? [name] : endings.map((e) => name + '.' + e);
+  for (const src of tries) {
+    const img = await loadImage(src);
+    if (img && img.naturalWidth && img.naturalHeight) {
+      return { type: 'image', src, ratio: img.naturalWidth / img.naturalHeight };
+    }
+  }
+  return null;
+}
+
+function probeVideoFile(src) {
+  return new Promise((resolve) => {
+    const video = document.createElement('video');
+    let finished = false;
+    let timer;
+    const finish = (result) => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      video.removeAttribute('src');
+      video.load();                                  // let go of the file
+      resolve(result);
+    };
+    // If the browser is slow to report the size, assume a normal 16:9 film instead of waiting.
+    timer = setTimeout(() => finish({ type: 'video', src, ratio: 16 / 9 }), 4000);
+    video.preload = 'metadata';
+    video.onloadedmetadata = () =>
+      finish({ type: 'video', src, ratio: (video.videoWidth / video.videoHeight) || 16 / 9 });
+    video.onerror = () => finish(null);
+    video.src = src;
+  });
+}
+
+/* The file ending of a video can be left out too: the page tries .mp4, .webm and .mov */
+const videoEndings = ['mp4', 'webm', 'mov'];
+const hasVideoEnding = (name) => /\.(mp4|webm|mov|m4v|ogv)$/i.test(name);
+
+async function probeVideo(name) {
+  const tries = hasVideoEnding(name) ? [name] : videoEndings.map((e) => name + '.' + e);
+  for (const src of tries) {
+    const info = await probeVideoFile(src);
+    if (info) return info;
+  }
+  return null;
+}
+
+const probe = (item) => (item.type === 'video' ? probeVideo(item.src) : probeImage(item.src));
+
+/* ---------- Groups: works-1.1.png + works-1.2.png = one entry with two views ---------- */
+
+function groupInfo(photo) {
+  if (!collapseGroups) return { key: '', n: 0 };
+  if (photo.group) return { key: 'g:' + photo.group, n: 0 };
+  const m = String(photo.src).split('?')[0].match(/^(.*)\.([0-9]+)\.(jpe?g|png|webp|gif|avif)$/i);
+  return m ? { key: 'f:' + m[1], n: Number(m[2]) } : { key: '', n: 0 };
+}
+
+/* Looks for  name.2.ext, name.3.ext ...  next to a picture. Stops at the first one that does not exist. */
+async function discoverExtras(src, taken) {
+  if (!autoFindViews || !collapseGroups) return [];
+  const m = String(src).split('?')[0].match(/^(.*?)(?:\.([0-9]+))?\.(jpe?g|png|webp|gif|avif)$/i);
+  if (!m) return [];
+  const found = [];
+  for (let n = (m[2] ? Number(m[2]) : 1) + 1; n < 40; n++) {
+    const name = m[1] + '.' + n + '.' + m[3];
+    if (taken && taken.has(name)) break;             // that file has its own line in the list
+    const info = await probeImage(name);
+    if (!info) break;
+    found.push({ ...info, n });
+  }
+  return found;
+}
+
+/* One picture plus its extra views -> [{ src, label }, ...]  (the first one is the cover) */
+function viewsOf(item) {
+  const norm = (v) => (typeof v === 'string' ? { src: v, label: '' } : { src: v.src, label: v.label || '' });
+  return [{ src: item.src, label: item.label || '' }, ...(item.views || []).map(norm)];
+}
+
+async function resolveWorks(list) {
+  const seen = new Set();
+  const groups = new Map();
+  const raw = [];
+
+  // A picture listed as an extra view of another one does not get a tile of its own.
+  const claimed = new Set();
+  list.forEach((photo) => (photo.views || []).forEach((v) => claimed.add(typeof v === 'string' ? v : v.src)));
+
+  list.forEach((photo) => {
+    if (seen.has(photo.src)) return;                       // ignore accidental duplicates
+    if (claimed.has(photo.src) && !(photo.views && photo.views.length)) return;
+    seen.add(photo.src);
+
+    // Videos
+    if (photo.type === 'video') {
+      raw.push({ video: photo });
+      return;
+    }
+
+    // solo: true  keeps a picture on its own tile, even when its file name has a number (works-1.2.png)
+    if (photo.solo && !(photo.views && photo.views.length)) {
+      raw.push({
+        members: [{
+          src: photo.src, n: 0, label: photo.label || '', category: photo.category || '', alt: photo.alt || '',
+          title: photo.title || '', description: photo.description || '', hoverVideo: photo.video || ''
+        }],
+        pinned: true
+      });
+      return;
+    }
+
+    // Method 1: explicit  views: [...]
+    if (photo.views && photo.views.length) {
+      const members = viewsOf(photo).map((v, i) => ({
+        src: v.src, n: i, label: v.label, category: photo.category || '', alt: photo.alt || '',
+        title: i === 0 ? photo.title || '' : '', description: i === 0 ? photo.description || '' : '',
+        hoverVideo: i === 0 ? photo.video || '' : ''
+      }));
+      members.forEach((m) => seen.add(m.src));
+      raw.push({ members, explicit: true });
+      return;
+    }
+
+    // Methods 2 and 3: numbered file names, or  group: '...'
+    const { key, n } = groupInfo(photo);
+    const member = {
+      src: photo.src, n, label: photo.label || '', category: photo.category || '', alt: photo.alt || '',
+      title: photo.title || '', description: photo.description || '', hoverVideo: photo.video || ''
+    };
+    if (key && groups.has(key)) {
+      groups.get(key).members.push(member);
+    } else {
+      const entry = { members: [member], pinned: key.startsWith('g:') };
+      raw.push(entry);
+      if (key) groups.set(key, entry);
+    }
+  });
+
+  await Promise.all(raw.map(async (e) => {
+    if (e.video) { e.info = await probeVideo(e.video.src); return; }
+
+    // A picture can have a video that plays on hover: check that the file is there
+    const hoverSrc = e.members.find((m) => m.hoverVideo)?.hoverVideo;
+    await Promise.all([
+      ...e.members.map(async (m) => { m.info = await probeImage(m.src); }),
+      (async () => { if (hoverSrc) e.hoverInfo = await probeVideo(hoverSrc); })()
+    ]);
+
+    // Method 4: more numbered files next to it are extra views
+    if (e.explicit || e.pinned) return;
+    const found = e.members.filter((m) => m.info);
+    if (!found.length) return;
+    const last = found.reduce((a, b) => (b.n > a.n ? b : a));
+    const extras = await discoverExtras(last.info.src, seen);
+    extras.forEach((x) => e.members.push({
+      src: x.src, n: x.n, label: '', category: '', alt: '', title: '', description: '', hoverVideo: '', info: x
+    }));
+  }));
+
+  const entries = [];
+  raw.forEach((e) => {
+    if (e.video) {
+      if (!e.info) return;
+      const v = e.video;
+      entries.push({
+        type: 'video',
+        srcs: [e.info.src],
+        labels: [''],
+        poster: v.poster || '',
+        ratio: e.info.ratio,
+        category: v.category || '',
+        title: v.title || '',
+        description: v.description || '',
+        alt: v.alt || v.title || 'Video ' + (entries.length + 1)
+      });
+      return;
+    }
+
+    const ok = e.members.filter((m) => m.info).sort((a, b) => a.n - b.n);
+    if (!ok.length) {
+      // No cover picture found, but the video is there: show the video instead
+      if (e.hoverInfo) {
+        const first = e.members[0];
+        entries.push({
+          type: 'video',
+          srcs: [e.hoverInfo.src],
+          missingCover: true,
+          labels: [''],
+          poster: '',
+          ratio: e.hoverInfo.ratio,
+          category: first.category || '',
+          title: first.title || '',
+          description: first.description || '',
+          alt: first.alt || first.title || 'Video ' + (entries.length + 1)
+        });
+      }
+      return;
+    }
+    const title = ok.find((m) => m.title)?.title || '';
+    entries.push({
+      type: 'image',
+      srcs: ok.map((m) => m.info.src),
+      labels: ok.map((m) => m.label),
+      video: e.hoverInfo ? e.hoverInfo.src : '',
+      ratio: ok[0].info.ratio,
+      category: ok[0].category || '',
+      title,
+      description: ok.find((m) => m.description)?.description || '',
+      alt: ok[0].alt || title || 'Work ' + (entries.length + 1)
+    });
+  });
+  return entries;
+}
+
+/* ---------- Gallery ---------- */
+
+/* Hover previews only on devices with a mouse, and not for people who asked for less motion. */
+const canPreview = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* The title and description that slide up when you hover a tile */
+function makeInfo(entry) {
+  if (!entry.title && !entry.description) return null;
+  const info = document.createElement('span');
+  info.className = 'tile-info';
+  if (entry.title) {
+    const title = document.createElement('span');
+    title.className = 'tile-info-title';
+    title.textContent = entry.title;
+    info.append(title);
+  }
+  if (entry.description) {
+    const text = document.createElement('span');
+    text.className = 'tile-info-text';
+    text.textContent = entry.description;
+    info.append(text);
+  }
+  return info;
+}
+
+function makeTile(entry) {
+  /* ----- video: plays silently while you hover ----- */
+  if (entry.type === 'video') {
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = 'tile is-video' + (entry.poster ? ' has-poster' : '');
+    tile.style.aspectRatio = entry.ratio;
+    tile.setAttribute('aria-label', 'Play ' + entry.alt);
+
+    if (entry.poster) {
+      const poster = new Image();
+      poster.src = entry.poster;
+      poster.alt = entry.alt;
+      tile.append(poster);
+    }
+
+    const video = document.createElement('video');   // without a poster it shows the first frame
+    video.className = 'preview-video';
+    video.src = entry.srcs[0] + (entry.poster ? '' : '#t=0.1');
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = entry.poster ? 'none' : 'metadata';
+    video.tabIndex = -1;
+    tile.append(video);
+
+    const play = document.createElement('span');
+    play.className = 'play-badge';
+    play.setAttribute('aria-hidden', 'true');
+    tile.append(play);
+
+    const info = makeInfo(entry);
+    if (info) tile.append(info);
+
+    if (canPreview) {
+      const stop = () => { video.pause(); video.currentTime = 0.1; tile.classList.remove('is-playing'); };
+      video.addEventListener('playing', () => tile.classList.add('is-playing'));
+      tile.addEventListener('mouseenter', () => {
+        const started = video.play();
+        if (started && started.catch) started.catch(() => {});
+      });
+      tile.addEventListener('mouseleave', stop);
+      tile.addEventListener('click', stop);
+    }
+    return tile;
+  }
+
+  /* ----- picture: the extra views fade in one after another while you hover,
+           or, when the picture has a video, the video plays over it ----- */
+  const hasVideo = Boolean(entry.video);
+  const hasInfo = Boolean(entry.title || entry.description);
+  const tile = document.createElement('button');
+  tile.type = 'button';
+  tile.className = 'tile'
+    + (hasInfo || hasVideo || entry.srcs.length > 1 ? '' : ' plain')
+    + (hasVideo ? ' has-poster' : '');
+  tile.style.aspectRatio = entry.ratio;
+  tile.setAttribute('aria-label', 'Open ' + entry.alt);
+
+  const layers = entry.srcs.map((src, i) => {
+    const img = new Image();
+    img.src = src;
+    img.alt = i === 0 ? entry.alt : '';
+    img.decoding = 'async';
+    if (i > 0) img.className = 'preview-layer';
+    tile.append(img);
+    return img;
+  });
+
+  let hoverVideo = null;
+  if (hasVideo) {
+    hoverVideo = document.createElement('video');   // lies on top of the cover, fades in while it plays
+    hoverVideo.className = 'preview-video';
+    hoverVideo.src = entry.video;
+    hoverVideo.muted = true;
+    hoverVideo.loop = true;
+    hoverVideo.playsInline = true;
+    hoverVideo.preload = 'none';
+    hoverVideo.tabIndex = -1;
+    tile.append(hoverVideo);
+  }
+
+  const info = makeInfo(entry);
+  if (info) tile.append(info);
+
+  if (hasVideo || entry.srcs.length > 1) {
+    const total = entry.srcs.length;
+    // No "2 views" badge. Only a picture with a video gets a small badge in the top right corner.
+    if (hasVideo) {
+      const badge = document.createElement('span');
+      badge.className = 'group-badge';
+      badge.textContent = total > 1 ? '\u25B6 + ' + total + ' images' : '\u25B6 video';
+      tile.append(badge);
+    }
+
+    if (canPreview && hasVideo) {
+      const stop = () => {
+        hoverVideo.pause();
+        if (hoverVideo.readyState) hoverVideo.currentTime = 0;
+        tile.classList.remove('is-playing');
+      };
+      hoverVideo.addEventListener('playing', () => tile.classList.add('is-playing'));
+      tile.addEventListener('mouseenter', () => {
+        const started = hoverVideo.play();
+        if (started && started.catch) started.catch(() => {});
+      });
+      tile.addEventListener('mouseleave', stop);
+      tile.addEventListener('click', stop);
+    } else if (canPreview) {
+      let current = 0;
+      let first = 0;
+      let timer = 0;
+      const show = (n) => {
+        current = n;
+        layers.forEach((layer, i) => layer.classList.toggle('on', i > 0 && i === n));
+      };
+      const stop = () => {
+        clearTimeout(first);
+        clearInterval(timer);
+        current = 0;
+        layers.forEach((layer) => layer.classList.remove('on'));
+      };
+      const tick = () => {
+        if (!tile.isConnected) { stop(); return; }
+        show((current + 1) % total);
+      };
+      tile.addEventListener('mouseenter', () => {
+        stop();
+        first = setTimeout(() => { tick(); timer = setInterval(tick, 1300); }, 450);
+      });
+      tile.addEventListener('mouseleave', stop);
+      tile.addEventListener('click', stop);
+    }
+  }
+  return tile;
+}
+
+function isVisible(g, t) {
+  return g.filter === 'All' || t.entry.category === g.filter;
+}
+
+function buildGallery(el, entries, spacious) {
+  const g = { el, filter: 'All', lastWidth: 0, raf: 0, spacious: Boolean(spacious) };
+
+  g.tiles = entries.map((entry) => {
+    const t = { entry, ratio: entry.ratio, el: makeTile(entry) };
+    t.el.addEventListener('click', () => {
+      const shown = g.tiles.filter((x) => isVisible(g, x)).map((x) => x.entry);
+      openViewer(shown, shown.indexOf(entry), t.el);
+    });
+    return t;
+  });
+
+  g.ro = new ResizeObserver(() => {
+    cancelAnimationFrame(g.raf);
+    g.raf = requestAnimationFrame(() => layoutGallery(g));
+  });
+  g.ro.observe(el);
+
+  layoutGallery(g, true);
+  return g;
+}
+
+/*
+  Column layout. Every picture gets the same width, so vertical and horizontal
+  pictures have the same presence, and each keeps its own proportions
+  (a vertical picture is simply taller and is shown in full).
+  Each next picture goes into the currently shortest column, which keeps the
+  bottom edge even and the order roughly left to right.
+*/
+function layoutGallery(g, force) {
+  const W = Math.floor(g.el.clientWidth);
+  if (!W) return;                                   // page is hidden right now
+  if (!force && W === g.lastWidth) return;
+  g.lastWidth = W;
+
+  const gap = g.spacious ? (W < 600 ? 14 : 22) : (W < 600 ? 12 : 16);   // the homepage has more room between pictures
+  const count = W < 480 ? 1 : W < 900 ? 2 : W < 1400 ? 3 : 4;   // number of columns
+  const colWidth = (W - gap * (count - 1)) / count;
+  g.el.style.setProperty('--gap', gap + 'px');
+
+  const cols = Array.from({ length: count }, () => {
+    const el = document.createElement('div');
+    el.className = 'col';
+    return { el, height: 0 };
+  });
+
+  g.tiles.filter((t) => isVisible(g, t)).forEach((t) => {
+    const shortest = cols.reduce((a, b) => (b.height < a.height - 0.5 ? b : a));
+    shortest.el.append(t.el);
+    shortest.height += colWidth / t.ratio + gap;
+  });
+
+  g.el.replaceChildren(...cols.map((c) => c.el));
+}
+
+/* ---------- Projects page (main page) ---------- */
+
+let worksGallery = null;
+let mediaLibrary = [];
+
+function buildFilters(entries) {
+  const box = $('workFilters');
+  box.replaceChildren();
+  const cats = [...new Set([...workCategories, ...entries.map((e) => e.category).filter(Boolean)])];
+  if (cats.length < 2) return;
+
+  ['All', ...cats].forEach((cat) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'filter-button';
+    button.textContent = cat;
+    button.setAttribute('aria-pressed', String(cat === 'All'));
+    button.addEventListener('click', () => {
+      worksGallery.filter = cat;
+      box.querySelectorAll('.filter-button').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+      layoutGallery(worksGallery, true);
+      $('filterEmpty').hidden = worksGallery.tiles.some((t) => isVisible(worksGallery, t));
+    });
+    box.append(button);
+  });
+}
+
+let worksEntries = [];
+
+function rebuildWorks() {
+  if (worksGallery && worksGallery.ro) worksGallery.ro.disconnect();   // the old gallery stops listening
+  $('worksGrid').replaceChildren();
+  $('filterEmpty').hidden = true;
+  worksGallery = buildGallery($('worksGrid'), worksEntries, true);
+  buildFilters(worksEntries);
+}
+
+(async function initWorks() {
+  worksEntries = await resolveWorks(worksPhotos);
+  mediaLibrary = worksEntries.flatMap((e) => e.srcs.map((src) => ({ type: e.type, src })));
+  if (!worksEntries.length) { $('worksEmpty').hidden = false; return; }
+  rebuildWorks();
+})();
+
+/* ---------- Group pictures (only in edit mode) ----------
+   Open the site with ?edit at the end of the address (index.html?edit#projects).
+   1. Click "Group pictures" (or open a picture and click "Add reference pictures").
+   2. Click the main picture, then click every picture that looks like it.
+      "Show look-alikes first" puts the pictures with similar colours and shapes at the top.
+   3. Click "Add group". The reference pictures now belong to the main picture.
+   4. Click "Copy pictures code" and paste it over the  worksPhotos  list in this file.
+   Nothing is saved until you do step 4. Reload the page to start over. */
+
+let titlesChanged = false;
+let groupMain = null;
+let groupRefs = new Set();
+let groupOrder = [];
+const groupOptions = new Map();
+const featureCache = new Map();
+
+const pictureEntries = () => worksEntries.filter((e) => e.type === 'image');
+
+function updateGroupStatus(message) {
+  $('groupStatus').textContent = message || (groupMain
+    ? 'Main picture chosen. Reference pictures chosen: ' + groupRefs.size + '.'
+    : 'Click the main picture first.');
+}
+
+function syncGroupPicker() {
+  groupOptions.forEach(({ button, tag }, entry) => {
+    const isMain = entry === groupMain;
+    const isRef = groupRefs.has(entry);
+    button.classList.toggle('is-main', isMain);
+    button.classList.toggle('is-ref', isRef);
+    button.setAttribute('aria-pressed', String(isMain || isRef));
+    const text = isMain ? 'Main' : isRef ? 'Reference' : entry.srcs.length > 1 ? entry.srcs.length + ' views' : '';
+    tag.textContent = text;
+    tag.hidden = !text;
+  });
+}
+
+function renderGroupPicker() {
+  const box = $('groupPicker');
+  box.replaceChildren();
+  groupOptions.clear();
+
+  groupOrder.forEach((entry) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'group-option';
+    button.setAttribute('aria-label', entry.alt);
+
+    const img = new Image();
+    img.src = entry.srcs[0];
+    img.alt = '';
+    img.loading = 'lazy';
+
+    const tag = document.createElement('span');
+    tag.className = 'group-option-tag';
+
+    button.append(img, tag);
+    button.addEventListener('click', () => pickGroupEntry(entry));
+    groupOptions.set(entry, { button, tag });
+    box.append(button);
+  });
+  syncGroupPicker();
+}
+
+function pickGroupEntry(entry) {
+  if (!groupMain) groupMain = entry;
+  else if (entry === groupMain) { groupMain = null; groupRefs.clear(); }   // click the main picture again to start over
+  else if (groupRefs.has(entry)) groupRefs.delete(entry);
+  else groupRefs.add(entry);
+  updateGroupStatus();
+  syncGroupPicker();
+}
+
+function openGroupEditor(main) {
+  groupMain = main || null;
+  groupRefs = new Set();
+  groupOrder = pictureEntries();
+  renderGroupPicker();
+  updateGroupStatus();
+  const panel = $('groupEditor');
+  panel.hidden = false;
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* A tiny fingerprint of a picture: its colours on an 8 x 8 grid */
+async function featuresOf(src) {
+  if (featureCache.has(src)) return featureCache.get(src);
+  const img = await loadImage(src);
+  let values = null;
+  if (img) {
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 8;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(img, 0, 0, 8, 8);
+    const data = ctx.getImageData(0, 0, 8, 8).data;      // throws when the page is opened from a file on the computer
+    values = [];
+    for (let i = 0; i < data.length; i += 4) values.push(data[i], data[i + 1], data[i + 2]);
+  }
+  featureCache.set(src, values);
+  return values;
+}
+
+async function sortByLookAlike() {
+  if (!groupMain) { updateGroupStatus('Click the main picture first. Then I can show the pictures that look like it.'); return; }
+  updateGroupStatus('Comparing the pictures...');
+  try {
+    const mainValues = await featuresOf(groupMain.srcs[0]);
+    const scored = await Promise.all(pictureEntries().map(async (entry) => {
+      if (entry === groupMain) return { entry, score: -1 };
+      const values = await featuresOf(entry.srcs[0]);
+      if (!values || !mainValues) return { entry, score: Infinity };
+      let sum = 0;
+      for (let i = 0; i < values.length; i++) sum += Math.abs(values[i] - mainValues[i]);
+      const shape = Math.abs(Math.log(entry.ratio / groupMain.ratio));   // a wide picture is less like a tall one
+      return { entry, score: sum / values.length + shape * 40 };
+    }));
+    scored.sort((a, b) => a.score - b.score);
+    groupOrder = scored.map((s) => s.entry);
+    renderGroupPicker();
+    updateGroupStatus('The pictures most like the main picture are at the top. This compares colours and shapes, not faces, so check each one yourself. Reference pictures chosen: ' + groupRefs.size + '.');
+  } catch (err) {
+    updateGroupStatus('Comparing only works when the site is opened from its web address, not from a file on your computer. You can still pick the pictures by hand.');
+  }
+}
+
+function addGroup() {
+  if (!groupMain || !groupRefs.size) {
+    updateGroupStatus('Choose a main picture and at least one picture that looks like it.');
+    return;
+  }
+  groupRefs.forEach((ref) => {
+    ref.srcs.forEach((src, i) => {
+      if (groupMain.srcs.includes(src)) return;
+      groupMain.srcs.push(src);
+      groupMain.labels.push((ref.labels && ref.labels[i]) || '');
+    });
+  });
+  worksEntries = worksEntries.filter((e) => !groupRefs.has(e));
+  groupMain = null;
+  groupRefs = new Set();
+  $('groupEditor').hidden = true;
+
+  const note = $('worksNote');
+  note.textContent = 'Group added. It is not saved yet: click "Copy pictures code" and paste it over the worksPhotos list in your file. Made a mistake? Reload the page to start over.';
+  note.hidden = false;
+
+  rebuildWorks();
+}
+
+/* The whole list of pictures as code, with every group written out as views */
+function worksCode() {
+  const lines = worksEntries.map((e) => {
+    const item = {};
+    if (e.type === 'video') {
+      item.type = 'video';
+      item.src = e.srcs[0];
+      if (e.poster) item.poster = e.poster;
+    } else {
+      item.src = e.srcs[0];
+      if (e.video) item.video = e.video;
+      if (e.srcs.length > 1) {
+        item.views = e.srcs.slice(1).map((src, i) => {
+          const label = e.labels && e.labels[i + 1];
+          return label ? { src, label } : src;
+        });
+      }
+    }
+    if (e.title && e.title.trim()) item.title = e.title.trim();
+    if (e.description && e.description.trim()) item.description = e.description.trim();
+    if (e.category) item.category = e.category;
+    return '  ' + JSON.stringify(item);
+  });
+  return 'const worksPhotos = [\n' + lines.join(',\n') + '\n];';
+}
+
+$('vEditTitle').addEventListener('input', () => {
+  const entry = seq[cur];
+  if (!entry) return;
+  entry.title = $('vEditTitle').value;
+  $('vTitle').textContent = entry.title;
+  titlesChanged = true;
+});
+$('vEditDesc').addEventListener('input', () => {
+  const entry = seq[cur];
+  if (!entry) return;
+  entry.description = $('vEditDesc').value;
+  $('vDesc').textContent = entry.description;
+  titlesChanged = true;
+});
+
+$('groupButton').addEventListener('click', () => openGroupEditor(null));
+$('lookAlikeButton').addEventListener('click', sortByLookAlike);
+$('addGroupButton').addEventListener('click', addGroup);
+$('cancelGroupButton').addEventListener('click', () => {
+  groupMain = null;
+  groupRefs = new Set();
+  $('groupEditor').hidden = true;
+});
+$('vAddRefs').addEventListener('click', () => {
+  const entry = seq[cur];
+  closeViewer();
+  openGroupEditor(entry);
+});
+$('copyWorksButton').addEventListener('click', async () => {
+  if (worksEntries.some((e) => e.missingCover)
+      && !confirm('A picture in your list was not found, so it is shown as a video only. Copying now would drop that picture from the list. Copy anyway?')) return;
+  const code = worksCode();
+  const button = $('copyWorksButton');
+  try {
+    await navigator.clipboard.writeText(code);
+    button.textContent = 'Copied ✓';
+    setTimeout(() => { button.textContent = 'Copy pictures code'; }, 2000);
+  } catch (err) {
+    prompt('Copy this code and paste it over the worksPhotos list in your file:', code);
+  }
+});
+
+/* ---------- Software under the banner ---------- */
+
+/* Cuts the empty margin off a logo and centres it, so every logo fills its tile in the same way,
+   however much white space the original picture has. Returns a new picture, or null when it cannot
+   (for example when the page is opened as a file instead of from a web address). */
+function trimLogo(img, fill) {
+  try {
+    const max = 200;
+    const scale = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+    const w = Math.max(1, Math.round(img.naturalWidth * scale));
+    const h = Math.max(1, Math.round(img.naturalHeight * scale));
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(img, 0, 0, w, h);
+    const data = ctx.getImageData(0, 0, w, h).data;
+
+    // The background is the colour in the corners
+    const at = (x, y) => (y * w + x) * 4;
+    const corners = [at(0, 0), at(w - 1, 0), at(0, h - 1), at(w - 1, h - 1)];
+    const bg = [0, 1, 2, 3].map((c) => corners.reduce((sum, i) => sum + data[i + c], 0) / 4);
+    const isLogo = (i) => {
+      if (bg[3] < 30) return data[i + 3] > 30;                    // transparent background
+      if (data[i + 3] < 30) return false;
+      return Math.max(Math.abs(data[i] - bg[0]), Math.abs(data[i + 1] - bg[1]), Math.abs(data[i + 2] - bg[2])) > 40;
+    };
+
+    let minX = w, minY = h, maxX = -1, maxY = -1;
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        if (!isLogo(at(x, y))) continue;
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      }
+    }
+    if (maxX < 0) return null;
+    const bw = maxX - minX + 1;
+    const bh = maxY - minY + 1;
+    if (bw * bh < w * h * 0.002) return null;                    // only specks found, not a logo
+
+    const size = 160;
+    const room = fill ? 1 : 0.78;                                // a round picture fills its circle
+    const k = (size * room) / Math.max(bw, bh);
+    const out = document.createElement('canvas');
+    out.width = out.height = size;
+    const octx = out.getContext('2d');
+    octx.imageSmoothingQuality = 'high';
+    octx.drawImage(img, minX / scale, minY / scale, bw / scale, bh / scale,
+      (size - bw * k) / 2, (size - bh * k) / 2, bw * k, bh * k);
+
+    // A coloured or grey background around the logo would show as a patch: make it see-through
+    if (!fill && bg[3] >= 30) {
+      const shot = octx.getImageData(0, 0, size, size);
+      const d = shot.data;
+      for (let i = 0; i < d.length; i += 4) {
+        if (d[i + 3] === 0) continue;
+        if (Math.max(Math.abs(d[i] - bg[0]), Math.abs(d[i + 1] - bg[1]), Math.abs(d[i + 2] - bg[2])) <= 28) d[i + 3] = 0;
+      }
+      octx.putImageData(shot, 0, 0);
+    }
+    return out.toDataURL('image/png');
+  } catch (err) {
+    return null;
+  }
+}
+
+/* The tile colours, used in this order. A line can pick its own with  color: '#hex' */
+const softwareTiles = [
+  { bg: 'linear-gradient(135deg, #8B6CF0, #6D4FE0)', ink: '#fff' },
+  { bg: 'linear-gradient(135deg, #3DB8EC, #089FDA)', ink: '#000' },
+  { bg: 'linear-gradient(135deg, #F8E08E, #E8B93A)', ink: '#000' },
+  { bg: 'linear-gradient(135deg, #FF9BD0, #FF78BE)', ink: '#000' }
+];
+
+/* One program. compact = only the logo (for the side), otherwise the logo with its name under it. */
+/* The square with the logo of one program (the letters until the logo has loaded) */
+function makeSoftwareIcon(item, i) {
+  const icon = document.createElement('span');
+  icon.className = 'software-icon';
+  icon.setAttribute('aria-hidden', 'true');
+  const tile = item.color ? { bg: item.color, ink: item.ink || '#fff' } : softwareTiles[i % softwareTiles.length];
+  icon.style.setProperty('--tile', tile.bg);
+  icon.style.setProperty('--tile-ink', tile.ink);
+  icon.textContent = item.short || item.name.slice(0, 2);
+
+  const showLogo = async (src) => {
+    const loaded = await loadImage(src);
+    if (!loaded) return;                                       // the letters stay
+    const trimmed = trimLogo(loaded, Boolean(item.round));
+    const img = new Image();
+    img.src = trimmed || src;
+    img.alt = '';
+    icon.textContent = '';
+    icon.classList.add('has-logo');
+    icon.classList.toggle('is-round', Boolean(item.round));
+    icon.classList.toggle('is-untrimmed', !trimmed);
+    icon.append(img);
+  };
+  if (item.logo) showLogo(item.logo);
+  else if (item.icon) probeImage(item.icon).then((info) => { if (info) showLogo(info.src); });
+  return icon;
+}
+
+
+/* ---------- The sticks in the banner: the software logos, or the qualities ---------- */
+
+function drawSticks() {
+  const sticks = $('bannerSticks');
+  sticks.replaceChildren();
+
+  if (bannerSticks === 'qualities') {
+    qualities.forEach((word) => {
+      const li = document.createElement('li');
+      li.className = 'stick';
+      // A longer word makes a taller stick, up to the height that fits under the text of the banner
+      li.style.setProperty('--h', Math.min(6.4, 1.5 + word.length * 0.64).toFixed(1));
+      const name = document.createElement('span');
+      name.className = 'stick-name';
+      name.textContent = word;
+      li.append(name);
+      sticks.append(li);
+    });
+  } else {
+    // A logo on top of every stick. Every stick has a different height, like a skyline.
+    // The name shows when you rest the mouse on a stick.
+    const title = document.createElement('li');
+    title.className = 'sticks-label';
+    title.textContent = 'Tools';
+    sticks.append(title);
+    const heights = [5.6, 6.6, 6.0, 7.6, 6.4, 7.2, 6.0];   // in rem (at the biggest size of the banner)
+    software.forEach((item, i) => {
+      const li = document.createElement('li');
+      li.className = 'stick is-logo';
+      li.title = item.name + (item.note ? ' (' + item.note + ')' : '');
+      li.style.setProperty('--h', heights[i % heights.length]);
+      const label = document.createElement('span');
+      label.className = 'sr-only';
+      label.textContent = item.name;
+      li.append(makeSoftwareIcon(item, i), label);
+      sticks.append(li);
+    });
+  }
+  $('banner').classList.toggle('has-sticks', sticks.querySelector('.stick') !== null);
+}
+
+drawSticks();
+
+/* ---------- Profile picture in the banner (optional) ---------- */
+
+probeImage(profilePhoto).then((info) => {
+  if (!info) return;
+  const img = new Image();
+  img.src = info.src;
+  img.alt = 'Portrait of Lisa Vandros Tendo';
+  $('bannerPhoto').append(img);
+  $('banner').classList.add('has-photo');
+});
+
+/* ---------- About photo (optional) ---------- */
+
+probeImage(aboutPhoto).then((info) => {
+  if (!info) return;
+  const img = new Image();
+  img.src = info.src;
+  img.alt = '';
+  $('aboutPhoto').append(img);
+  $('aboutLayout').classList.remove('no-photo');
+});
+
+/* ---------- Collection list ---------- */
+
+let editingProjectId = null;
+
+/* "2026 · 3 scenes" for a collection with children, "2026 · 4 items" for one without */
+function projectInfoLine(p) {
+  const parts = [p.year];
+  const kids = p.children ? p.children.length : 0;
+  if (kids) {
+    const label = p.childLabel || 'collections';
+    parts.push(kids + ' ' + (kids === 1 ? label.replace(/s$/, '') : label));
+  } else {
+    const count = p.items ? p.items.length : 0;
+    parts.push(count + (count === 1 ? ' item' : ' items'));
+  }
+  return parts.filter(Boolean).join(' · ');
+}
+
+/* The picture for a card: its own cover, else its first item, else the first item of its first child */
+function coverItemOf(p) {
+  if (p.cover) return { type: 'image', src: p.cover };
+  if (p.items && p.items.length) return p.items[0];
+  for (const child of p.children || []) {
+    const item = coverItemOf(child);
+    if (item) return item;
+  }
+  return null;
+}
+
+function fillCover(cover, first, title) {
+  if (!first) return;
+  if (first.type === 'video' && !first.poster) {
+    const video = document.createElement('video');
+    video.src = first.src + '#t=0.1';
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = 'metadata';
+    cover.append(video);
+    return;
+  }
+  probeImage(first.type === 'video' ? first.poster : first.src).then((info) => {
+    if (!info) return;
+    const img = new Image();
+    img.src = info.src;
+    img.alt = 'Cover photo of ' + title;
+    img.loading = 'lazy';
+    cover.append(img);
+  });
+}
+
+/* One card: cover, name and a small line. Used for collections and for the collections inside them. */
+function makeCollectionCard(href, p, withText) {
+  const card = document.createElement('div');
+  card.className = 'project';
+
+  const link = document.createElement('a');
+  link.href = href;
+
+  const cover = document.createElement('div');
+  cover.className = 'cover';
+  fillCover(cover, coverItemOf(p), p.title);
+
+  const name = document.createElement('span');
+  name.className = 'project-name';
+  name.textContent = p.title;
+
+  const line = document.createElement('p');
+  line.className = 'project-info';
+  line.textContent = projectInfoLine(p);
+
+  link.append(cover, name, line);
+  if (withText && p.text) {
+    const desc = document.createElement('p');
+    desc.className = 'project-desc';
+    desc.textContent = p.text;
+    link.append(desc);
+  }
+  card.append(link);
+  return card;
+}
+
+function drawProjectList() {
+  const grid = $('projectGrid');
+  grid.replaceChildren();
+
+  collections.forEach((p) => {
+    const card = makeCollectionCard('#collections/' + p.id, p);
+
+    if (editMode) {
+      const actions = document.createElement('div');
+      actions.className = 'project-actions';
+
+      const edit = document.createElement('button');
+      edit.type = 'button';
+      edit.textContent = 'Edit';
+      edit.addEventListener('click', () => openProjectEditor(p));
+
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.textContent = 'Delete';
+      del.addEventListener('click', () => deleteProject(p.id));
+
+      actions.append(edit, del);
+      card.append(actions);
+    }
+
+    grid.append(card);
+  });
+}
+
+/* ---------- Collection editor (only in edit mode) ---------- */
+
+function openProjectEditor(project) {
+  editingProjectId = project ? project.id : null;
+  $('editorTitle').textContent = project ? 'Edit collection' : 'New collection';
+  $('projectName').value = project?.title || '';
+  $('projectYear').value = project?.year || '';
+  $('projectDescription').value = project?.text || '';
+  renderProjectMediaSelector(project?.items || []);
+
+  const editor = $('projectEditor');
+  editor.hidden = false;
+  editor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderProjectMediaSelector(selectedItems) {
+  const container = $('projectMediaSelector');
+  container.replaceChildren();
+
+  mediaLibrary.forEach((media, index) => {
+    const option = document.createElement('label');
+    option.className = 'media-option';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.dataset.index = index;
+    checkbox.checked = selectedItems.some((item) => item.type === media.type && item.src === media.src);
+    option.classList.toggle('selected', checkbox.checked);
+    checkbox.addEventListener('change', () => option.classList.toggle('selected', checkbox.checked));
+
+    const preview = document.createElement(media.type === 'video' ? 'video' : 'img');
+    preview.src = media.src;
+    if (media.type === 'video') { preview.muted = true; preview.preload = 'metadata'; }
+    else { preview.alt = 'Select image'; preview.loading = 'lazy'; }
+
+    option.append(preview, checkbox);
+    container.append(option);
+  });
+}
+
+function saveProject() {
+  const name = $('projectName').value.trim();
+  const year = $('projectYear').value.trim();
+  const text = $('projectDescription').value.trim();
+
+  if (!name) { alert('Please enter a collection name.'); return; }
+
+  const existing = collections.find((p) => p.id === editingProjectId)?.items || [];
+  const items = [...document.querySelectorAll('#projectMediaSelector input[type="checkbox"]')]
+    .filter((c) => c.checked)
+    .map((c) => {
+      const media = mediaLibrary[Number(c.dataset.index)];
+      const previous = existing.find((item) => item.src === media.src);   // keeps its extra views
+      return previous ? { ...previous } : { type: media.type, src: media.src };
+    });
+
+  if (editingProjectId) {
+    const project = collections.find((p) => p.id === editingProjectId);
+    if (project) Object.assign(project, { title: name, year, text, items });   // children stay as they are
+  } else {
+    const base = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'collection';
+    let id = base;
+    for (let n = 2; collections.some((p) => p.id === id); n++) id = base + '-' + n;
+    collections.push({ id, title: name, year, text, items });
+  }
+
+  editingProjectId = null;
+  $('projectEditor').hidden = true;
+  drawProjectList();
+}
+
+function deleteProject(id) {
+  const index = collections.findIndex((p) => p.id === id);
+  if (index === -1) return;
+  if (!confirm('Delete "' + collections[index].title + '"?')) return;
+  collections.splice(index, 1);
+  drawProjectList();
+}
+
+document.querySelectorAll('.edit-only').forEach((el) => { el.hidden = !editMode; });
+
+$('newProjectButton').addEventListener('click', () => openProjectEditor(null));
+$('saveProjectButton').addEventListener('click', saveProject);
+$('cancelProjectButton').addEventListener('click', () => {
+  editingProjectId = null;
+  $('projectEditor').hidden = true;
+});
+$('copyProjectsButton').addEventListener('click', async () => {
+  const code = 'const collections = ' + JSON.stringify(collections, null, 2) + ';';
+  const button = $('copyProjectsButton');
+  try {
+    await navigator.clipboard.writeText(code);
+    button.textContent = 'Copied ✓';
+    setTimeout(() => { button.textContent = 'Copy collections code'; }, 2000);
+  } catch (err) {
+    prompt('Copy this code and paste it over the collections list in your file:', code);
+  }
+});
+
+drawProjectList();
+
+/* ---------- One collection (or one collection inside a collection) ---------- */
+
+/* Items of a collection or of a case update -> entries the gallery and the viewer understand */
+async function resolveItems(items, base) {
+  const resolved = await Promise.all((items || []).map(async (item, i) => {
+    const alt = item.alt || item.title || base + ' ' + (i + 1);
+    const title = item.title || '';
+    const description = item.description || '';
+    if (item.type === 'video') {
+      const info = await probeVideo(item.src);
+      return info && {
+        type: 'video', srcs: [info.src], labels: [''], poster: item.poster || '',
+        ratio: info.ratio, category: '', alt, title, description
+      };
+    }
+    const infos = await Promise.all(viewsOf(item).map(async (v) => {
+      const info = await probeImage(v.src);
+      return info && { ...info, label: v.label };
+    }));
+    const ok = infos.filter(Boolean);
+
+    // A picture can have a video that plays on hover
+    const hover = item.video ? await probeVideo(item.video) : null;
+
+    if (!ok.length) {
+      // No picture found, but the video is there: show the video instead
+      return hover ? {
+        type: 'video', srcs: [hover.src], labels: [''], poster: '',
+        ratio: hover.ratio, category: '', alt, title, description
+      } : null;
+    }
+    if (!(item.views && item.views.length)) {
+      const extras = await discoverExtras(ok[0].src);
+      extras.forEach((x) => ok.push({ ...x, label: '' }));
+    }
+    return {
+      type: 'image', srcs: ok.map((o) => o.src), labels: ok.map((o) => o.label),
+      video: hover ? hover.src : '',
+      ratio: ok[0].ratio, category: '', alt, title, description
+    };
+  }));
+  return resolved.filter(Boolean);
+}
+
+let projectToken = 0;
+
+/*
+  p     = the collection
+  child = optional: one of its children. Then this page shows the child instead.
+  A collection with children shows an overview of them first (one card each),
+  followed by its own images, if it has any.
+*/
+async function drawProject(p, child) {
+  const token = ++projectToken;
+  const view = $('projectView');
+  view.replaceChildren();
+
+  const current = child || p;
+  const hasChildren = !child && Boolean(p.children && p.children.length);
+
+  const back = document.createElement('a');
+  back.className = 'back';
+  back.href = child ? '#collections/' + p.id : '#collections';
+  back.textContent = child ? '\u2190 ' + p.title : '\u2190 all collections';
+
+  const title = document.createElement('h1');
+  title.textContent = current.title;
+
+  const meta = document.createElement('p');
+  meta.className = 'project-meta';
+  meta.textContent = projectInfoLine(current);
+
+  view.append(back, title, meta);
+
+  if (current.text) {
+    const text = document.createElement('p');
+    text.className = 'project-text';
+    text.textContent = current.text;
+    view.append(text);
+  }
+
+  if (hasChildren) {
+    const grid = document.createElement('div');
+    grid.className = 'projects';
+    p.children.forEach((c) => grid.append(makeCollectionCard('#collections/' + p.id + '/' + c.id, c, true)));
+    view.append(grid);
+  }
+
+  const hasItems = Boolean(current.items && current.items.length);
+  if (hasChildren && !hasItems) return;             // just the overview
+
+  let host = view;
+  if (hasChildren) {
+    const section = document.createElement('section');
+    section.className = 'case-section';
+    const heading = document.createElement('h2');
+    heading.className = 'section-title';
+    heading.textContent = 'Images';
+    section.append(heading);
+    view.append(section);
+    host = section;
+  }
+
+  const gallery = document.createElement('div');
+  gallery.className = 'gallery';
+  host.append(gallery);
+
+  const entries = await resolveItems(current.items, current.title);
+  if (token !== projectToken) return;               // the visitor already went somewhere else
+
+  if (!entries.length) {
+    const empty = document.createElement('p');
+    empty.className = 'empty';
+    empty.textContent = 'No images in this collection yet.';
+    gallery.replaceWith(empty);
+    return;
+  }
+  buildGallery(gallery, entries);
+}
+
+/* ---------- Progress: cases ---------- */
+
+function formatDate(d) {
+  if (!d) return '';
+  const t = new Date(d + 'T00:00:00');
+  return isNaN(t) ? String(d) : t.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+const newestFirst = (a, b) => String(b.date || '').localeCompare(String(a.date || ''));
+
+function drawRecent() {
+  const list = $('recentList');
+  list.replaceChildren();
+  const latest = cases
+    .flatMap((c) => (c.updates || []).filter((u) => u.date).map((u) => ({ c, u })))
+    .sort((a, b) => newestFirst(a.u, b.u))
+    .slice(0, 5);
+
+  $('recentBlock').hidden = !latest.length;
+  latest.forEach(({ c, u }) => {
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = '#progress/' + c.id;
+
+    const date = document.createElement('span');
+    date.className = 'recent-date';
+    date.textContent = formatDate(u.date);
+
+    const what = document.createElement('span');
+    const name = document.createElement('span');
+    name.className = 'recent-case';
+    name.textContent = c.title;
+    what.append(name);
+    if (u.title) {
+      const title = document.createElement('span');
+      title.className = 'recent-title';
+      title.textContent = u.title;
+      what.append(title);
+    }
+
+    link.append(date, what);
+    li.append(link);
+    list.append(li);
+  });
+}
+
+function drawCaseList() {
+  const grid = $('caseGrid');
+  grid.replaceChildren();
+  $('casesEmpty').hidden = cases.length > 0;
+
+  cases.forEach((c) => {
+    const card = document.createElement('div');
+    card.className = 'project';
+    card.dataset.type = c.type || '';
+
+    const link = document.createElement('a');
+    link.href = '#progress/' + c.id;
+
+    const cover = document.createElement('div');
+    cover.className = 'cover';
+    const firstUpdateImage = (c.updates || []).flatMap((u) => u.items || []).find((i) => i.type !== 'video');
+    const coverSrc = c.cover || c.compare?.[0]?.after || firstUpdateImage?.src;
+    if (coverSrc) {
+      probeImage(coverSrc).then((info) => {
+        if (!info) return;
+        const img = new Image();
+        img.src = info.src;
+        img.alt = 'Cover picture of ' + c.title;
+        img.loading = 'lazy';
+        cover.append(img);
+      });
+    }
+
+    const name = document.createElement('span');
+    name.className = 'project-name';
+    name.textContent = c.title;
+
+    const info = document.createElement('p');
+    info.className = 'project-info';
+    info.textContent = [c.type, c.status].filter(Boolean).join(' \u00b7 ');
+
+    link.append(cover, name, info);
+
+    const newest = [...(c.updates || [])].filter((u) => u.date).sort(newestFirst)[0];
+    if (newest) {
+      const latest = document.createElement('p');
+      latest.className = 'project-info';
+      latest.textContent = 'Latest update: ' + formatDate(newest.date);
+      link.append(latest);
+    }
+
+    card.append(link);
+    grid.append(card);
+  });
+}
+
+function drawCaseFilters() {
+  const box = $('caseFilters');
+  box.replaceChildren();
+  const types = [...new Set(cases.map((c) => c.type).filter(Boolean))];
+  if (types.length < 2) return;
+
+  ['All', ...types].forEach((type) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'filter-button';
+    button.textContent = type;
+    button.setAttribute('aria-pressed', String(type === 'All'));
+    button.addEventListener('click', () => {
+      box.querySelectorAll('.filter-button').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+      $('caseGrid').querySelectorAll('.project').forEach((card) => {
+        card.hidden = type !== 'All' && card.dataset.type !== type;
+      });
+    });
+    box.append(button);
+  });
+}
+
+/* A before / after picture with a handle you can drag (or move with the arrow keys). */
+function makeCompare(pair, before, after) {
+  const block = document.createElement('figure');
+  block.className = 'compare-block';
+
+  if (pair.label) {
+    const label = document.createElement('figcaption');
+    label.className = 'compare-label';
+    label.textContent = pair.label;
+    block.append(label);
+  }
+
+  const box = document.createElement('div');
+  box.className = 'compare';
+  box.style.setProperty('--r', after.ratio);
+
+  const imgAfter = new Image();
+  imgAfter.src = after.src;
+  imgAfter.alt = (pair.label ? pair.label + ', ' : '') + 'after';
+
+  const imgBefore = new Image();
+  imgBefore.src = before.src;
+  imgBefore.alt = (pair.label ? pair.label + ', ' : '') + 'before';
+
+  const tagBefore = document.createElement('span');
+  tagBefore.className = 'compare-tag before';
+  tagBefore.textContent = 'Before';
+  const tagAfter = document.createElement('span');
+  tagAfter.className = 'compare-tag after';
+  tagAfter.textContent = 'After';
+
+  const line = document.createElement('div');
+  line.className = 'compare-line';
+
+  const range = document.createElement('input');
+  range.type = 'range';
+  range.min = 0;
+  range.max = 100;
+  range.step = 0.1;
+  range.value = 50;
+  range.setAttribute('aria-label', 'Slide between before and after');
+
+  const set = (v) => {
+    imgBefore.style.clipPath = 'inset(0 ' + (100 - v) + '% 0 0)';
+    line.style.left = v + '%';
+  };
+  range.addEventListener('input', () => set(Number(range.value)));
+  set(50);
+
+  box.append(imgAfter, imgBefore, tagBefore, tagAfter, line, range);
+  block.append(box);
+  return block;
+}
+
+let caseToken = 0;
+
+async function drawCase(c) {
+  const token = ++caseToken;
+  const view = $('progressView');
+  view.replaceChildren();
+
+  const back = document.createElement('a');
+  back.className = 'back';
+  back.href = '#progress';
+  back.textContent = '\u2190 all cases';
+
+  const title = document.createElement('h1');
+  title.textContent = c.title;
+
+  const meta = document.createElement('p');
+  meta.className = 'project-meta';
+  meta.textContent = [c.type, c.status].filter(Boolean).join(' \u00b7 ');
+
+  view.append(back, title, meta);
+
+  if (c.text) {
+    const text = document.createElement('p');
+    text.className = 'project-text';
+    text.textContent = c.text;
+    view.append(text);
+  }
+
+  const pairs = await Promise.all((c.compare || []).map(async (pair) => {
+    const [before, after] = await Promise.all([probeImage(pair.before), probeImage(pair.after)]);
+    return before && after ? { pair, before, after } : null;
+  }));
+
+  const updates = [...(c.updates || [])].sort(newestFirst);
+  const resolvedUpdates = await Promise.all(updates.map(async (u) => ({
+    u, entries: await resolveItems(u.items, u.title || c.title)
+  })));
+  if (token !== caseToken) return;                  // the visitor already went somewhere else
+
+  const shownPairs = pairs.filter(Boolean);
+  if (shownPairs.length) {
+    const section = document.createElement('section');
+    section.className = 'case-section';
+    const heading = document.createElement('h2');
+    heading.className = 'section-title';
+    heading.textContent = 'Before and after';
+    section.append(heading);
+    shownPairs.forEach(({ pair, before, after }) => section.append(makeCompare(pair, before, after)));
+    view.append(section);
+  }
+
+  if (resolvedUpdates.length) {
+    const section = document.createElement('section');
+    section.className = 'case-section';
+    const heading = document.createElement('h2');
+    heading.className = 'section-title';
+    heading.textContent = 'Updates';
+    section.append(heading);
+    view.append(section);
+
+    resolvedUpdates.forEach(({ u, entries }) => {
+      const block = document.createElement('article');
+      block.className = 'update';
+
+      if (u.date) {
+        const date = document.createElement('p');
+        date.className = 'update-date';
+        date.textContent = formatDate(u.date);
+        block.append(date);
+      }
+      if (u.title) {
+        const heading3 = document.createElement('h3');
+        heading3.className = 'update-title';
+        heading3.textContent = u.title;
+        block.append(heading3);
+      }
+      if (u.text) {
+        const text = document.createElement('p');
+        text.className = 'update-text';
+        text.textContent = u.text;
+        block.append(text);
+      }
+
+      section.append(block);                         // in the page first, so the gallery can measure its width
+      if (entries.length) {
+        const gallery = document.createElement('div');
+        gallery.className = 'gallery';
+        block.append(gallery);
+        buildGallery(gallery, entries);
+      }
+    });
+  }
+
+  if (!shownPairs.length && !resolvedUpdates.length) {
+    const empty = document.createElement('p');
+    empty.className = 'empty';
+    empty.textContent = 'Nothing to show for this case yet.';
+    view.append(empty);
+  }
+}
+
+drawRecent();
+drawCaseList();
+drawCaseFilters();
+
+/* ---------- Image viewer ---------- */
+
+const viewer = $('viewer');
+const vImg = $('vImg');
+const vVideo = $('vVideo');
+const relatedViews = $('relatedViews');
+const relatedList = $('relatedList');
+
+let seq = [];        // the works you can flip through
+let cur = 0;         // which work is open
+let viewNo = 0;      // which view of that work is open
+let opener = null;
+
+function stopVideo() {
+  vVideo.pause();
+  vVideo.removeAttribute('src');
+  vVideo.removeAttribute('poster');
+  vVideo.load();
+}
+
+/* Everything you can look at inside one work, in order.
+   A picture with a video: the video first, then the pictures (the cover and the extra views). */
+function viewsFor(entry) {
+  if (entry.type === 'video') {
+    return [{ kind: 'video', src: entry.srcs[0], thumb: entry.poster || '', label: '' }];
+  }
+  const list = entry.srcs.map((src, i) => ({
+    kind: 'image', src, thumb: src, label: (entry.labels && entry.labels[i]) || ''
+  }));
+  if (entry.video) list.unshift({ kind: 'video', src: entry.video, thumb: entry.srcs[0], label: '' });
+  return list;
+}
+
+function renderViewer() {
+  const entry = seq[cur];
+  const views = viewsFor(entry);
+  if (viewNo >= views.length) viewNo = 0;
+  const shown = views[viewNo];
+
+  if (shown.kind === 'video') {
+    vImg.hidden = true;
+    vImg.removeAttribute('src');
+    vVideo.hidden = false;
+    vVideo.poster = entry.type === 'video' ? (entry.poster || '') : entry.srcs[0];
+    vVideo.src = shown.src;
+    vVideo.setAttribute('aria-label', entry.alt);
+    const started = vVideo.play();                       // the visitor just clicked, so this is allowed
+    if (started && started.catch) started.catch(() => {});
+  } else {
+    stopVideo();
+    vVideo.hidden = true;
+    vImg.hidden = false;
+    vImg.src = shown.src;
+    vImg.alt = views.length > 1 ? entry.alt + ', view ' + (viewNo + 1) + ' of ' + views.length : entry.alt;
+  }
+
+  $('vTitle').textContent = entry.title || '';
+  $('vTitle').hidden = !entry.title;
+  $('vDesc').textContent = entry.description || '';
+  $('vDesc').hidden = !entry.description;
+  // In edit mode the title and description of a work of the homepage are fields you can type in
+  const editable = editMode && worksEntries.includes(entry);
+  $('vInfo').hidden = editable || (!entry.title && !entry.description);
+  $('vEdit').hidden = !editable;
+  if (editable) {
+    if (document.activeElement !== $('vEditTitle')) $('vEditTitle').value = entry.title || '';
+    if (document.activeElement !== $('vEditDesc')) $('vEditDesc').value = entry.description || '';
+  }
+
+  $('vCaption').textContent = shown.label;
+  $('vCaption').hidden = !shown.label;
+
+  $('vCount').textContent = seq.length > 1 ? (cur + 1) + ' / ' + seq.length : '';
+  $('vPrev').hidden = $('vNext').hidden = seq.length < 2;
+  $('vAddRefs').hidden = !(editMode && entry.type === 'image' && worksEntries.includes(entry));
+
+  relatedList.replaceChildren();
+  relatedViews.hidden = views.length < 2;
+  if (views.length > 1) {
+    const offset = views[0].kind === 'video' ? 1 : 0;     // so the pictures are numbered from 1
+    views.forEach((view, i) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'related-thumb'
+        + (i === viewNo ? ' active' : '')
+        + (view.kind === 'video' ? ' is-video-thumb' : '');
+      const thumbLabel = view.label || (view.kind === 'video' ? 'Video' : 'View ' + (i + 1 - offset));
+      button.setAttribute('aria-label', thumbLabel);
+      button.title = thumbLabel;
+      if (view.thumb) {
+        const img = new Image();
+        img.src = view.thumb;
+        img.alt = '';
+        button.append(img);
+      }
+      button.addEventListener('click', (e) => { e.stopPropagation(); viewNo = i; renderViewer(); });
+      relatedList.append(button);
+    });
+  }
+}
+
+function goView(step) {
+  const count = seq[cur] ? viewsFor(seq[cur]).length : 0;
+  if (count < 2) return;
+  viewNo = (viewNo + step + count) % count;
+  renderViewer();
+}
+
+function go(step) {
+  if (seq.length < 2) return;
+  cur = (cur + step + seq.length) % seq.length;
+  viewNo = 0;
+  renderViewer();
+}
+
+function openViewer(entries, start, openerEl) {
+  if (!entries.length || start < 0) return;
+  seq = entries;
+  cur = start;
+  viewNo = 0;
+  opener = openerEl;
+  renderViewer();
+  viewer.hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('vClose').focus();
+}
+
+function closeViewer() {
+  viewer.hidden = true;
+  document.body.style.overflow = '';
+  vImg.removeAttribute('src');
+  stopVideo();
+  if (titlesChanged) {
+    titlesChanged = false;
+    const note = $('worksNote');
+    note.textContent = 'Titles changed. They are not saved yet: click "Copy pictures code" and paste it over the worksPhotos list in your file. Made a mistake? Reload the page to start over.';
+    note.hidden = false;
+    rebuildWorks();
+  }
+  if (opener && opener.isConnected) opener.focus();
+}
+
+$('vClose').addEventListener('click', closeViewer);
+$('vPrev').addEventListener('click', () => go(-1));
+$('vNext').addEventListener('click', () => go(1));
+viewer.addEventListener('click', (e) => {
+  if (e.target === viewer || e.target === $('viewerMain')) closeViewer();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (viewer.hidden) return;
+  // While you type a title, the keys belong to the text field
+  const typing = document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+  if (typing) { if (e.key === 'Escape') document.activeElement.blur(); return; }
+  // While the video itself has focus, the arrow keys and space belong to its player controls.
+  if (document.activeElement === vVideo && e.key !== 'Escape') return;
+  if (e.key === 'Escape') closeViewer();
+  else if (e.key === 'ArrowLeft') go(-1);
+  else if (e.key === 'ArrowRight') go(1);
+  else if (e.key === 'ArrowUp')   { e.preventDefault(); goView(-1); }
+  else if (e.key === 'ArrowDown') { e.preventDefault(); goView(1); }
+});
+
+let touchStart = null;
+viewer.addEventListener('touchstart', (e) => {
+  if (e.target === vVideo || e.target.closest('.viewer-edit')) { touchStart = null; return; }       // dragging the video's controls is not a swipe
+  touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+}, { passive: true });
+viewer.addEventListener('touchend', (e) => {
+  if (!touchStart) return;
+  const dx = e.changedTouches[0].clientX - touchStart.x;
+  const dy = e.changedTouches[0].clientY - touchStart.y;
+  touchStart = null;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);      // swipe sideways: next work
+  else if (Math.abs(dy) > 50) goView(dy < 0 ? 1 : -1);                            // swipe up/down: other views
+}, { passive: true });
+
+/* ---------- Switching pages (the address changes to #projects, #collections, #about, ...) ---------- */
+
+const pages = ['projects', 'collections', 'progress', 'about', 'contact'];
+
+function showPage() {
+  const [page, sub, sub2] = location.hash.slice(1).split('/');
+  const id = pages.includes(page) ? page : 'projects';
+  pages.forEach((p) => { $('page-' + p).hidden = p !== id; });
+
+  /* Collections has three levels: the list, one collection (#collections/its-id),
+     and one collection inside it (#collections/its-id/child-id) */
+  const project = id === 'collections' && sub ? collections.find((p) => p.id === sub) : null;
+  const child = project && sub2 ? (project.children || []).find((c) => c.id === sub2) : null;
+  $('projectList').hidden = !!project;
+  $('projectView').hidden = !project;
+  if (project) drawProject(project, child);
+
+  /* Progress has two views: the list of cases, and one case (#progress/its-id) */
+  const theCase = id === 'progress' && sub ? cases.find((c) => c.id === sub) : null;
+  $('progressList').hidden = !!theCase;
+  $('progressView').hidden = !theCase;
+  if (theCase) drawCase(theCase);
+
+  document.querySelectorAll('.site nav a').forEach((a) => {
+    if (a.getAttribute('href') === '#' + id) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
+  });
+
+  if (id === 'projects' && worksGallery) layoutGallery(worksGallery, true);
+  window.scrollTo(0, 0);
+}
+
+window.addEventListener('hashchange', showPage);
+showPage();
+</script>
+</body>
+</html>
