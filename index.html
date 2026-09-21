@@ -223,8 +223,51 @@
     background: linear-gradient(to top, var(--pink), #FF9BD0);   /* pink */
     transition: transform .15s ease;
   }
-  .stick:hover { transform: translateY(-5px); }
-  .stick.is-logo { justify-content: flex-start; padding: .4rem 0 0; }
+  .stick:hover, .stick:focus-within { transform: translateY(-5px); }
+
+  /* The pop-up that says how much I know of a program (shows when you rest the mouse on a stick) */
+  .tool-tip {
+    position: fixed;
+    z-index: 80;
+    left: 0;
+    top: 0;
+    width: max-content;
+    max-width: min(16rem, calc(100vw - 1.5rem));
+    padding: .85rem 1rem .9rem;
+    border: 1px solid #C8961A;
+    border-radius: 14px;
+    background: linear-gradient(to bottom, var(--gold-light), var(--gold));   /* gold */
+    box-shadow: 0 14px 32px rgba(200, 150, 26, .4), 0 4px 12px rgba(0, 0, 0, .15);
+    color: var(--ink);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity .15s ease, transform .15s ease;
+    pointer-events: none;
+  }
+  .tool-tip.show { opacity: 1; transform: translateY(0); }
+  .tool-tip::after {                              /* the little arrow towards the stick */
+    content: "";
+    position: absolute;
+    left: var(--arrow, 50%);
+    bottom: -7px;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    background: var(--gold);
+    border-right: 1px solid #C8961A;
+    border-bottom: 1px solid #C8961A;
+    transform: rotate(45deg);
+  }
+  .tool-tip.below::after { bottom: auto; top: -7px; background: var(--gold-light); transform: rotate(225deg); }
+  .tool-tip { padding: .75rem 1rem .8rem; }
+  .tool-tip-name { display: block; font-size: 1rem; font-weight: 800; }
+  .tool-tip-level { display: flex; align-items: center; gap: .6rem; margin-top: .45rem; font-size: .85rem; font-weight: 600; }
+  .tool-tip-bars { display: flex; gap: 4px; }
+  .tool-tip-bars i { width: 1.4rem; height: .4rem; border-radius: 999px; background: rgba(0, 0, 0, .16); }
+  .tool-tip-bars i.on { background: var(--ink); }
+  .stick.is-logo { justify-content: flex-start; padding: 0; }
+  .stick-link { display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; padding: .4rem 0 0; color: inherit; }
+  .stick-link:focus-visible { outline: 2px solid #fff; outline-offset: -4px; border-radius: 12px 12px 0 0; }
   .sticks-label {
     align-self: flex-end;
     margin: 0 .3rem 1rem 0;
@@ -281,6 +324,13 @@
     }
     .banner-photo { order: -1; }
     .banner-photo img { width: 9rem; }
+    /* the sticks get narrower on a small screen so all of them fit next to each other */
+    .banner-sticks { gap: clamp(.25rem, 1.6vw, .6rem); }
+    .stick { width: clamp(1.9rem, 9.4vw, 3.3rem); }
+    .stick .software-icon { width: calc(100% - .5rem); height: auto; aspect-ratio: 1; font-size: .75rem; }
+  }
+  @media (max-width: 520px) {
+    .sticks-label { display: none; }
   }
 
   /* ---------- Gallery (projects page + collection pages) ----------
@@ -409,6 +459,106 @@
     line-height: 1;
     pointer-events: none;
   }
+
+  /* ---------- Case study: the tile on the homepage and the page itself ---------- */
+  .tile.is-case { cursor: pointer; }
+
+  /* A case tile that shows its cover inside a phone (device: 'phone' in the case) */
+  .tile.has-device { background: var(--device-bg, #DCE8FF); }
+  .tile-device {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 90%;
+    aspect-ratio: var(--frame-ratio, .53);
+    transform: translate(-50%, -50%);
+    border-radius: 16% / 8.5%;
+    background: #111;
+    box-shadow: inset 0 0 0 1px #333, 0 18px 30px rgba(0, 0, 0, .22);
+  }
+  .tile-device::before {                       /* the island at the top of the phone */
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: 1.6%;
+    left: 50%;
+    width: 27%;
+    height: 1.5%;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: #000;
+  }
+  .tile-device-screen { position: absolute; inset: 3% 6%; overflow: hidden; border-radius: 13% / 6.4%; background: #fff; }
+  .tile .tile-device-screen img { object-fit: cover; }
+  .case-badge {
+    position: absolute;
+    left: .5rem;
+    top: .5rem;
+    z-index: 2;
+    padding: .3rem .7rem;
+    border-radius: 999px;
+    background: linear-gradient(100deg, var(--purple), var(--accent));
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 600;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .case-study { max-width: 980px; }
+  .case-study-sub { margin: 0 0 2.5rem; max-width: 60ch; font-size: 1.25rem; font-weight: 300; }
+  .cs-section { margin: 0 0 2.75rem; }
+  .cs-heading { margin: 0 0 1rem; font-size: clamp(1.4rem, 2.6vw, 1.9rem); font-weight: 800; letter-spacing: -.02em; line-height: 1.15; }
+  .cs-list { margin: 0 0 1rem; padding-left: 1.25rem; max-width: 62ch; font-size: 1.125rem; font-weight: 300; }
+  .cs-list li { margin: .35rem 0; white-space: pre-line; }
+  .cs-list.marked { list-style: none; padding-left: 0; }
+  .cs-list.marked li { padding-left: 1.9rem; position: relative; }
+  .cs-list.marked li::before { content: attr(data-bullet); position: absolute; left: 0; }
+  .cs-text a, .cs-list a { color: inherit; text-decoration: underline; word-break: break-all; }
+  .cs-subheading { white-space: pre-line; }
+  .cs-subheading { margin: 0 0 .75rem; font-size: 1.3rem; font-weight: 800; letter-spacing: -.01em; line-height: 1.2; }
+  /* A clickable Figma prototype inside a phone (or a tablet) */
+  .device {
+    position: relative;
+    margin: 0 auto;
+    background: #111;
+    box-shadow: inset 0 0 0 2px #2c2c2c, 0 30px 60px rgba(0, 0, 0, .22), 0 8px 18px rgba(0, 0, 0, .18);
+  }
+  .device.phone { width: min(100%, 340px); padding: 12px; border-radius: 50px; }
+  .device.tablet { width: min(100%, 760px); padding: 18px; border-radius: 34px; }
+  .device-screen {
+    position: relative;
+    overflow: hidden;
+    background: #000;
+    aspect-ratio: var(--ratio, 390 / 844);
+  }
+  .device.phone .device-screen { border-radius: 38px; }
+  .device.tablet .device-screen { border-radius: 18px; }
+  .device-screen iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .device.phone::before {                      /* the island at the top of the phone */
+    content: "";
+    position: absolute;
+    top: 21px;
+    left: 50%;
+    width: 27%;
+    height: 22px;
+    margin-left: -13.5%;
+    border-radius: 14px;
+    background: #000;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .device-btn { position: absolute; width: 3px; border-radius: 3px; background: #262626; }
+  .device-btn.left { left: -3px; }
+  .device-btn.right { right: -3px; }
+  .cs-video { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; background: #000; }
+  .cs-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .cs-text { margin: 0 0 1rem; max-width: 62ch; font-size: 1.125rem; font-weight: 300; white-space: pre-line; }
+  .cs-text.large { font-size: 1.35rem; font-weight: 500; }
+  .cs-images { display: grid; gap: 1.5rem; }
+  /* natural: true  = every picture at its own size (for pages of a document); small ones sit next to each other */
+  .cs-images.natural { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: flex-start; }
+  .cs-images.natural .cs-image { width: auto; max-width: 100%; border: 1px solid var(--line); }
+  .cs-image { display: block; width: 100%; height: auto; border-radius: var(--radius); background: #fff; cursor: zoom-in; }
 
   /* ---------- Software logos (on the sticks in the banner) ---------- */
   .software-icon {
@@ -545,6 +695,8 @@
   .project-editor { margin-bottom: 3rem; max-width: 800px; }
   .project-editor label { display: block; margin-bottom: 1rem; }
   .project-editor input[type="text"],
+  .project-editor input[type="date"],
+  .project-editor select,
   .project-editor textarea {
     display: block;
     width: 100%;
@@ -634,6 +786,38 @@
   .recent a:hover .recent-case { border-bottom-color: var(--accent); }
   .recent-title { display: block; color: var(--muted); }
 
+  /* ---------- Ideas (on the progress page) ---------- */
+  .ideas-block { margin-top: 4rem; }
+  .ideas-header { margin-bottom: 1.25rem; }
+  .future-title { margin: 3.5rem 0 1.25rem; }
+  .ideas-header .section-title { margin: 0; }
+  .ideas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 1rem; }
+  .idea {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #fff;
+  }
+  .idea-top { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+  .idea-status {
+    padding: .25rem .65rem;
+    border-radius: 999px;
+    background: var(--purple);
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .idea-status.status-trying { background: var(--gold); color: var(--ink); }
+  .idea-status.status-done { background: var(--ink); }
+  .idea-date { color: var(--muted); font-size: .8rem; }
+  .idea-title { margin: 0; font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
+  .idea-note { margin: 0; font-weight: 300; white-space: pre-line; }
+  .idea-tag { margin-top: auto; color: var(--muted); font-size: .8rem; }
+  .idea .project-actions { margin-top: .25rem; }
   .compare-block { margin: 0 0 2.5rem; }
   .compare-label { margin: 0 0 .6rem; font-weight: 500; }
   .compare {
@@ -706,6 +890,40 @@
   }
   .compare:focus-within .compare-line::after { outline: 3px solid var(--accent); outline-offset: 2px; }
 
+  /* ---------- timeline of a project ---------- */
+  .finished-title { margin-top: 3.5rem; }
+  .skills { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .skills.small { margin: 1rem 0 0; }
+  .skill-chip {
+    padding: .4rem .85rem;
+    border-radius: 999px;
+    background: linear-gradient(100deg, var(--purple), var(--accent));
+    color: #fff;
+    font-size: .85rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .skill-chip small { margin-left: .4rem; font-size: .75rem; font-weight: 300; opacity: .85; }
+  .skills.small .skill-chip { padding: .25rem .65rem; font-size: .75rem; }
+  .timeline { position: relative; margin: 0; padding: 0 0 0 1.75rem; list-style: none; border-left: 2px solid var(--line); }
+  .tl-item { position: relative; padding: 0 0 3rem; }
+  .tl-item::before {
+    content: "";
+    position: absolute;
+    left: calc(-1.75rem - 7px);
+    top: .3rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px #fff;
+  }
+  .tl-date { margin: 0 0 .15rem; color: var(--muted); font-size: .9rem; }
+  .tl-title { margin: 0 0 .75rem; font-size: 1.35rem; font-weight: 800; line-height: 1.25; }
+  .tl-label { margin: 1rem 0 .15rem; color: var(--muted); font-size: .75rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+  .tl-text { margin: 0 0 .5rem; max-width: 60ch; font-weight: 300; white-space: pre-line; }
+  .tl-item .gallery { margin-top: 1.25rem; }
+
   .update { padding: 1.5rem 0 2rem; border-top: 1px solid var(--line); }
   .update-date { margin: 0 0 .25rem; color: var(--muted); font-size: .9375rem; }
   .update-title { margin: 0 0 .5rem; font-size: 1.25rem; font-weight: 500; }
@@ -723,6 +941,28 @@
   #aboutPhoto img { display: block; width: 100%; height: auto; border-radius: var(--radius); }   /* full photo, never cropped */
   .about p { margin: 0 0 1.25rem; max-width: 56ch; }
   .about p:first-child { font-size: 1.25rem; font-weight: 300; }
+
+  /* What I can do (the cards under the About text) */
+  .can-section { margin-top: 4rem; }
+  .can-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); gap: 1rem; align-items: start; }
+  .can-card {
+    padding: 1.25rem 1.35rem 1.35rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #fff;
+    scroll-margin-top: 6rem;
+    transition: border-color .25s ease, box-shadow .25s ease;
+  }
+  .can-card.is-target { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold-light); }   /* the one you clicked in the banner */
+  .can-head { display: flex; align-items: center; gap: .9rem; margin-bottom: .9rem; }
+  .can-head .software-icon { flex: none; width: 2.75rem; height: 2.75rem; border-radius: 13px; font-size: .95rem; }
+  .can-name { margin: 0; font-size: 1.15rem; font-weight: 800; line-height: 1.2; }
+  .can-level { display: flex; align-items: center; gap: .5rem; margin-top: .3rem; color: var(--muted); font-size: .8rem; font-weight: 600; }
+  .can-level .tool-tip-bars i { background: var(--soft); }
+  .can-level .tool-tip-bars i.on { background: linear-gradient(90deg, var(--purple), var(--accent)); }
+  .can-list { margin: 0; padding-left: 1.1rem; font-weight: 300; }
+  .can-list li { margin: .4rem 0; }
+  .can-card .gallery { margin-top: 1.25rem; }
 
   /* ---------- Contact ---------- */
   .contact p { margin: 0 0 2rem; max-width: 52ch; font-size: 1.25rem; font-weight: 300; }
@@ -782,6 +1022,9 @@
     align-items: center;
     justify-content: center;
   }
+  .viewer-main img { cursor: zoom-in; }
+  .viewer-main.zoomed { overflow: auto; align-items: flex-start; justify-content: flex-start; }   /* click the picture: real size, scroll to read */
+  .viewer-main.zoomed img { max-width: none; max-height: none; cursor: zoom-out; }
   .viewer-main img {
     border-radius: 8px;
     display: block;
@@ -866,6 +1109,7 @@
   .related-thumb.active { border-color: #fff; }
   .related-thumb:hover { border-color: #fff; }
   .related-thumb img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .related-thumb video { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
   /* The thumbnail that stands for the video gets a small play triangle */
   .related-thumb.is-video-thumb img { opacity: .7; }
@@ -1100,14 +1344,158 @@
         <ol class="recent" id="recentList"></ol>
       </div>
 
-      <h2 class="section-title">Cases</h2>
+      <div class="projects-header ideas-header">
+        <h2 class="section-title">Currently working on</h2>
+        <div class="header-actions edit-only" hidden>
+          <button id="newCaseButton" class="project-action" type="button">+ New project</button>
+          <button id="copyCasesButton" class="project-action secondary" type="button">Copy cases code</button>
+        </div>
+      </div>
+      <p class="group-status" id="casesNote" hidden></p>
       <div class="filters" id="caseFilters"></div>
       <div class="projects" id="caseGrid"></div>
-      <p class="empty" id="casesEmpty" hidden>No cases yet.</p>
+      <p class="empty" id="casesEmpty" hidden>Nothing here yet.</p>
+
+      <h2 class="section-title finished-title" id="finishedTitle" hidden>Finished</h2>
+      <div class="projects" id="finishedGrid"></div>
+
+      <!-- Ideas: the list is in the script (search for "YOUR IDEAS"). Add ideas with ?edit at the end of the address. -->
+      <div class="ideas-block">
+        <div class="projects-header ideas-header">
+          <h2 class="section-title">Ideas</h2>
+          <div class="header-actions edit-only" hidden>
+            <button id="newIdeaButton" class="project-action" type="button">+ New idea</button>
+            <button id="newFutureButton" class="project-action" type="button">+ New project</button>
+            <button id="copyIdeasButton" class="project-action secondary" type="button">Copy ideas code</button>
+          </div>
+        </div>
+
+        <p class="group-status" id="ideasNote" hidden></p>
+
+        <div id="ideaEditor" class="project-editor" hidden>
+          <h3 id="ideaEditorTitle">New idea</h3>
+          <label>
+            This is
+            <select id="ideaKind">
+              <option value="idea">An idea</option>
+              <option value="project">A project I still want to post on my portfolio</option>
+            </select>
+          </label>
+          <label>
+            Name
+            <input id="ideaTitle" type="text" placeholder="What is the idea?">
+          </label>
+          <label>
+            Note (optional)
+            <textarea id="ideaNoteText" placeholder="A few words about it..."></textarea>
+          </label>
+          <label>
+            For which project? (optional)
+            <input id="ideaTag" type="text" placeholder="Mystery shopper">
+          </label>
+          <label>
+            Status
+            <select id="ideaStatus">
+              <option value="">(none)</option>
+              <option value="Idea">Idea</option>
+              <option value="Trying">Trying</option>
+              <option value="Done">Done</option>
+            </select>
+          </label>
+          <label>
+            Date
+            <input id="ideaDate" type="text" placeholder="2026-09-21">
+          </label>
+          <div class="editor-buttons">
+            <button id="saveIdeaButton" class="project-action" type="button">Save idea</button>
+            <button id="cancelIdeaButton" class="project-action secondary" type="button">Cancel</button>
+          </div>
+        </div>
+
+        <div class="ideas" id="ideaGrid"></div>
+        <p class="empty" id="ideasEmpty" hidden>No ideas yet.</p>
+
+        <h2 class="section-title future-title">Projects I still want to post on my portfolio</h2>
+        <div class="ideas" id="futureGrid"></div>
+        <p class="empty" id="futureEmpty" hidden>No projects yet.</p>
+      </div>
     </div>
 
     <div id="progressView" hidden></div>
 
+    <!-- Tools to change the timeline: shown only when the site is opened with ?edit -->
+    <div id="updateEditor" class="project-editor" hidden>
+      <h3 id="updateEditorTitle">New update</h3>
+      <label>
+        Date (you can change it any time)
+        <input id="updDate" type="date">
+      </label>
+      <label>
+        Title
+        <input id="updTitle" type="text" placeholder="For example: First animation finished">
+      </label>
+      <label>
+        What I made
+        <textarea id="updText" placeholder="What is done, what did I make on this day?"></textarea>
+      </label>
+      <label>
+        How it's going
+        <textarea id="updGoing" placeholder="What goes well, what is still difficult?"></textarea>
+      </label>
+      <label>
+        What I learned
+        <textarea id="updLearned" placeholder="What did I learn or get better at?"></textarea>
+      </label>
+      <label>
+        Skills (separated by commas)
+        <input id="updSkills" type="text" placeholder="Blender, lighting, keyframes">
+      </label>
+      <label>
+        Pictures and videos (the file names in your img or video folder, one per line)
+        <textarea id="updPictures" placeholder="blender-1.png&#10;blender-2.png&#10;render.mp4"></textarea>
+      </label>
+      <div class="editor-buttons">
+        <button id="saveUpdateButton" class="project-action" type="button">Save update</button>
+        <button id="cancelUpdateButton" class="project-action secondary" type="button">Cancel</button>
+      </div>
+    </div>
+
+    <div id="caseEditor" class="project-editor" hidden>
+      <h3 id="caseEditorTitle">New project</h3>
+      <label>
+        Name
+        <input id="caseTitle" type="text" placeholder="What are you working on?">
+      </label>
+      <label>
+        Kind (for the filter, for example UX/UI)
+        <input id="caseType" type="text" placeholder="UX/UI">
+      </label>
+      <label>
+        Status
+        <select id="caseStatus">
+          <option value="In progress">In progress (shows under "Currently working on")</option>
+          <option value="Finished">Finished</option>
+        </select>
+      </label>
+      <label>
+        A few words about it
+        <textarea id="caseText" placeholder="What is this project about?"></textarea>
+      </label>
+      <label>
+        Cover picture (file name in your img folder, optional)
+        <input id="caseCover" type="text" placeholder="img/blender-1.png">
+      </label>
+      <div class="editor-buttons">
+        <button id="saveCaseButton" class="project-action" type="button">Save project</button>
+        <button id="cancelCaseButton" class="project-action secondary" type="button">Cancel</button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Case study page (#case/challengyu): the text and pictures are in the list caseStudies in the script -->
+  <section id="page-case" hidden>
+    <div id="caseStudyView"></div>
   </section>
 
   <!-- 4. About: replace the text -->
@@ -1121,6 +1509,12 @@
         <p>Say where you are based and where you are happy to travel.</p>
       </div>
     </div>
+
+    <!-- What I can do: made from the "software" list in the script. Click a logo in the banner and you land here. -->
+    <section class="can-section" id="canSection">
+      <h2 class="section-title">What I can do</h2>
+      <div class="can-grid" id="canGrid"></div>
+    </section>
   </section>
 
   <!-- 5. Contact: replace the email, Instagram and TikTok links and handles -->
@@ -1168,7 +1562,7 @@
     <p class="viewer-desc" id="vDesc"></p>
   </div>
   <div class="related-views" id="relatedViews" hidden>
-    <div class="related-title">Views</div>
+    <div class="related-title">Related</div>
     <div class="related-list" id="relatedList"></div>
   </div>
   <div class="viewer-edit" id="vEdit" hidden>
@@ -1204,6 +1598,10 @@
       works-1.3.png become one tile automatically (the lowest number is the cover).
 
    3. Give every picture of the piece the same  group: 'car'.
+
+   6. Related VIDEOS: put them in  views  too, written like this:
+        { type: 'video', src: 'video/making-of.mp4', label: 'Making of', poster: 'img/making-of.jpg' }
+      poster is optional; without it the thumbnail shows the first frame of the video.
 
    5. Keep a numbered picture on its own tile: add  solo: true  to its line, for example
         { src: 'img/works-1.2.png', category: 'Real-characters', solo: true }
@@ -1268,9 +1666,43 @@
    list  workCategories  right below the photos, in that order. A category with no
    photos yet (like Writing) still gets its button and says "Nothing here yet."
 
+   GROUPS AND FILTERS
+   A group is found under the filter of EVERY picture in it, and it looks the same everywhere: one tile
+   that opens with its reference pictures. So put the category on each picture:
+        { src: 'img/a.png', category: 'Real-characters',
+          views: ['img/b.png', { src: 'img/c.png', category: 'UX/UI' }] }
+   This group shows under All and Real-characters (because of a.png and b.png) and under UX/UI (because of c.png).
+   A picture with a  video:  is also found under Storytelling / Movies. Use  videoCategory: '...'  to change that.
+
    Tip: resize photos to about 1600 pixels on the long side. That keeps the site fast.
 ------------------------------------------------------------------- */
 const worksPhotos = [
+  // ---------------------------------------------------------------------------------------------
+  // WHERE TO PUT RELATED PICTURES AND VIDEOS
+  // When someone clicks a picture, everything you list under  views  appears as small thumbnails
+  // under it ("Related"). They can click a thumbnail to see that shot, style or video.
+  // Copy this example, remove the // in front of every line, and change the names:
+  //
+  // { src: 'img/main-picture.png',                 // the picture in the gallery (the cover)
+  //   category: 'Real-characters',
+  //   title: 'Name of this piece',
+  //   views: [
+  //     'img/other-shot-1.png',                    // another picture: just the file name
+  //     'img/other-shot-2.png',
+  //     { src: 'img/other-style.png', label: 'Warm light' },              // with a small caption
+  //     { type: 'video', src: 'video/making-of.mp4', label: 'Making of' }, // a video
+  //     { type: 'video', src: 'video/close-up.mp4' }                        // as many as you like
+  //   ] },
+  // ---------------------------------------------------------------------------------------------
+
+  // ---- CASE STUDY ----
+  // The Challengyu case study: a tile with its title. Point at it to see what is in the case,
+  // click it to read the whole case. The case itself is in the list  caseStudies  below.
+  { type: 'case', id: 'challengyu' },
+  { type: 'case', id: 'intratuin' },
+  { type: 'case', id: 'nashville' },
+  { type: 'case', id: 'mystery-shopper' },
+
   // ---- YOUR VIDEOS ----
   // The woman drinking: ONE tile. The picture is the cover, the video plays over it when you hover,
   // and the extra pictures (the look-alikes) are the views you see when you open it.
@@ -1290,8 +1722,19 @@ const worksPhotos = [
   // solo: true = its own tile in the gallery, not a reference picture of the one next to it
   { src: 'img/works-1.1.png',  category: 'Real-characters', solo: true },
   { src: 'img/works-1.2.png',  category: 'Real-characters', solo: true },
-  { src: 'img/works-2.1.png',  category: 'Real-characters', solo: true },
+
+  // THE EXAMPLE: the café woman with two reference pictures.
+  // Click her in the gallery and three boxes appear under the big picture:
+  // her own picture, works-5.jpeg and works-5.1.jpeg. Replace those two names with your own pictures.
+  { src: 'img/works-2.1.png',  category: 'Real-characters', solo: true,
+    title: 'Café',
+    views: [
+      'img/works-5.jpeg',
+      'img/works-5.1.jpeg'
+    ] },
+
   { src: 'img/works-2.2.png',  category: 'Real-characters', solo: true },
+  { src: 'img/wedding.png',    category: 'Real-characters' },
 
   { src: 'img/works-8.jpeg',   category: 'UX/UI' },
   { src: 'img/works-9.png',    category: 'UX/UI' },
@@ -1302,6 +1745,9 @@ const worksPhotos = [
     category: 'Storytelling / Movies' },
   { type: 'video', src: 'video/portfolio-video-2',
     title: 'Portfolio video 2',
+    category: 'Storytelling / Movies' },
+  { type: 'video', src: 'video/ai-video.mp4',
+    title: 'AI video',
     category: 'Storytelling / Movies' },
 
   { src: 'img/works-11.png',   category: 'UX/UI' },
@@ -1322,6 +1768,352 @@ const worksPhotos = [
   { src: 'img/works-23.png',   category: 'UX/UI' },
   { src: 'img/works-24.png',   category: 'UX/UI' },
   { src: 'img/works-25.png',   category: 'UX/UI' },
+];
+
+/* ------------------------------------------------------------------
+   YOUR CASE STUDIES
+   A case study is a tile on the homepage (a picture with a title). Point at it and its pictures
+   and title show; click it and the whole case opens on its own page.
+   To show a case on the homepage, put this line in the list worksPhotos:
+        { type: 'case', id: 'challengyu' },
+
+   id       = a short name without spaces, used in the address (#case/<id>)
+   title    = the name of the case
+   category = the filter it is found under (UX/UI)
+   subtitle = the short text under the title on the case page (optional)
+   summary  = the short text shown when you point at the tile (optional; without it the subtitle is used)
+   cover    = the picture on the tile. preview = more pictures that show one after another
+              when you point at the tile. The file ending can be left out.
+   device: 'phone'          shows the cover and the preview pictures inside a phone on the tile
+   coverBackground: '#hex'  the colour behind that phone   (coverRatio: 0.8 = the shape of the tile)
+   sections = the page itself, from top to bottom. Each section can have:
+        heading: '...'          a title
+        subheading: '...'       a smaller title (for a part inside a bigger one)
+        figma: '...'            a clickable Figma prototype in a phone: paste the link of the prototype
+                                (see the example in the case  challengyu). device: 'tablet' shows it in a tablet;
+                                ratio: '390 / 844' is the shape of the screen (width / height of your Figma frame)
+        youtube: '...'          a YouTube video: paste the link of the video (or just its code)
+        title: '...'            the name of the video (for people who cannot see it)
+        text: '...'             a text (use \n\n for an empty line between paragraphs; links become clickable)
+        list: ['...', '...']    a list. bullet: '🔹' puts that sign in front of every line instead of a dot
+        large: true             the text is bigger (for an introduction)
+        image: 'img/a'          one picture
+        natural: true           (with images) every picture at its own size, for pages of a document
+        scale: 4                (with natural) the pictures were exported at 4 times their size (2, 3 or 4):
+                                they are shown smaller on the page and stay sharp; click one for the real size
+        images: ['img/a', ...]  several pictures under each other
+        alt: '...'              a short description of the picture(s), for people who cannot see them
+   A picture that is not in your img folder is skipped.
+------------------------------------------------------------------- */
+const caseStudies = [
+  {
+    id: 'challengyu',
+    title: 'Challengyu',
+    category: 'UX/UI',
+    subtitle: 'Mobile app design for helping users commit themselves to their goals, keeping each other accountable and challenge one another.',
+    cover: 'img/challengyu-hifi-home',
+    preview: [
+      'img/challengyu-hifi-screens',
+      'img/challengyu-hifi-login',
+      'img/challengyu-lowfi-home',
+      'img/challengyu-lowfi-start',
+      'img/challengyu-sitemap'
+    ],
+    sections: [
+      { text: 'Did you ever had a goal but it felt hard to pursue it?\n\nChallengyu helps you to help each other accountable by seeing and registering each other progress.', large: true },
+      { image: 'img/challengyu-phones', alt: 'Three screens of the Challengyu app: profile, sign up and timer' },
+      // The clickable prototype in a phone: paste your Figma prototype link between the quotes
+      // and remove the // in front of the line. ratio is the width / height of your phone frame in Figma.
+      // { figma: 'PASTE THE FIGMA PROTOTYPE LINK HERE', ratio: '390 / 844', title: 'Clickable prototype of Challengyu' },
+      { heading: 'Problem',
+        text: 'When two or more people are pursuing the same goal it is hard to keep track of the progress of each person. People give up pretty easy when doing things alone when it comes to committing to their own goals.' },
+      { heading: 'Solution',
+        text: 'To create an app that helps them to have accountability when it comes to pursing goals together. Challenging one another and pushing them to achieve their goals together.' },
+      { heading: 'Why Challengeyuu?',
+        text: 'My friend and I live in two different countries ( America and Europe) and have both different timezones.\n\nWe wanted to help each other out and make it pretty simple to keep track of our own progress and the progress of each other to push ourselves to the max.\n\nWithout Challengyu we keep having to make notes on how long we  for example we skipped rope and for how many times a week. It took effort to constantly write down the progress, since we both had busy lives.' },
+      { heading: 'The main points that we are focusing on is:',
+        text: '-The app has to be simple\n\n-Able to see each others progress\n\n-Registering information of the progress\n\n-Having a reason why you want to achieve what you want to achieve ( having a visual motivation to keep you going)' },
+      { heading: 'Site map', image: 'img/challengyu-sitemap', alt: 'Sitemap of Challengyu' },
+      { images: [
+          'img/challengyu-lowfi-start',
+          'img/challengyu-lowfi-home',
+          'img/challengyu-hifi-login',
+          'img/challengyu-hifi-screens',
+          'img/challengyu-hifi-home'
+        ],
+        alt: 'Screens of the Challengyu app' }
+    ]
+  },
+  {
+    id: 'intratuin',
+    title: 'Infratuin',                                 // spelled like this on your page; change it here if it should be Intratuin
+    category: 'UX/UI',
+    subtitle: 'Creating a simple way to order your Christmas tree for the winter season!',
+    cover: 'img/intratuin-tablet',
+    preview: [
+      'img/intratuin-final-texture',
+      'img/intratuin-final-package',
+      'img/intratuin-final-lights',
+      'img/intratuin-final-gingerbread',
+      'img/intratuin-final-receipt',
+      'img/intratuin-final-overview',
+      'img/intratuin-mefi-trees',
+      'img/intratuin-lofi-1',
+      'img/intratuin-sitemap'
+    ],
+    sections: [
+      { text: 'Every Christmas almost everyone has or buys a Christmas tree.\n\nWe created an app for Intratuin to help customers order their own Christmas tree simple and fast.\n\nDuring the process you will see some dutch words since, because it\'s a Dutch company.', large: true },
+      { image: 'img/intratuin-tablet', alt: 'The start screen of the Intratuin app on a tablet' },
+      { text: 'Intratuin is a company that sells things for in the houd, garden and pets in Netherlands.', large: true },
+      { heading: 'Goal',
+        text: 'To create a simple app the can be used for ordering Christmas tree during the winter season.' },
+      { heading: 'Sketch of wireframes', image: 'img/intratuin-sketches', alt: 'Paper sketches of the wireframes' },
+      { image: 'img/intratuin-sitemap', alt: 'Site map of the Intratuin screens' },
+      { text: 'Down below you can view the lofi screens.',
+        images: ['img/intratuin-lofi-1', 'img/intratuin-lofi-2', 'img/intratuin-lofi-3'],
+        alt: 'Paper sketches of the lofi screens' },
+      { heading: 'Mefi screens',
+        images: [
+          'img/intratuin-mefi-start',
+          'img/intratuin-mefi-payment',
+          'img/intratuin-mefi-trees',
+          'img/intratuin-mefi-feedforward'
+        ],
+        alt: 'Mefi screens of the Intratuin app' },
+      { text: 'Down below you can view the final screens that we made for Intratuin.',
+        images: [
+          'img/intratuin-final-start',
+          'img/intratuin-final-overview',
+          'img/intratuin-final-texture',
+          'img/intratuin-final-package',
+          'img/intratuin-final-lights',
+          'img/intratuin-final-gingerbread',
+          'img/intratuin-final-receipt'
+        ],
+        alt: 'Final screens of the Intratuin app' }
+    ]
+  },
+  {
+    id: 'nashville',
+    title: 'Nashville number system app',
+    category: 'UX/UI',
+    subtitle: 'Designing app for musicians, singers and for anyone who wants to know the number system.',
+    cover: 'img/nashville-mockup',
+    preview: [
+      'img/nashville-hifi-1',
+      'img/nashville-hifi-2',
+      'img/nashville-hifi-3',
+      'img/nashville-lofi-1',
+      'img/nashville-lofi-2'
+    ],
+    sections: [
+      { image: 'img/nashville-mockup', alt: 'Three screens of the Nashville number system app' },
+      // The clickable prototype in a phone (paste the Figma prototype link, remove the //):
+      // { figma: 'PASTE THE FIGMA PROTOTYPE LINK HERE', ratio: '390 / 844', title: 'Clickable prototype of the Nashville number system app' },
+      { text: 'Did you ever want to play a song spontan with your band? But didn\'t know the chords? That\'s where we use the Nashville number system that helps musicians, singers to play any song at any time.', large: true },
+      // The video from your page. Paste the YouTube link of "The Nashville Number System Explained! (Pianote)"
+      // between the quotes and remove the // in front of the line:
+      // { youtube: 'PASTE THE YOUTUBE LINK HERE', title: 'The Nashville Number System Explained! (Pianote)' },
+      { heading: 'Project overview' },
+      { subheading: 'What is the problem?',
+        text: 'Musicans and singers find it hard to learn the Nash number system because of busyness of life and practices.' },
+      { subheading: 'What is the goal?',
+        text: 'Create a learning app that helps musicians, singers and anyone who want to learn the number system. Help them recognize the Nashville numbers faster by heart and mind.' },
+      { heading: 'Getting to know our users',
+        text: 'We have thought of the category of users we would like to interview for this interview. We thought of musicians, singers and people who are interested in learning new things.\n\nWe interviewed 5-10 people and were focused on asking these questions:\n\n2.What type of learner are you?\n\n3.If there was an app what would have to be in it in able to be succeeding for you?' },
+      { heading: 'Summary of all interviews:',
+        text: 'They struggled with when it comes to the number system:\n\n-To make time, most people have busy schedules ( making time for it )\n\n-They don\u2019t know where to start ( overhelmed)\n\n-Don\u2019t know or see the value of learning it ( singers)' },
+      { heading: 'Conclusions',
+        text: 'Musicians:\n\nWant to know more about the number system, to learn it fast, recognize it and implement it right away.\n\nSingers:\n\nMost singers find it easier to learn it when they learn while learning to play an instrument.\n\nPeople who are interested in learning new things:\n\nFind it interesting to learn about it.' },
+      { heading: 'Userflow', text: 'Down below you can find the navigation of the app.' },
+      { heading: 'Lofi-wireframes',
+        text: 'Down below are the lofi wireframes of the app.',
+        images: [
+          'img/nashville-lofi-1',
+          'img/nashville-lofi-2',
+          'img/nashville-lofi-3',
+          'img/nashville-lofi-4'
+        ],
+        alt: 'Lofi wireframes of the Nashville number system app' },
+      { images: [
+          'img/nashville-hifi-1',
+          'img/nashville-hifi-2',
+          'img/nashville-hifi-3'
+        ],
+        alt: 'Screens of the Nashville number system app' }
+    ]
+  },
+  {
+    id: 'mystery-shopper',
+    title: 'Mystery shopper',
+    category: 'UX/UI',
+    subtitle: 'The process of redesigning the Momua company app  2026',
+    // The picture on the tile on the homepage: the app in a phone on a blue background.
+    cover: 'img/mystery-shopper-cover',
+    preview: [],
+    sections: [
+      // The clickable prototype in a phone. ratio is the width / height of your phone frame in Figma.
+      { figma: 'https://www.figma.com/proto/CWQnW5Zgvb1HdQ7u39b5ir/designs?t=RuekjVnFxC5xKBLI-0&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=258%3A173&show-proto-sidebar=1',
+        ratio: '768 / 1531',                          // the shape of your start screen
+        background: '#ffffff',                        // the colour behind the prototype
+        title: 'Clickable prototype of the Mystery shopper app' },
+      // The text of the document, as you wrote it (only the layout is new: titles, paragraphs and lists).
+      {"heading": "Phrase 0.5  Brainstorming  Redesign & stating goals  "},
+      {"subheading": "Introduction:"},
+      {"text": "MOMUA Company  is a company based in Ukraine.  Mainly Mom’s that one day decided together to try out something new. And that’s how the mom company started to grow as a company that is focused on working from their hearts, purpose- driven and dedicated. "},
+      {"subheading": "Goal:"},
+      {"list": ["To create a mobile redesign of the website and using their current app as a foundation"]},
+      {"subheading": "Personal goals:"},
+      {"list": ["To work organized", "use animations", "test it out with the company if they have time", "being focused on getting the most important screens done."]},
+      {"subheading": "Problem: "},
+      {"text": "During the years I had noticed that the website that employers use while working was not easy to navigate .\nFor example having a lot of information on one page that  makes i t harder for the user to find the information they need.\n\nThe mobile version existed however the app felt more like an mobile app that was not part of the company ."},
+      {"subheading": "Design challenges versions"},
+      {"text": "1.How can we make a better redesign of the current mobile app of MOMUA company?\n\n2.How can we help employers navigate the companies app faster for them to understand how to use it, in able to do their work?"},
+      {"subheading": "Design challenge explanation "},
+      {"text": "The first design challenge was not very clear so not very specific. That’s the reason why I decided to change it because it had to be something that was measureable rather then something vague ."},
+
+      {"heading": "Phrase 1 collecting information about the company "},
+      {"subheading": "Understanding the people of the company "},
+      {"text": "Behind every company is a story. Some deep some simple but it matters. Getting to know the people in de company can help us to get a better understanding of what kind of people they are and understand what they actually care about. "},
+      {"subheading": "Momua Company  people ( mystery shop professionals part MSP association organisation)"},
+      {"list": ["Mom’s ( mom enterepeuners)", "love to travel", "work under pressure", "Empathy"], "bullet": "🔹"},
+      {"subheading": "Pictures "},
+      {"text": "On the right side you see the members of the mom company. Real people that love to share what they are and are not afraid to post their owns lives ."},
+      {"subheading": "Momua Company Values"},
+      {"list": ["Unity", "Realible & global ", "Trying new things", "Meaningful work ( working with their hearts)", "Focusing on the good (positive)"], "bullet": "🔹"},
+      {"subheading": "Down below"},
+      {"text": "Down below you get to view the companies opinions, story and who they actually are."},
+      {"text": "Meaningful work & Unity  \nTrying new things \nRisktakers\nRealible & global "},
+      {"subheading": "What does the company do?"},
+      {"text": "Around the whole world Momua company helps companies to improve their customer service by sending mystery shoppers into their companies to evalute them."},
+      {"text": "“World of Mompreneurs: Where Business Meets Maternal Magic!”"},
+      {"subheading": "Momua Company  people ( mystery shop professionals part MSP association organisation)"},
+      {"list": ["Mom’s ( mom enterepeuners)", "love to travel", "work under pressure", "Empathy"], "bullet": "🔹"},
+      {"subheading": "Momua Company  services ( data collection & validation)"},
+      {"list": ["High-quality data collection and verification services on a global scale that will make your business thrive", "Operate on different continents"], "bullet": "🔹"},
+      {"subheading": "Momua Company  Aim when working with other Companies"},
+      {"list": ["To improve the customer experience of companies", "Deliver fast and great work"], "bullet": "🔹"},
+      {"subheading": "Understanding the company ( while keeeping redesign in mind)"},
+      {"text": "In order to make a redesign it is always good to take a look at the companies brand. I looked at their Instagram, Linkedin and their  own website to get a feel for the atmosphere of their company. "},
+      {"subheading": "Socials of the company"},
+      {"text": "On the right side you can view their socials."},
+      {"subheading": "Momua Company  Social media "},
+      {"list": ["Instagram\nhttps://www.instagram.com/momua_worldwide/", "Linkedln\nhttps://www.linkedin.com/company/mom-ua/posts/?feedView=all", "Website\nhttps://www.mom-ua.com/"], "bullet": "🔹"},
+      {"subheading": "Instagram of Momua Company fonts"},
+      {"subheading": "What I have noticed "},
+      {"text": "The company feels very alive on instagram . The blue colour is very dominant. They use patterns, such as flowers, wavey icons and emphasize what they stand for."},
+      {"subheading": "Inspiration for the mobile design\n& showcase instagram page, linkedln"},
+      {"subheading": "What I have noticed "},
+      {"text": "The company feels uses more colour such, as pink, green and purple that matches the brand of the company. "},
+      {"subheading": "Conclusion after research"},
+      {"text": " The company needs more of their  own brand in the mobile app the create that atmosphere \nMOM ( loving ) energy in combination with staying professional using the blue dominant colour.\n\nImportant key words that that said throughout the Instagram posts are:\nrealiable, global,meaningful, purpose, driven by data, and meaningful."},
+      {"subheading": "Old Goal:"},
+      {"list": ["To create a mobile redesign of the website and using their current app as a foundation"]},
+      {"subheading": "New Goal:"},
+      {"list": ["To create a mobile redesign of the website and using their current app as a foundation combining  their companies brand in the mobile design"]},
+
+      {"heading": "Website"},
+      {"subheading": "Preview into their own current website"},
+
+      {"heading": "Mobile design"},
+      {"subheading": "Mobile app:"},
+      {"text": "This mobile app is an app that can be used by any mystershopper company. Personalization is missing here. "},
+      {"subheading": "Site map of the website "},
+      {"text": "Login\nShoplog\nMy apps\nMy profile \nJob board\nHelp"},
+      {"subheading": "User account"},
+      {"text": "Login\nMy apps"},
+      {"subheading": "User account & site of the website"},
+      {"text": "The site of the user accounts looks\nprofessional, however colour is missing. Because fo the placement of information and colour it does not help the user to get excited or make the navigating easier ( scannable)."},
+      {"text": "Shop log\nJob board"},
+      {"subheading": "Changes  placement of information"},
+      {"text": "Not every word or page is pretty logical when mentioned. I want to take a look at it and and change some pages preferable the name."},
+      {"text": "My profile\nHelp"},
+
+      {"heading": "Ideas/ inspiration  that can make the app better "},
+      {"subheading": "Feedback"},
+      {"subheading": "The app was confusing"},
+      {"text": "The user found it hard to understand why the app was made and with which goal. Without reading the process of the app it became hard to navigate the app. "},
+      {"text": "The app should be easy and simple to understand even if the user has not seen or read the process behind it. "},
+      {"text": "Ideas of functions - giving more information such as introduction"},
+      {"subheading": "The app did not trigger or motivate or trigger the user as much as hoped."},
+      {"text": "The user just clicked on anything they thought was right or clickable. But without real aim. it was more guess work."},
+      {"text": "The ap should have functions that encourage the user to do something without the user having to do much."},
+      {"subheading": "Screen global on the app seemed confusing "},
+      {"text": "which made the user use words as: What do I need to do here? "},
+      {"text": "Direction rather then choosing interfaces that are challenging to make."},
+      {"subheading": "Feedback breakdown and other things that where said "},
+      {"text": "Focus on:\n\n-Companies values and how that can be brought back in the app of the design.  \n-Guide the user through the app\n-Choose simplicity over complexitiy especially when it takes over the priority of the users needs. In this case it’s guidance and simplicity.\n-Go deeper into the app so expand on certain features making most clickable"},
+
+      // The rest of the text of the document: the rebranding research, as you wrote it.
+      {"heading": "Rebranding research"},
+      {"text": "Currently the Momua company does not use an app, but only a survey website what the mystery shoppers can use to submit all their , work and submit everything. "},
+      {"subheading": "The current problems with the website is that: "},
+      {"text": "-Color: They only used the color grey, white and black. \n\n-Identity: It does not  much reflect the companies identity\n\n-Users: The website does not motivate users to do something.\n\n-Users: Confusing to use \nThe website does not help you to navigate where things are ot what certain features mean.\n\n-Emotion: Feels boring"},
+      {"subheading": "Rebranding the app of the Momua Company."},
+      {"text": "I realized I did not know what rebranding quite meant according to the given feedback. i thought rebranding only meant changing the colour. \nBut it is far more then that. "},
+      {"text": "Shop log\nJob board"},
+      {"subheading": "Google’s definination of rebranding:"},
+      {"text": "In its simplest terms, rebranding is the process of changing the corporate image or \"personality\" of an established brand to influence how it is perceived by the public. "},
+      {"text": "My profile\nHelp"},
+      {"subheading": "Examples how peeple rebranded a companies identity"},
+      {"text": "The companies values has changed from: Retro camera, simple photo app 📸\n\nTo being focused on:\ncolorful, modern, video-focused 🎥"},
+      {"text": "Same company though DIFFERENT feeling "},
+      {"subheading": "Momua Company Values"},
+      {"list": ["Unity", "Realible & global ", "Trying new things", "Meaningful work ( working with their hearts)", "Focusing on the good (positive)"], "bullet": "🔹"},
+      {"subheading": "Momua Company Values"},
+      {"list": ["Unity\nInviting them in a group", "Realible & global \nShowing with how many partners they worked and how many mystery shoppers they have over the world. ", "Trying new things\nSuggesting new places the mystery shoppers can do or suggest new missions ", "Meaningful work ( working with their hearts)\nMessages ( announcements/ feedback messages", "Focusing on the good (positive)\nColor"], "bullet": "🔹"},
+      {"subheading": "Mystery shopper Values"},
+      {"list": ["Easy to navigate", "Fun and rewarding", "Motivated", "Simple"], "bullet": "🔹"},
+      {"subheading": "Mystery shopper Values"},
+      {"list": ["Easy to navigate\nusing icons", "Fun and rewarding\nColour, forms & Messages ", "Motivated\nMessages ", "Simple\nColour, forms "], "bullet": "🔹"},
+      {"subheading": "The core questions before starting the rebrand a companies designs:"},
+      {"text": "Who are they now?\nWho are they trying to reach?\nWhat feeling do they want?"},
+      {"subheading": "What is really needed ( with the users values): "},
+      {"text": "-Guidance & direction ( easy to navigate)\n-Triggering the user \n-Simplicity and professionalism \n-Fun and rewarding"},
+      {"text": "Core  of the new idenitity of Momua is professionalism and motivation"},
+      {"text": "Who are they now?\nWho are they trying to reach?\nWhat feeling do they want?"},
+      {"subheading": "Momua Company  people ( mystery shop professionals part MSP association organisation)"},
+      {"list": ["Mom’s ( mom enterepeuners)", "love to travel", "work under pressure", "Empathy"], "bullet": "🔹"},
+      {"subheading": "Momua Company  services ( data collection & validation)"},
+      {"list": ["High-quality data collection and verification services on a global scale that will make your business thrive", "Operate on different continents"], "bullet": "🔹"},
+      {"subheading": "Momua Company Values"},
+      {"list": ["Unity", "Realible & global ", "Trying new things", "Meaningful work ( working with their hearts)", "Focusing on the good (positive)"], "bullet": "🔹"},
+      {"subheading": "Structure in the current"},
+      {"subheading": "The companies perspective:"},
+      {"text": "Empathy, work under pressure, can balance work and personal things, positive, travel together and value spending time with other people especially their own family."},
+      {"text": "Employers: Want to have work but not having a feeling that they are working well having."},
+      {"text": "The companies perspective: They are trying to reach companies that who want to improve their customer service"},
+      {"text": "Employers: They are trying to work with employers who are dedicated, punctional, realiable "},
+      {"subheading": "The companies perspective:"},
+      {"text": "professional, fun and purposeful"},
+      {"text": "Employers: Fun, easy to navigate, rewarding"},
+      {"text": "1. Fix the structure FIRST"},
+      {"subheading": "Ask:"},
+      {"text": "Is the home screen clear?\nCan I find a mission in 2 seconds?\nIs earning money obvious?"},
+      {"subheading": "For who is this app "},
+      {"subheading": "Current page names"},
+      {"text": "1.Local jobs\n2.Global jobs\n3.My jobs\n4.My profile"},
+      {"subheading": "Changed page names"},
+      {"text": "1.Adding a home screen\n2.Home missions\n3.Global missions\n4.My Assignments\n5.My profile"},
+      {"subheading": "Why changing the names of the pages? "},
+      {"text": "By changing the names we make it for the user more clear what each page means and make it fun and rewarding which are the values of\nthe mystery shopper."},
+      {"text": "The  redesign for the Momua company app\nis souly focused on for the people who work \nat the Momua company, the workers."},
+      {"text": "These workers ( mystery shoppers)  are they ones who  get hired by the Momua company to evaluate ( by doing tasks, report and uploading proof) the customer service  of other companies such as hotels and spa in different countries of the world. "},
+      {"text": "Inspiration on other game apps based on keeping the ore values in mind."},
+
+      // The document of the project, page by page. The text is inside the pictures, as you made it.
+      // Click a page to see it at its real size and scroll to read it.
+      { images: [
+          'img/mystery-shopper-doc-01', 'img/mystery-shopper-doc-02', 'img/mystery-shopper-doc-03',
+          'img/mystery-shopper-doc-04', 'img/mystery-shopper-doc-05', 'img/mystery-shopper-doc-06',
+          'img/mystery-shopper-doc-07', 'img/mystery-shopper-doc-08', 'img/mystery-shopper-doc-09',
+          'img/mystery-shopper-doc-10'
+        ],
+        natural: true,
+        scale: 1,          // if you save the pages again at 4 times the size (see below), write 4 here
+        alt: 'A page of the document about redesigning the Momua company app' }
+    ]
+  }
 ];
 
 /* The filter buttons, in this order. Names must match the category names above exactly. */
@@ -1348,21 +2140,47 @@ const bannerSticks = 'software';
    of the name). To show the real logo instead, put a picture in the img folder and add
    icon: 'img/figma' (the file ending can be left out). The empty margin around a logo is cut off
    by itself. Add  round: true  to show a picture in a circle. A small grey word after the name
-   can be added with  note: 'basics'.  color: '#hex'  picks a colour for the tile.  Examples of lines you can add:
+   can be added with  note: 'basics'.  color: '#hex'  picks a colour for the tile.
+
+   HOW MUCH YOU KNOW: level: 1 = Basics, 2 = Intermediate, 3 = Expert. When someone rests the mouse
+   on a logo in the banner, a gold pop-up shows the name and that level. A program without a level
+   shows no pop-up.
+   WHAT YOU CAN DO: can: ['one thing', 'another thing'] . When someone clicks a logo in the banner they
+   land on the About page, on the card of that program, where these lines are listed.
+   PICTURES OF YOUR WORK: pictures: ['img/a', 'img/b'] shows those pictures on the card (the file ending can be
+   left out; click one to see it big). A video: { type: 'video', src: 'video/my-video.mp4' }.
+   Examples of lines you can add:
         { name: 'Blender', short: 'Bl' },
         { name: 'Figma', icon: 'img/figma' },
-        { name: 'JavaScript', short: 'JS', note: 'basics' },
+        { name: 'JavaScript', short: 'JS', level: 1, can: ['Make pages interactive'] },
 ------------------------------------------------------------------- */
 /* The file names are the ones in your img folder, exactly as they are written there.
    If a file is not found, the tile shows the letters instead. */
 const software = [
-  { name: 'Figma',       short: 'Fi', icon: 'img/figma.png' },
-  { name: 'HTML',        short: 'HT', icon: 'img/html-5.png.webp' },
-  { name: 'CSS',         short: 'CS', icon: 'img/css.png.webp' },
-  { name: 'JavaScript',  short: 'JS', note: 'basics', icon: 'img/javascript.png.jpg' },
-  { name: 'Kling AI',    short: 'KL', icon: 'img/kling.ai.png.jpeg' },
-  { name: 'Leonardo AI', short: 'Le', icon: 'img/leo.png.webp', round: true },
-  { name: 'CapCut',      short: 'CC', icon: 'img/capcut.png' }
+  { name: 'Figma',       short: 'Fi', icon: 'img/figma.png', level: 1,
+    can: ['Design app screens: low-fi wireframes and hi-fi screens', 'Make site maps and user flows', 'Build clickable prototypes'],
+    pictures: ['img/mystery-shopper-start', 'img/challengyu-hifi-home', 'img/nashville-hifi-1', 'img/intratuin-final-overview'] },
+  { name: 'HTML',        short: 'HT', icon: 'img/html-5.png.webp', level: 1,
+    can: ['Build web pages and small apps', 'Structure a page so it is easy to read and navigate'],
+    pictures: ['img/portfolio-site'] },                       // save a screenshot of your site as img/portfolio-site.png
+  { name: 'CSS',         short: 'CS', icon: 'img/css.png.webp', level: 1,
+    can: ['Style pages so they look like my designs', 'Make layouts that work on phones and computers', 'Add small animations'],
+    pictures: ['img/portfolio-site'] },
+  { name: 'JavaScript',  short: 'JS', icon: 'img/javascript.png.jpg', level: 1,
+    can: ['Make pages interactive, for example buttons, filters and pop-ups'],
+    pictures: ['img/portfolio-site'] },
+  { name: 'Kling AI',    short: 'KL', icon: 'img/kling.ai.png.jpeg', level: 1,
+    can: ['Make short AI videos from pictures and prompts'],
+    pictures: ['img/woman-drinking', { type: 'video', src: 'video/ai-video.mp4' }] },
+  { name: 'Leonardo AI', short: 'Le', icon: 'img/leo.png.webp', round: true, level: 1,
+    can: ['Create AI characters and images'],
+    pictures: ['img/works-1.1.png', 'img/works-1.2.png', 'img/works-2.1.png'] },
+  { name: 'CapCut',      short: 'CC', icon: 'img/capcut.png', level: 1,
+    can: ['Edit videos and put clips together'],
+    pictures: [{ type: 'video', src: 'video/portfolio-video' }, { type: 'video', src: 'video/portfolio-video-2' }] },
+  // Until you save the Illustrator logo as img/illustrator.png, the tile shows "Ai" in the colours of the program
+  { name: 'Adobe Illustrator', short: 'Ai', icon: 'img/illustrator', color: '#330000', ink: '#FF9A00', level: 1,
+    can: ['Draw simple shapes, icons and illustrations'] }
 ];
 
 /* ------------------------------------------------------------------
@@ -1394,14 +2212,17 @@ const software = [
 ------------------------------------------------------------------- */
 const collections = [
   {
-    id: 'spring-editorial',
-    title: 'Spring Editorial',
+    id: 'anime-ai',
+    title: 'Anime AI',
     year: '2026',
-    text: 'A collection of images from my Spring Editorial project.',
+    text: 'A collection of my anime AI images.',
     items: [
       { type: 'image', src: 'img/works-1.jpeg' },
       { type: 'image', src: 'img/works-2.jpeg' },
-      { type: 'image', src: 'img/works-3.jpeg' }
+      { type: 'image', src: 'img/works-3.jpeg' },
+      { type: 'image', src: 'img/works-27.png' },
+      { type: 'image', src: 'img/works-26.png' },
+      { type: 'image', src: 'img/works-19' }          // no ending: the page finds works-19.png or works-19.jpeg
     ]
   },
   {
@@ -1426,12 +2247,36 @@ const collections = [
     year: '2026',
     text: 'Realistic art of avatars. Choose an avatar to see its collection.',
     childLabel: 'avatars',
-    items: [],
+    items: [
+      { type: 'image', src: 'img/wedding.png' },
+      { type: 'image', src: 'img/works-2.2.png' },
+      { type: 'image', src: 'img/works-11.png' },
+      { type: 'image', src: 'img/works-14.png' },
+      { type: 'image', src: 'img/works-15.png' },
+      { type: 'image', src: 'img/works-18' }          // no ending: the page finds works-18.png or works-18.jpeg
+    ],
     // One child per avatar. Rename them and put the pictures of each avatar in its items.
     children: [
       { id: 'avatar-1', title: 'Avatar 1', year: '2026', text: '', items: [] },
       { id: 'avatar-2', title: 'Avatar 2', year: '2026', text: '', items: [] },
       { id: 'avatar-3', title: 'Avatar 3', year: '2026', text: '', items: [] }
+    ]
+  },
+  {
+    id: 'locations',
+    title: 'Locations',
+    year: '2026',
+    text: 'A collection of locations.',
+    items: [
+      { type: 'image', src: 'img/works-10.png' },
+      { type: 'image', src: 'img/works-16.png' },
+      { type: 'image', src: 'img/works-16.jpeg' },
+      { type: 'image', src: 'img/works-20' },          // no ending: the page finds works-20.png or works-20.jpeg
+      { type: 'image', src: 'img/works-21.png' },
+      { type: 'image', src: 'img/works-22.png' },
+      { type: 'image', src: 'img/works-23.png' },
+      { type: 'image', src: 'img/works-24.png' },
+      { type: 'image', src: 'img/works-25.png' }
     ]
   },
   {
@@ -1444,10 +2289,16 @@ const collections = [
 ];
 
 /* ------------------------------------------------------------------
-   YOUR CASES (the progress page)
-   A case is one thing you are working on, or have worked on. Visitors choose
-   a case and see how it developed: before and after, plus your recent updates.
-   The newest updates of all cases are also listed at the top of the progress page.
+   YOUR PROJECTS AND THEIR TIMELINES (the progress page)
+   A case is one thing you are working on, or have worked on. Cases with the status
+   'In progress' are shown under "Currently working on", the others under "Finished".
+   Visitors click one and see how it developed: a timeline with what you made, how it is going,
+   what you learned, your pictures, and the skills you got. The newest updates of all cases
+   are also listed at the top of the progress page.
+
+   To change the timeline without typing code: open the site with ?edit at the end of the address
+   (index.html?edit#progress). There you can add projects, add updates, change their dates and
+   pictures, and delete things. Then click "Copy cases code" and paste it over the list below.
 
    id      = a short name without spaces, used in the address (#progress/<id>)
    title   = the name people see
@@ -1462,8 +2313,11 @@ const collections = [
              Visitors drag the handle to slide between the two.
 
    updates = what you have been working on. Any order, they are sorted by date (newest first):
-             { date: '2026-09-15', title: 'Second round', text: 'What changed and why.',
+             { date: '2026-09-15', title: 'Second round', text: 'What I made.',
+               going: 'How it is going.', learned: 'What I learned.', skills: ['Blender', 'Lighting'],
                items: [ { type: 'image', src: 'img/a.png' }, { type: 'video', src: 'video/b.mp4' } ] }
+             text = what I made, going = how it is going, learned = what I learned (all optional).
+             The skills of all updates are collected in "Skills so far" with the date you got them.
              items work like the items of a collection: images, videos, views,
              title and description. date must look like 2026-09-15.
 ------------------------------------------------------------------- */
@@ -1482,16 +2336,51 @@ const cases = [
         date: '2026-09-15',
         title: 'Second round of changes',
         text: 'What changed this time, and why.',
+        going: 'What goes well and what is still difficult.',
+        learned: 'What I learned from this round.',
+        skills: ['Prototyping', 'Feedback'],
         items: [{ type: 'image', src: 'img/works-11.png' }]
       },
       {
         date: '2026-09-02',
         title: 'First sketches',
         text: 'Where this started.',
+        skills: ['Sketching'],
         items: [{ type: 'image', src: 'img/works-12.png' }]
       }
     ]
   }
+];
+
+/* ------------------------------------------------------------------
+   YOUR IDEAS AND FUTURE PROJECTS (the lists at the bottom of the progress page)
+   One line per idea or project. The newest date comes first.
+   kind   = 'project' for a project you still want to post on your portfolio (leave it out for an idea)
+   title  = the idea or the project
+   note   = a few words about it (optional)
+   tag    = for which project, or a label like 'AI' (optional)
+   status = 'Idea', 'Trying' or 'Done' (optional)
+   date   = like 2026-09-21 (optional)
+
+   To add ideas without typing code: open the site with ?edit at the end of the address
+   (index.html?edit#progress), click "+ New idea", and when you are done click "Copy ideas code"
+   and paste it over the list below.
+------------------------------------------------------------------- */
+const ideas = [
+  {"title": "Build template AI portfolio", "status": "Idea", "date": "2026-09-21"},
+  {"title": "Testing out Blender with AI", "status": "Idea", "date": "2026-09-21"},
+  {"title": "Redesigning my resume", "status": "Idea", "date": "2026-09-21"},
+  {"title": "Working on a fashion AI", "status": "Idea", "date": "2026-09-21"},
+  {"title": "Creating a stage zoeker", "status": "Idea", "date": "2026-09-21"},
+  {"title": "Create Uganda Airlines voiceover", "tag": "Voiceover", "status": "Idea", "date": "2026-09-21"},
+
+  // Projects you still want to post on your portfolio (kind: 'project')
+  {"kind": "project", "title": "Portfolio of Cello", "tag": "AI"},
+  {"kind": "project", "title": "Party tent rentals", "tag": "AI"},
+  {"kind": "project", "title": "Fit log"},
+  {"kind": "project", "title": "Field log", "tag": "AI"},
+  {"kind": "project", "title": "Finance app", "tag": "AI"},
+  {"kind": "project", "title": "Reminder", "tag": "AI"}
 ];
 
 /* ------------------------------------------------------------------ */
@@ -1518,7 +2407,7 @@ async function probeImage(name) {
   for (const src of tries) {
     const img = await loadImage(src);
     if (img && img.naturalWidth && img.naturalHeight) {
-      return { type: 'image', src, ratio: img.naturalWidth / img.naturalHeight };
+      return { type: 'image', src, ratio: img.naturalWidth / img.naturalHeight, width: img.naturalWidth };
     }
   }
   return null;
@@ -1589,9 +2478,16 @@ async function discoverExtras(src, taken) {
 
 /* One picture plus its extra views -> [{ src, label }, ...]  (the first one is the cover) */
 function viewsOf(item) {
-  const norm = (v) => (typeof v === 'string' ? { src: v, label: '' } : { src: v.src, label: v.label || '' });
-  return [{ src: item.src, label: item.label || '' }, ...(item.views || []).map(norm)];
+  const norm = (v) => (typeof v === 'string'
+    ? { src: v, label: '', category: '', poster: '', isVideo: hasVideoEnding(v) }
+    : { src: v.src, label: v.label || '', category: v.category || '', poster: v.poster || '',
+        isVideo: v.type === 'video' || hasVideoEnding(v.src || '') });
+  return [{ src: item.src, label: item.label || '', category: item.category || '', poster: '', isVideo: false },
+    ...(item.views || []).map(norm)];
 }
+
+/* A picture with a video is also a piece of film, so it is found under this filter as well */
+const defaultVideoCategory = 'Storytelling / Movies';
 
 async function resolveWorks(list) {
   const seen = new Set();
@@ -1603,6 +2499,12 @@ async function resolveWorks(list) {
   list.forEach((photo) => (photo.views || []).forEach((v) => claimed.add(typeof v === 'string' ? v : v.src)));
 
   list.forEach((photo) => {
+    // A case study: a tile that leads to the page of the case
+    if (photo.type === 'case') {
+      const study = caseStudies.find((c) => c.id === photo.id);
+      if (study) raw.push({ caseStudy: study });
+      return;
+    }
     if (seen.has(photo.src)) return;                       // ignore accidental duplicates
     if (claimed.has(photo.src) && !(photo.views && photo.views.length)) return;
     seen.add(photo.src);
@@ -1618,7 +2520,8 @@ async function resolveWorks(list) {
       raw.push({
         members: [{
           src: photo.src, n: 0, label: photo.label || '', category: photo.category || '', alt: photo.alt || '',
-          title: photo.title || '', description: photo.description || '', hoverVideo: photo.video || ''
+          title: photo.title || '', description: photo.description || '', hoverVideo: photo.video || '',
+          hoverCategory: photo.video ? (photo.videoCategory || defaultVideoCategory) : ''
         }],
         pinned: true
       });
@@ -1627,13 +2530,16 @@ async function resolveWorks(list) {
 
     // Method 1: explicit  views: [...]
     if (photo.views && photo.views.length) {
-      const members = viewsOf(photo).map((v, i) => ({
-        src: v.src, n: i, label: v.label, category: photo.category || '', alt: photo.alt || '',
+      const allViews = viewsOf(photo);
+      const videoViews = allViews.filter((v) => v.isVideo);        // related videos
+      const members = allViews.filter((v) => !v.isVideo).map((v, i) => ({
+        src: v.src, n: i, label: v.label, category: v.category || photo.category || '', alt: photo.alt || '',
         title: i === 0 ? photo.title || '' : '', description: i === 0 ? photo.description || '' : '',
-        hoverVideo: i === 0 ? photo.video || '' : ''
+        hoverVideo: i === 0 ? photo.video || '' : '',
+        hoverCategory: i === 0 && photo.video ? (photo.videoCategory || defaultVideoCategory) : ''
       }));
       members.forEach((m) => seen.add(m.src));
-      raw.push({ members, explicit: true });
+      raw.push({ members, explicit: true, videoViews });
       return;
     }
 
@@ -1641,7 +2547,8 @@ async function resolveWorks(list) {
     const { key, n } = groupInfo(photo);
     const member = {
       src: photo.src, n, label: photo.label || '', category: photo.category || '', alt: photo.alt || '',
-      title: photo.title || '', description: photo.description || '', hoverVideo: photo.video || ''
+      title: photo.title || '', description: photo.description || '', hoverVideo: photo.video || '',
+      hoverCategory: photo.video ? (photo.videoCategory || defaultVideoCategory) : ''
     };
     if (key && groups.has(key)) {
       groups.get(key).members.push(member);
@@ -1653,13 +2560,20 @@ async function resolveWorks(list) {
   });
 
   await Promise.all(raw.map(async (e) => {
+    if (e.caseStudy) {
+      e.infos = await Promise.all([e.caseStudy.cover, ...(e.caseStudy.preview || [])].filter(Boolean).map(probeImage));
+      return;
+    }
     if (e.video) { e.info = await probeVideo(e.video.src); return; }
 
     // A picture can have a video that plays on hover: check that the file is there
     const hoverSrc = e.members.find((m) => m.hoverVideo)?.hoverVideo;
     await Promise.all([
       ...e.members.map(async (m) => { m.info = await probeImage(m.src); }),
-      (async () => { if (hoverSrc) e.hoverInfo = await probeVideo(hoverSrc); })()
+      (async () => { if (hoverSrc) e.hoverInfo = await probeVideo(hoverSrc); })(),
+      (async () => {
+        e.videoInfos = await Promise.all((e.videoViews || []).map(async (v) => ({ v, info: await probeVideo(v.src) })));
+      })()
     ]);
 
     // Method 4: more numbered files next to it are extra views
@@ -1669,12 +2583,37 @@ async function resolveWorks(list) {
     const last = found.reduce((a, b) => (b.n > a.n ? b : a));
     const extras = await discoverExtras(last.info.src, seen);
     extras.forEach((x) => e.members.push({
-      src: x.src, n: x.n, label: '', category: '', alt: '', title: '', description: '', hoverVideo: '', info: x
+      src: x.src, n: x.n, label: '', category: '', alt: '', title: '', description: '', hoverVideo: '', hoverCategory: '', info: x
     }));
   }));
 
   const entries = [];
   raw.forEach((e) => {
+    if (e.caseStudy) {
+      const study = e.caseStudy;
+      const shown = (e.infos || []).filter(Boolean);            // the pictures that exist; the first one is the cover
+      if (!shown.length) return;
+      entries.push({
+        type: 'image',
+        caseId: study.id,
+        href: '#case/' + study.id,
+        srcs: shown.map((i) => i.src),
+        labels: shown.map(() => ''),
+        viewCats: shown.map(() => study.category || ''),
+        categories: [study.category].filter(Boolean),
+        extraVideos: [],
+        video: '',
+        ratio: study.device ? (study.coverRatio || 0.8) : shown[0].ratio,     // a phone tile is a portrait tile
+        device: study.device || '',
+        deviceBg: study.coverBackground || '',
+        deviceRatio: shown[0].ratio,
+        category: study.category || '',
+        title: study.title,
+        description: study.summary || study.subtitle || '',
+        alt: study.title + ' case study'
+      });
+      return;
+    }
     if (e.video) {
       if (!e.info) return;
       const v = e.video;
@@ -1713,13 +2652,25 @@ async function resolveWorks(list) {
       return;
     }
     const title = ok.find((m) => m.title)?.title || '';
+    // The category of every picture in the group. The group is found under each of them.
+    const viewCats = ok.map((m) => m.category || ok[0].category || '');
+    const categories = [...new Set(viewCats.filter(Boolean))];
+    const hoverCat = e.hoverInfo ? e.members.find((m) => m.hoverCategory)?.hoverCategory : '';
+    if (hoverCat && !categories.includes(hoverCat)) categories.push(hoverCat);
+    const extraVideos = (e.videoInfos || []).filter((x) => x.info).map((x) => ({
+      src: x.info.src, label: x.v.label, poster: x.v.poster, category: x.v.category
+    }));
+    extraVideos.forEach((v) => { if (v.category && !categories.includes(v.category)) categories.push(v.category); });
     entries.push({
       type: 'image',
+      extraVideos,
       srcs: ok.map((m) => m.info.src),
       labels: ok.map((m) => m.label),
+      viewCats,
+      categories,
       video: e.hoverInfo ? e.hoverInfo.src : '',
       ratio: ok[0].info.ratio,
-      category: ok[0].category || '',
+      category: ok[0].category || categories[0] || '',
       title,
       description: ok.find((m) => m.description)?.description || '',
       alt: ok[0].alt || title || 'Work ' + (entries.length + 1)
@@ -1809,9 +2760,25 @@ function makeTile(entry) {
   tile.type = 'button';
   tile.className = 'tile'
     + (hasInfo || hasVideo || entry.srcs.length > 1 ? '' : ' plain')
-    + (hasVideo ? ' has-poster' : '');
+    + (hasVideo ? ' has-poster' : '')
+    + (entry.href ? ' is-case' : '');
   tile.style.aspectRatio = entry.ratio;
-  tile.setAttribute('aria-label', 'Open ' + entry.alt);
+  tile.setAttribute('aria-label', entry.href ? 'Read the case study ' + entry.title : 'Open ' + entry.alt);
+
+  // A phone on the tile: the pictures go into the screen of a phone, on a coloured background
+  let holder = tile;
+  if (entry.device) {
+    tile.classList.add('has-device');
+    if (entry.deviceBg) tile.style.setProperty('--device-bg', entry.deviceBg);
+    const frame = document.createElement('span');
+    frame.className = 'tile-device';
+    frame.style.setProperty('--frame-ratio', ((entry.deviceRatio || 0.49) * 0.94 / 0.88).toFixed(4));
+    const phoneScreen = document.createElement('span');
+    phoneScreen.className = 'tile-device-screen';
+    frame.append(phoneScreen);
+    tile.append(frame);
+    holder = phoneScreen;
+  }
 
   const layers = entry.srcs.map((src, i) => {
     const img = new Image();
@@ -1819,7 +2786,7 @@ function makeTile(entry) {
     img.alt = i === 0 ? entry.alt : '';
     img.decoding = 'async';
     if (i > 0) img.className = 'preview-layer';
-    tile.append(img);
+    holder.append(img);
     return img;
   });
 
@@ -1838,6 +2805,13 @@ function makeTile(entry) {
 
   const info = makeInfo(entry);
   if (info) tile.append(info);
+
+  if (entry.href) {                                  // a case study says so in the corner
+    const caseBadge = document.createElement('span');
+    caseBadge.className = 'case-badge';
+    caseBadge.textContent = 'Case study';
+    tile.append(caseBadge);
+  }
 
   if (hasVideo || entry.srcs.length > 1) {
     const total = entry.srcs.length;
@@ -1892,16 +2866,18 @@ function makeTile(entry) {
 }
 
 function isVisible(g, t) {
-  return g.filter === 'All' || t.entry.category === g.filter;
+  const e = t.entry;
+  return g.filter === 'All' || (e.categories || [e.category]).includes(g.filter);
 }
 
-function buildGallery(el, entries, spacious) {
-  const g = { el, filter: 'All', lastWidth: 0, raf: 0, spacious: Boolean(spacious) };
+function buildGallery(el, entries, spacious, columns) {
+  const g = { el, filter: 'All', lastWidth: 0, raf: 0, spacious: Boolean(spacious), columns: columns || 0 };
 
   g.tiles = entries.map((entry) => {
     const t = { entry, ratio: entry.ratio, el: makeTile(entry) };
     t.el.addEventListener('click', () => {
-      const shown = g.tiles.filter((x) => isVisible(g, x)).map((x) => x.entry);
+      if (entry.href) { location.hash = entry.href; return; }       // a case study opens its own page
+      const shown = g.tiles.filter((x) => isVisible(g, x)).map((x) => x.entry).filter((x) => !x.href);
       openViewer(shown, shown.indexOf(entry), t.el);
     });
     return t;
@@ -1931,7 +2907,7 @@ function layoutGallery(g, force) {
   g.lastWidth = W;
 
   const gap = g.spacious ? (W < 600 ? 14 : 22) : (W < 600 ? 12 : 16);   // the homepage has more room between pictures
-  const count = W < 480 ? 1 : W < 900 ? 2 : W < 1400 ? 3 : 4;   // number of columns
+  const count = g.columns || (W < 480 ? 1 : W < 900 ? 2 : W < 1400 ? 3 : 4);   // number of columns
   const colWidth = (W - gap * (count - 1)) / count;
   g.el.style.setProperty('--gap', gap + 'px');
 
@@ -1958,7 +2934,7 @@ let mediaLibrary = [];
 function buildFilters(entries) {
   const box = $('workFilters');
   box.replaceChildren();
-  const cats = [...new Set([...workCategories, ...entries.map((e) => e.category).filter(Boolean)])];
+  const cats = [...new Set([...workCategories, ...entries.flatMap((e) => e.categories || [e.category]).filter(Boolean)])];
   if (cats.length < 2) return;
 
   ['All', ...cats].forEach((cat) => {
@@ -1989,7 +2965,7 @@ function rebuildWorks() {
 
 (async function initWorks() {
   worksEntries = await resolveWorks(worksPhotos);
-  mediaLibrary = worksEntries.flatMap((e) => e.srcs.map((src) => ({ type: e.type, src })));
+  mediaLibrary = worksEntries.filter((e) => !e.href).flatMap((e) => e.srcs.map((src) => ({ type: e.type, src })));
   if (!worksEntries.length) { $('worksEmpty').hidden = false; return; }
   rebuildWorks();
 })();
@@ -2010,7 +2986,7 @@ let groupOrder = [];
 const groupOptions = new Map();
 const featureCache = new Map();
 
-const pictureEntries = () => worksEntries.filter((e) => e.type === 'image');
+const pictureEntries = () => worksEntries.filter((e) => e.type === 'image' && !e.href);
 
 function updateGroupStatus(message) {
   $('groupStatus').textContent = message || (groupMain
@@ -2129,7 +3105,12 @@ function addGroup() {
       if (groupMain.srcs.includes(src)) return;
       groupMain.srcs.push(src);
       groupMain.labels.push((ref.labels && ref.labels[i]) || '');
+      groupMain.viewCats.push((ref.viewCats && ref.viewCats[i]) || ref.category || groupMain.category || '');
     });
+    (ref.categories || [ref.category]).filter(Boolean).forEach((c) => {
+      if (!groupMain.categories.includes(c)) groupMain.categories.push(c);
+    });
+    groupMain.extraVideos = (groupMain.extraVideos || []).concat(ref.extraVideos || []);
   });
   worksEntries = worksEntries.filter((e) => !groupRefs.has(e));
   groupMain = null;
@@ -2146,6 +3127,7 @@ function addGroup() {
 /* The whole list of pictures as code, with every group written out as views */
 function worksCode() {
   const lines = worksEntries.map((e) => {
+    if (e.caseId) return '  ' + JSON.stringify({ type: 'case', id: e.caseId });   // the case study tile
     const item = {};
     if (e.type === 'video') {
       item.type = 'video';
@@ -2154,12 +3136,22 @@ function worksCode() {
     } else {
       item.src = e.srcs[0];
       if (e.video) item.video = e.video;
-      if (e.srcs.length > 1) {
-        item.views = e.srcs.slice(1).map((src, i) => {
-          const label = e.labels && e.labels[i + 1];
-          return label ? { src, label } : src;
-        });
-      }
+      const views = e.srcs.slice(1).map((src, i) => {
+        const label = e.labels && e.labels[i + 1];
+        const cat = e.viewCats && e.viewCats[i + 1];
+        const view = { src };
+        if (label) view.label = label;
+        if (cat && cat !== e.category) view.category = cat;      // this picture is found under its own filter too
+        return Object.keys(view).length > 1 ? view : src;
+      });
+      (e.extraVideos || []).forEach((v) => {                    // related videos
+        const view = { type: 'video', src: v.src };
+        if (v.label) view.label = v.label;
+        if (v.poster) view.poster = v.poster;
+        if (v.category) view.category = v.category;
+        views.push(view);
+      });
+      if (views.length) item.views = views;
     }
     if (e.title && e.title.trim()) item.title = e.title.trim();
     if (e.description && e.description.trim()) item.description = e.description.trim();
@@ -2318,6 +3310,55 @@ function makeSoftwareIcon(item, i) {
 }
 
 
+/* ---------- The pop-up: how much I know of a program ---------- */
+
+const levelNames = ['Basics', 'Intermediate', 'Expert'];
+
+/* Three small bars and the word: how much I know of a program */
+function makeLevel(level) {
+  const bars = document.createElement('span');
+  bars.className = 'tool-tip-bars';
+  for (let n = 1; n <= 3; n++) {
+    const bar = document.createElement('i');
+    if (n <= level) bar.className = 'on';
+    bars.append(bar);
+  }
+  const word = document.createElement('span');
+  word.textContent = levelNames[Math.min(3, Math.max(1, level)) - 1];
+  return [bars, word];
+}
+
+function showToolTip(stick, item) {
+  const tip = $('toolTip');
+  $('toolTipName').textContent = item.name;
+  $('toolTipLevel').replaceChildren(...makeLevel(item.level));
+
+  // Above the stick when there is room, otherwise below it, and never outside the screen
+  tip.classList.remove('show', 'below');
+  const box = stick.getBoundingClientRect();
+  const width = tip.offsetWidth;
+  const height = tip.offsetHeight;
+  const centre = box.left + box.width / 2;
+  const left = Math.min(Math.max(8, centre - width / 2), window.innerWidth - width - 8);
+  const below = box.top - height - 14 < 8;
+  tip.style.left = left + 'px';
+  tip.style.top = (below ? box.bottom + 14 : box.top - height - 14) + 'px';
+  tip.style.setProperty('--arrow', Math.min(width - 16, Math.max(16, centre - left)) + 'px');
+  tip.classList.toggle('below', below);
+  tip.setAttribute('aria-hidden', 'false');
+  requestAnimationFrame(() => tip.classList.add('show'));
+}
+
+function hideToolTip() {
+  const tip = $('toolTip');
+  tip.classList.remove('show');
+  tip.setAttribute('aria-hidden', 'true');
+}
+window.addEventListener('scroll', hideToolTip, { passive: true });
+
+/* The name of a program as a short word for the address: 'Kling AI' -> 'kling-ai' */
+const softwareSlug = (item) => item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
 /* ---------- The sticks in the banner: the software logos, or the qualities ---------- */
 
 function drawSticks() {
@@ -2343,16 +3384,29 @@ function drawSticks() {
     title.className = 'sticks-label';
     title.textContent = 'Tools';
     sticks.append(title);
-    const heights = [5.6, 6.6, 6.0, 7.6, 6.4, 7.2, 6.0];   // in rem (at the biggest size of the banner)
+    const heights = [5.6, 6.6, 6.0, 7.6, 6.4, 7.2, 6.0, 6.8];   // in rem (at the biggest size of the banner)
     software.forEach((item, i) => {
       const li = document.createElement('li');
       li.className = 'stick is-logo';
-      li.title = item.name + (item.note ? ' (' + item.note + ')' : '');
+      if (item.level) {
+        li.addEventListener('mouseenter', () => showToolTip(li, item));
+        li.addEventListener('mouseleave', hideToolTip);
+        li.addEventListener('focusin', () => showToolTip(li, item));     // also for someone using the keyboard
+        li.addEventListener('focusout', hideToolTip);
+      } else {
+        li.title = item.name;
+      }
+      li.addEventListener('click', hideToolTip);
       li.style.setProperty('--h', heights[i % heights.length]);
+      // A click goes to the About page, to the card of this program
+      const link = document.createElement('a');
+      link.className = 'stick-link';
+      link.href = '#about/' + softwareSlug(item);
       const label = document.createElement('span');
       label.className = 'sr-only';
-      label.textContent = item.name;
-      li.append(makeSoftwareIcon(item, i), label);
+      label.textContent = item.name + (item.level ? ', ' + levelNames[item.level - 1] : '') + ', see what I can do';
+      link.append(makeSoftwareIcon(item, i), label);
+      li.append(link);
       sticks.append(li);
     });
   }
@@ -2360,6 +3414,61 @@ function drawSticks() {
 }
 
 drawSticks();
+
+/* ---------- About page: What I can do (one card for every program) ---------- */
+
+function drawCan() {
+  const grid = $('canGrid');
+  grid.replaceChildren();
+  software.forEach((item, i) => {
+    const card = document.createElement('article');
+    card.className = 'can-card';
+    card.id = 'about-' + softwareSlug(item);
+
+    const head = document.createElement('div');
+    head.className = 'can-head';
+    const text = document.createElement('div');
+    const name = document.createElement('h3');
+    name.className = 'can-name';
+    name.textContent = item.name;
+    text.append(name);
+    if (item.level) {
+      const level = document.createElement('div');
+      level.className = 'can-level';
+      level.append(...makeLevel(item.level));
+      text.append(level);
+    }
+    head.append(makeSoftwareIcon(item, i), text);
+    card.append(head);
+
+    if (item.can && item.can.length) {
+      const list = document.createElement('ul');
+      list.className = 'can-list';
+      item.can.forEach((line) => {
+        const li = document.createElement('li');
+        li.textContent = line;
+        list.append(li);
+      });
+      card.append(list);
+    }
+    grid.append(card);
+
+    // Pictures of my basic work with this program (only the ones that exist in the folders are shown)
+    if (item.pictures && item.pictures.length) {
+      const items = item.pictures.map((p) => (typeof p === 'string' ? { type: hasVideoEnding(p) ? 'video' : 'image', src: p } : p));
+      resolveItems(items, item.name).then((entries) => {
+        if (!entries.length) return;
+        const gallery = document.createElement('div');
+        gallery.className = 'gallery';
+        card.append(gallery);
+        buildGallery(gallery, entries, false, 3);
+      });
+    }
+  });
+  $('canSection').hidden = software.length === 0;
+}
+
+drawCan();
 
 /* ---------- Profile picture in the banner (optional) ---------- */
 
@@ -2609,11 +3718,16 @@ async function resolveItems(items, base) {
         ratio: info.ratio, category: '', alt, title, description
       };
     }
-    const infos = await Promise.all(viewsOf(item).map(async (v) => {
+    const allViews = viewsOf(item);
+    const infos = await Promise.all(allViews.filter((v) => !v.isVideo).map(async (v) => {
       const info = await probeImage(v.src);
       return info && { ...info, label: v.label };
     }));
     const ok = infos.filter(Boolean);
+    const extraVideos = (await Promise.all(allViews.filter((v) => v.isVideo).map(async (v) => {
+      const info = await probeVideo(v.src);
+      return info && { src: info.src, label: v.label, poster: v.poster, category: '' };
+    }))).filter(Boolean);
 
     // A picture can have a video that plays on hover
     const hover = item.video ? await probeVideo(item.video) : null;
@@ -2631,6 +3745,7 @@ async function resolveItems(items, base) {
     }
     return {
       type: 'image', srcs: ok.map((o) => o.src), labels: ok.map((o) => o.label),
+      extraVideos,
       video: hover ? hover.src : '',
       ratio: ok[0].ratio, category: '', alt, title, description
     };
@@ -2714,6 +3829,190 @@ async function drawProject(p, child) {
   buildGallery(gallery, entries);
 }
 
+/* ---------- Case study page ---------- */
+
+let caseStudyToken = 0;
+
+/* A Figma link -> the address Figma wants for an embed. Only figma.com links are accepted.
+   The Figma toolbar is hidden and the click hints are off, so it looks like an app in a phone. */
+function figmaEmbedUrl(value) {
+  try {
+    const link = new URL(String(value || '').trim());
+    if (!/(^|\.)figma\.com$/.test(link.hostname) || !/^\/(proto|design|file|board)\//.test(link.pathname)) return '';
+    const settings = { 'hotspot-hints': '0', 'content-scaling': 'fixed' };
+    Object.keys(settings).forEach((key) => { if (!link.searchParams.has(key)) link.searchParams.set(key, settings[key]); });
+    link.searchParams.set('scaling', 'contain');      // the whole screen is scaled to fit the phone
+    link.searchParams.set('hide-ui', '1');            // no Figma toolbar around the prototype
+    link.searchParams.delete('show-proto-sidebar');   // and no side panel, so it stays a phone
+    return 'https://www.figma.com/embed?embed_host=share&url=' + encodeURIComponent(link.href);
+  } catch (err) {
+    return '';
+  }
+}
+
+/* Text with links: every https://... in it becomes a link that opens in a new tab */
+function appendWithLinks(element, text) {
+  String(text).split(/(https?:\/\/[^\s]+)/g).forEach((part, i) => {
+    if (i % 2 === 1) {
+      const link = document.createElement('a');
+      link.href = part;
+      link.textContent = part;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      element.append(link);
+    } else if (part) {
+      element.append(document.createTextNode(part));
+    }
+  });
+}
+
+/* The code of a YouTube video, from a link (watch, share or embed link) or from the code itself */
+function youtubeId(value) {
+  const text = String(value || '').trim();
+  const link = text.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([A-Za-z0-9_-]{11})/);
+  if (link) return link[1];
+  return /^[A-Za-z0-9_-]{11}$/.test(text) ? text : '';
+}
+
+async function drawCaseStudy(study) {
+  const token = ++caseStudyToken;
+  const view = $('caseStudyView');
+  view.replaceChildren();
+  view.className = 'case-study';
+
+  const back = document.createElement('a');
+  back.className = 'back';
+  back.href = '#projects';
+  back.textContent = '\u2190 all projects';
+
+  const title = document.createElement('h1');
+  title.textContent = study.title;
+
+  const meta = document.createElement('p');
+  meta.className = 'project-meta';
+  meta.textContent = ['Case study', study.category].filter(Boolean).join(' \u00b7 ');
+
+  view.append(back, title, meta);
+
+  if (study.subtitle) {
+    const sub = document.createElement('p');
+    sub.className = 'case-study-sub';
+    sub.textContent = study.subtitle;
+    view.append(sub);
+  }
+
+  // Look for all the pictures first, then show everything in the order of the list
+  const blocks = await Promise.all((study.sections || []).map(async (section) => {
+    const list = section.images || (section.image ? [section.image] : []);
+    const found = (await Promise.all(list.map(probeImage))).filter(Boolean);
+    return { section, found };
+  }));
+  if (token !== caseStudyToken) return;                  // the visitor already went somewhere else
+
+  // Click a picture to see it big; the arrows go to the next picture of the case
+  const entries = [];
+  blocks.forEach(({ section, found }) => found.forEach((info) => entries.push({
+    type: 'image', srcs: [info.src], labels: [''], extraVideos: [], video: '', ratio: info.ratio,
+    category: '', title: '', description: '', alt: section.alt || study.title + ' picture'
+  })));
+
+  let count = 0;
+  blocks.forEach(({ section, found }) => {
+    const videoId = section.youtube ? youtubeId(section.youtube) : '';
+    const figmaUrl = section.figma ? figmaEmbedUrl(section.figma) : '';
+    if (!section.heading && !section.subheading && !section.text && !section.list && !found.length && !videoId && !figmaUrl) return;
+    const box = document.createElement('section');
+    box.className = 'cs-section';
+
+    if (section.heading) {
+      const heading = document.createElement('h2');
+      heading.className = 'cs-heading';
+      heading.textContent = section.heading;
+      box.append(heading);
+    }
+    if (section.subheading) {
+      const sub = document.createElement('h3');
+      sub.className = 'cs-subheading';
+      sub.textContent = section.subheading;
+      box.append(sub);
+    }
+    if (section.text) {
+      const text = document.createElement('p');
+      text.className = 'cs-text' + (section.large ? ' large' : '');
+      appendWithLinks(text, section.text);
+      box.append(text);
+    }
+    if (section.list) {
+      const list = document.createElement('ul');
+      list.className = 'cs-list' + (section.bullet ? ' marked' : '');
+      section.list.forEach((item) => {
+        const li = document.createElement('li');
+        if (section.bullet) li.dataset.bullet = section.bullet;
+        appendWithLinks(li, item);
+        list.append(li);
+      });
+      box.append(list);
+    }
+    if (figmaUrl) {
+      const isTablet = section.device === 'tablet';
+      const device = document.createElement('div');
+      device.className = 'device ' + (isTablet ? 'tablet' : 'phone');
+      if (!isTablet) {                                     // the buttons on the sides of the phone
+        [['left', 90, 34], ['left', 140, 56], ['left', 210, 56], ['right', 170, 84]].forEach(([side, top, height]) => {
+          const button = document.createElement('span');
+          button.className = 'device-btn ' + side;
+          button.style.top = top + 'px';
+          button.style.height = height + 'px';
+          device.append(button);
+        });
+      }
+      const screen = document.createElement('div');
+      screen.className = 'device-screen';
+      screen.style.setProperty('--ratio', section.ratio || (isTablet ? '4 / 3' : '390 / 844'));
+      if (section.background) screen.style.background = section.background;
+      const prototype = document.createElement('iframe');
+      prototype.src = figmaUrl;
+      prototype.title = section.title || 'Clickable prototype';
+      prototype.loading = 'lazy';
+      prototype.allowFullscreen = true;
+      screen.append(prototype);
+      device.append(screen);
+      box.append(device);
+    }
+    if (videoId) {
+      const frame = document.createElement('div');
+      frame.className = 'cs-video';
+      const player = document.createElement('iframe');
+      player.src = 'https://www.youtube-nocookie.com/embed/' + videoId;
+      player.title = section.title || 'YouTube video';
+      player.loading = 'lazy';
+      player.allow = 'accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+      player.allowFullscreen = true;
+      player.referrerPolicy = 'strict-origin-when-cross-origin';
+      frame.append(player);
+      box.append(frame);
+    }
+    if (found.length) {
+      const images = document.createElement('div');
+      images.className = 'cs-images' + (section.natural ? ' natural' : '');
+      found.forEach((info) => {
+        const img = new Image();
+        img.className = 'cs-image';
+        img.src = info.src;
+        img.alt = section.alt || study.title + ' picture';
+        // natural: every picture at its own size. scale: 4 means the pictures were exported at 4 times
+        // their size, so they are shown at a quarter of their pixels (sharp on a sharp screen).
+        if (section.natural) img.style.width = Math.round(info.width / (section.scale || 1)) + 'px';
+        const index = count++;
+        img.addEventListener('click', () => openViewer(entries, index, img));
+        images.append(img);
+      });
+      box.append(images);
+    }
+    view.append(box);
+  });
+}
+
 /* ---------- Progress: cases ---------- */
 
 function formatDate(d) {
@@ -2760,55 +4059,69 @@ function drawRecent() {
   });
 }
 
+const isCurrent = (c) => /progress/i.test(c.status || '');
+
+/* One project as a card: cover, name, type and status, and when it last changed */
+function makeCaseCard(c) {
+  const card = document.createElement('div');
+  card.className = 'project';
+  card.dataset.type = c.type || '';
+
+  const link = document.createElement('a');
+  link.href = '#progress/' + c.id;
+
+  const cover = document.createElement('div');
+  cover.className = 'cover';
+  const firstUpdateImage = (c.updates || []).flatMap((u) => u.items || []).find((i) => i.type !== 'video');
+  const coverSrc = c.cover || c.compare?.[0]?.after || firstUpdateImage?.src;
+  if (coverSrc) {
+    probeImage(coverSrc).then((info) => {
+      if (!info) return;
+      const img = new Image();
+      img.src = info.src;
+      img.alt = 'Cover picture of ' + c.title;
+      img.loading = 'lazy';
+      cover.append(img);
+    });
+  }
+
+  const name = document.createElement('span');
+  name.className = 'project-name';
+  name.textContent = c.title;
+
+  const info = document.createElement('p');
+  info.className = 'project-info';
+  info.textContent = [c.type, c.status].filter(Boolean).join(' \u00b7 ');
+
+  link.append(cover, name, info);
+
+  const updates = c.updates || [];
+  const newest = [...updates].filter((u) => u.date).sort(newestFirst)[0];
+  const line = [updates.length ? updates.length + (updates.length === 1 ? ' update' : ' updates') : '',
+    newest ? 'latest ' + formatDate(newest.date) : ''].filter(Boolean).join(' \u00b7 ');
+  if (line) {
+    const latest = document.createElement('p');
+    latest.className = 'project-info';
+    latest.textContent = line;
+    link.append(latest);
+  }
+
+  card.append(link);
+  return card;
+}
+
+/* The projects you are working on now, and the ones that are finished */
 function drawCaseList() {
-  const grid = $('caseGrid');
-  grid.replaceChildren();
-  $('casesEmpty').hidden = cases.length > 0;
-
-  cases.forEach((c) => {
-    const card = document.createElement('div');
-    card.className = 'project';
-    card.dataset.type = c.type || '';
-
-    const link = document.createElement('a');
-    link.href = '#progress/' + c.id;
-
-    const cover = document.createElement('div');
-    cover.className = 'cover';
-    const firstUpdateImage = (c.updates || []).flatMap((u) => u.items || []).find((i) => i.type !== 'video');
-    const coverSrc = c.cover || c.compare?.[0]?.after || firstUpdateImage?.src;
-    if (coverSrc) {
-      probeImage(coverSrc).then((info) => {
-        if (!info) return;
-        const img = new Image();
-        img.src = info.src;
-        img.alt = 'Cover picture of ' + c.title;
-        img.loading = 'lazy';
-        cover.append(img);
-      });
-    }
-
-    const name = document.createElement('span');
-    name.className = 'project-name';
-    name.textContent = c.title;
-
-    const info = document.createElement('p');
-    info.className = 'project-info';
-    info.textContent = [c.type, c.status].filter(Boolean).join(' \u00b7 ');
-
-    link.append(cover, name, info);
-
-    const newest = [...(c.updates || [])].filter((u) => u.date).sort(newestFirst)[0];
-    if (newest) {
-      const latest = document.createElement('p');
-      latest.className = 'project-info';
-      latest.textContent = 'Latest update: ' + formatDate(newest.date);
-      link.append(latest);
-    }
-
-    card.append(link);
-    grid.append(card);
-  });
+  const now = $('caseGrid');
+  const done = $('finishedGrid');
+  now.replaceChildren();
+  done.replaceChildren();
+  const current = cases.filter(isCurrent);
+  const finished = cases.filter((c) => !isCurrent(c));
+  $('casesEmpty').hidden = current.length > 0;
+  $('finishedTitle').hidden = finished.length === 0;
+  current.forEach((c) => now.append(makeCaseCard(c)));
+  finished.forEach((c) => done.append(makeCaseCard(c)));
 }
 
 function drawCaseFilters() {
@@ -2825,9 +4138,9 @@ function drawCaseFilters() {
     button.setAttribute('aria-pressed', String(type === 'All'));
     button.addEventListener('click', () => {
       box.querySelectorAll('.filter-button').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
-      $('caseGrid').querySelectorAll('.project').forEach((card) => {
+      [$('caseGrid'), $('finishedGrid')].forEach((grid) => grid.querySelectorAll('.project').forEach((card) => {
         card.hidden = type !== 'All' && card.dataset.type !== type;
-      });
+      }));
     });
     box.append(button);
   });
@@ -2888,23 +4201,100 @@ function makeCompare(pair, before, after) {
 }
 
 let caseToken = 0;
+let currentCase = null;
+let timelineNewestFirst = true;
+let editingUpdate = -1;                                 // the place of the update being edited, -1 = a new one
+let casesDirty = false;                                 // something was changed and not copied yet
+
+const todayText = () => new Date().toISOString().slice(0, 10);
+const cleanLines = (text) => String(text || '').split(/[\n,]+/).map((t) => t.trim()).filter(Boolean);
+
+/* What you typed in the pictures field (file names) -> the items of an update */
+function parsePictures(text, previous) {
+  return cleanLines(text).map((name) => {
+    const src = /^(img|video)\//i.test(name) || /^https?:\/\//i.test(name) ? name : (hasVideoEnding(name) ? 'video/' : 'img/') + name;
+    const old = (previous || []).find((item) => item.src === src);        // keeps its titles and extra views
+    return old ? { ...old } : { type: hasVideoEnding(src) ? 'video' : 'image', src };
+  });
+}
+
+function labelled(box, label, text) {
+  const heading = document.createElement('p');
+  heading.className = 'tl-label';
+  heading.textContent = label;
+  const body = document.createElement('p');
+  body.className = 'tl-text';
+  body.textContent = text;
+  box.append(heading, body);
+}
+
+/* One moment on the timeline */
+function makeTimelineItem(u, index, entries) {
+  const item = document.createElement('li');
+  item.className = 'tl-item';
+
+  if (u.date) {
+    const date = document.createElement('p');
+    date.className = 'tl-date';
+    date.textContent = formatDate(u.date);
+    item.append(date);
+  }
+  if (u.title) {
+    const title = document.createElement('h3');
+    title.className = 'tl-title';
+    title.textContent = u.title;
+    item.append(title);
+  }
+
+  const detailed = Boolean(u.going || u.learned);       // with only a text, no labels are needed
+  if (u.text) {
+    if (detailed) labelled(item, 'What I made', u.text);
+    else {
+      const text = document.createElement('p');
+      text.className = 'tl-text';
+      text.textContent = u.text;
+      item.append(text);
+    }
+  }
+  if (u.going) labelled(item, 'How it\u2019s going', u.going);
+  if (u.learned) labelled(item, 'What I learned', u.learned);
+
+  if (u.skills && u.skills.length) {
+    const row = document.createElement('div');
+    row.className = 'skills small';
+    u.skills.forEach((name) => {
+      const chip = document.createElement('span');
+      chip.className = 'skill-chip';
+      chip.textContent = name;
+      row.append(chip);
+    });
+    item.append(row);
+  }
+
+  item.dataset.entries = String(entries.length);
+  item.dataset.index = String(index);
+  return item;
+}
 
 async function drawCase(c) {
   const token = ++caseToken;
+  currentCase = c;
   const view = $('progressView');
   view.replaceChildren();
 
   const back = document.createElement('a');
   back.className = 'back';
   back.href = '#progress';
-  back.textContent = '\u2190 all cases';
+  back.textContent = '\u2190 all projects';
 
   const title = document.createElement('h1');
   title.textContent = c.title;
 
   const meta = document.createElement('p');
   meta.className = 'project-meta';
-  meta.textContent = [c.type, c.status].filter(Boolean).join(' \u00b7 ');
+  const dates = (c.updates || []).filter((u) => u.date).map((u) => u.date).sort();
+  meta.textContent = [c.type, c.status, dates.length ? 'started ' + formatDate(dates[0]) : '',
+    (c.updates || []).length ? (c.updates.length + (c.updates.length === 1 ? ' update' : ' updates')) : ''].filter(Boolean).join(' \u00b7 ');
 
   view.append(back, title, meta);
 
@@ -2915,16 +4305,76 @@ async function drawCase(c) {
     view.append(text);
   }
 
+  // The tools to change this page (only when the site is opened with ?edit)
+  if (editMode) {
+    const tools = document.createElement('div');
+    tools.className = 'header-actions';
+    tools.style.marginBottom = '1.5rem';
+    const add = (label, secondary, action) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'project-action' + (secondary ? ' secondary' : '');
+      button.textContent = label;
+      button.addEventListener('click', action);
+      tools.append(button);
+      return button;
+    };
+    add('+ New update', false, () => openUpdateEditor(-1));
+    add('Edit project', true, () => openCaseEditor(c));
+    add('Copy cases code', true, () => copyCases());
+    add('Delete project', true, () => deleteCase(c));
+    view.append(tools);
+    const note = document.createElement('p');
+    note.className = 'group-status';
+    note.id = 'caseNote';
+    note.hidden = !casesDirty;
+    note.textContent = CASES_NOTE;
+    view.append(note);
+  }
+
+  // Look for every picture first, then show everything
   const pairs = await Promise.all((c.compare || []).map(async (pair) => {
     const [before, after] = await Promise.all([probeImage(pair.before), probeImage(pair.after)]);
     return before && after ? { pair, before, after } : null;
   }));
 
-  const updates = [...(c.updates || [])].sort(newestFirst);
-  const resolvedUpdates = await Promise.all(updates.map(async (u) => ({
-    u, entries: await resolveItems(u.items, u.title || c.title)
+  const order = (c.updates || []).map((u, i) => ({ u, i }))
+    .sort((a, b) => timelineNewestFirst ? newestFirst(a.u, b.u) : newestFirst(b.u, a.u));
+  const resolved = await Promise.all(order.map(async ({ u, i }) => ({
+    u, i, entries: await resolveItems(u.items, u.title || c.title)
   })));
-  if (token !== caseToken) return;                  // the visitor already went somewhere else
+  if (token !== caseToken) return;                        // the visitor already went somewhere else
+
+  // The skills, and since when
+  const skills = new Map();
+  (c.updates || []).forEach((u) => (u.skills || []).forEach((name) => {
+    const found = skills.get(name) || { count: 0, first: '' };
+    found.count += 1;
+    if (u.date && (!found.first || u.date < found.first)) found.first = u.date;
+    skills.set(name, found);
+  }));
+  if (skills.size) {
+    const section = document.createElement('section');
+    section.className = 'case-section';
+    const heading = document.createElement('h2');
+    heading.className = 'section-title';
+    heading.textContent = 'Skills so far';
+    const row = document.createElement('div');
+    row.className = 'skills';
+    skills.forEach((info, name) => {
+      const chip = document.createElement('span');
+      chip.className = 'skill-chip';
+      chip.textContent = name;
+      if (info.first) {
+        const since = document.createElement('small');
+        since.textContent = 'since ' + formatDate(info.first);
+        chip.append(since);
+      }
+      row.append(chip);
+    });
+    section.append(heading, row);
+    view.append(section);
+  }
 
   const shownPairs = pairs.filter(Boolean);
   if (shownPairs.length) {
@@ -2938,59 +4388,341 @@ async function drawCase(c) {
     view.append(section);
   }
 
-  if (resolvedUpdates.length) {
+  // The timeline
+  if (resolved.length) {
     const section = document.createElement('section');
     section.className = 'case-section';
     const heading = document.createElement('h2');
     heading.className = 'section-title';
-    heading.textContent = 'Updates';
+    heading.textContent = 'Timeline';
     section.append(heading);
+
+    const controls = document.createElement('div');
+    controls.className = 'filters';
+    [['Newest first', true], ['Oldest first', false]].forEach(([label, newest]) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'filter-button';
+      button.textContent = label;
+      button.setAttribute('aria-pressed', String(timelineNewestFirst === newest));
+      button.addEventListener('click', () => { timelineNewestFirst = newest; drawCase(c); });
+      controls.append(button);
+    });
+    section.append(controls);
+
+    const list = document.createElement('ol');
+    list.className = 'timeline';
+    section.append(list);
     view.append(section);
 
-    resolvedUpdates.forEach(({ u, entries }) => {
-      const block = document.createElement('article');
-      block.className = 'update';
-
-      if (u.date) {
-        const date = document.createElement('p');
-        date.className = 'update-date';
-        date.textContent = formatDate(u.date);
-        block.append(date);
-      }
-      if (u.title) {
-        const heading3 = document.createElement('h3');
-        heading3.className = 'update-title';
-        heading3.textContent = u.title;
-        block.append(heading3);
-      }
-      if (u.text) {
-        const text = document.createElement('p');
-        text.className = 'update-text';
-        text.textContent = u.text;
-        block.append(text);
-      }
-
-      section.append(block);                         // in the page first, so the gallery can measure its width
+    resolved.forEach(({ u, i, entries }) => {
+      const item = makeTimelineItem(u, i, entries);
+      list.append(item);                                  // in the page first, so the gallery can measure its width
       if (entries.length) {
         const gallery = document.createElement('div');
         gallery.className = 'gallery';
-        block.append(gallery);
+        item.append(gallery);
         buildGallery(gallery, entries);
+      }
+      if (editMode) {
+        const actions = document.createElement('div');
+        actions.className = 'project-actions';
+        const edit = document.createElement('button');
+        edit.type = 'button';
+        edit.textContent = 'Edit';
+        edit.addEventListener('click', () => openUpdateEditor(i));
+        const del = document.createElement('button');
+        del.type = 'button';
+        del.textContent = 'Delete';
+        del.addEventListener('click', () => {
+          if (!confirm('Delete this update?')) return;
+          c.updates.splice(i, 1);
+          casesChanged();
+        });
+        actions.append(edit, del);
+        item.append(actions);
       }
     });
   }
 
-  if (!shownPairs.length && !resolvedUpdates.length) {
+  if (!shownPairs.length && !resolved.length) {
     const empty = document.createElement('p');
     empty.className = 'empty';
-    empty.textContent = 'Nothing to show for this case yet.';
+    empty.textContent = 'Nothing to show for this project yet.';
     view.append(empty);
   }
 }
 
+/* ---------- Changing the projects and their timelines (only with ?edit) ---------- */
+
+const CASES_NOTE = 'Not saved yet: click "Copy cases code" and paste it over the cases list in your file. Made a mistake? Reload the page to start over.';
+
+function casesChanged() {
+  casesDirty = true;
+  drawRecent();
+  drawCaseList();
+  drawCaseFilters();
+  $('casesNote').textContent = CASES_NOTE;
+  $('casesNote').hidden = false;
+  if (currentCase && !$('progressView').hidden) drawCase(currentCase);
+}
+
+function openUpdateEditor(index) {
+  editingUpdate = index;
+  const u = index >= 0 ? currentCase.updates[index] : null;
+  $('updateEditorTitle').textContent = u ? 'Change this update' : 'New update';
+  $('updDate').value = u ? u.date || '' : todayText();
+  $('updTitle').value = u ? u.title || '' : '';
+  $('updText').value = u ? u.text || '' : '';
+  $('updGoing').value = u ? u.going || '' : '';
+  $('updLearned').value = u ? u.learned || '' : '';
+  $('updSkills').value = u ? (u.skills || []).join(', ') : '';
+  $('updPictures').value = u ? (u.items || []).map((item) => item.src).join('\n') : '';
+  const editor = $('updateEditor');
+  editor.hidden = false;
+  editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  $('updTitle').focus();
+}
+
+function saveUpdate() {
+  if (!currentCase) return;
+  const title = $('updTitle').value.trim();
+  if (!title) { alert('Please give this update a title.'); return; }
+  const previous = editingUpdate >= 0 ? currentCase.updates[editingUpdate] : null;
+  const update = {};
+  if ($('updDate').value) update.date = $('updDate').value;
+  update.title = title;
+  const text = $('updText').value.trim();
+  const going = $('updGoing').value.trim();
+  const learned = $('updLearned').value.trim();
+  const skills = cleanLines($('updSkills').value);
+  const items = parsePictures($('updPictures').value, previous && previous.items);
+  if (text) update.text = text;
+  if (going) update.going = going;
+  if (learned) update.learned = learned;
+  if (skills.length) update.skills = skills;
+  if (items.length) update.items = items;
+  currentCase.updates = currentCase.updates || [];
+  if (editingUpdate >= 0) currentCase.updates[editingUpdate] = update;
+  else currentCase.updates.push(update);
+  editingUpdate = -1;
+  $('updateEditor').hidden = true;
+  casesChanged();
+}
+
+function openCaseEditor(c) {
+  $('caseEditorTitle').textContent = c ? 'Change this project' : 'New project';
+  $('caseEditor').dataset.editing = c ? c.id : '';
+  $('caseTitle').value = c ? c.title : '';
+  $('caseType').value = c ? c.type || '' : '';
+  $('caseStatus').value = c && !isCurrent(c) ? 'Finished' : 'In progress';
+  $('caseText').value = c ? c.text || '' : '';
+  $('caseCover').value = c ? c.cover || '' : '';
+  const editor = $('caseEditor');
+  editor.hidden = false;
+  editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  $('caseTitle').focus();
+}
+
+function saveCaseForm() {
+  const title = $('caseTitle').value.trim();
+  if (!title) { alert('Please write the name of the project.'); return; }
+  const editing = $('caseEditor').dataset.editing;
+  const fields = {
+    title,
+    type: $('caseType').value.trim(),
+    status: $('caseStatus').value,
+    text: $('caseText').value.trim(),
+    cover: $('caseCover').value.trim()
+  };
+  Object.keys(fields).forEach((key) => { if (!fields[key]) delete fields[key]; });
+  $('caseEditor').hidden = true;
+
+  if (editing) {
+    const c = cases.find((x) => x.id === editing);
+    ['type', 'text', 'cover'].forEach((key) => { delete c[key]; });
+    Object.assign(c, fields);
+    casesChanged();
+    return;
+  }
+  const base = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'project';
+  let id = base;
+  for (let n = 2; cases.some((x) => x.id === id); n++) id = base + '-' + n;
+  cases.push({ id, ...fields, updates: [] });
+  casesChanged();
+  location.hash = '#progress/' + id;                      // open the new project, ready for its first update
+}
+
+function deleteCase(c) {
+  if (!confirm('Delete the project "' + c.title + '" and its whole timeline?')) return;
+  cases.splice(cases.indexOf(c), 1);
+  currentCase = null;
+  casesChanged();
+  location.hash = '#progress';
+}
+
+async function copyCases() {
+  const code = 'const cases = ' + JSON.stringify(cases, null, 2) + ';';
+  try {
+    await navigator.clipboard.writeText(code);
+    alert('Copied. Now paste it over the cases list in your file.');
+  } catch (err) {
+    prompt('Copy this code and paste it over the cases list in your file:', code);
+  }
+}
+
+$('newCaseButton').addEventListener('click', () => openCaseEditor(null));
+$('copyCasesButton').addEventListener('click', copyCases);
+$('saveUpdateButton').addEventListener('click', saveUpdate);
+$('cancelUpdateButton').addEventListener('click', () => { editingUpdate = -1; $('updateEditor').hidden = true; });
+$('saveCaseButton').addEventListener('click', saveCaseForm);
+$('cancelCaseButton').addEventListener('click', () => { $('caseEditor').hidden = true; });
+
+
 drawRecent();
 drawCaseList();
 drawCaseFilters();
+
+/* ---------- Ideas and future projects ---------- */
+
+let editingIdea = -1;                                   // the place in the list of the one being edited, -1 = a new one
+const kindOf = (idea) => (idea.kind === 'project' ? 'project' : 'idea');
+
+function makeIdeaCard(idea, index) {
+  const card = document.createElement('article');
+  card.className = 'idea';
+
+  if (idea.status || idea.date) {
+    const top = document.createElement('div');
+    top.className = 'idea-top';
+    if (idea.status) {
+      const status = document.createElement('span');
+      status.className = 'idea-status status-' + String(idea.status).toLowerCase();
+      status.textContent = idea.status;
+      top.append(status);
+    }
+    if (idea.date) {
+      const date = document.createElement('span');
+      date.className = 'idea-date';
+      date.textContent = formatDate(idea.date);
+      top.append(date);
+    }
+    card.append(top);
+  }
+
+  const title = document.createElement('h3');
+  title.className = 'idea-title';
+  title.textContent = idea.title;
+  card.append(title);
+
+  if (idea.note && idea.note !== idea.title) {
+    const note = document.createElement('p');
+    note.className = 'idea-note';
+    note.textContent = idea.note;
+    card.append(note);
+  }
+  if (idea.tag) {
+    const tag = document.createElement('span');
+    tag.className = 'idea-tag';
+    tag.textContent = idea.tag;
+    card.append(tag);
+  }
+
+  if (editMode) {
+    const actions = document.createElement('div');
+    actions.className = 'project-actions';
+    const edit = document.createElement('button');
+    edit.type = 'button';
+    edit.textContent = 'Edit';
+    edit.addEventListener('click', () => openIdeaEditor(index));
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.textContent = 'Delete';
+    del.addEventListener('click', () => {
+      if (!confirm('Delete "' + idea.title + '"?')) return;
+      ideas.splice(index, 1);
+      ideasChanged();
+    });
+    actions.append(edit, del);
+    card.append(actions);
+  }
+  return card;
+}
+
+function drawIdeas() {
+  [['idea', 'ideaGrid', 'ideasEmpty'], ['project', 'futureGrid', 'futureEmpty']].forEach(([kind, gridId, emptyId]) => {
+    const grid = $(gridId);
+    grid.replaceChildren();
+    // newest first; the ones without a date stay in the order of the list
+    const shown = ideas.map((idea, index) => ({ idea, index })).filter((x) => kindOf(x.idea) === kind)
+      .sort((a, b) => String(b.idea.date || '').localeCompare(String(a.idea.date || '')));
+    $(emptyId).hidden = shown.length > 0;
+    shown.forEach(({ idea, index }) => grid.append(makeIdeaCard(idea, index)));
+  });
+}
+
+function ideasChanged() {
+  drawIdeas();
+  const note = $('ideasNote');
+  note.textContent = 'Not saved yet: click "Copy ideas code" and paste it over the ideas list in your file. Made a mistake? Reload the page to start over.';
+  note.hidden = false;
+}
+
+function openIdeaEditor(index, kind) {
+  editingIdea = index;
+  const idea = index >= 0 ? ideas[index] : null;
+  const type = idea ? kindOf(idea) : (kind || 'idea');
+  $('ideaEditorTitle').textContent = idea ? 'Edit' : (type === 'project' ? 'New project' : 'New idea');
+  $('ideaKind').value = type;
+  $('ideaTitle').value = idea ? idea.title : '';
+  $('ideaNoteText').value = idea ? idea.note || '' : '';
+  $('ideaTag').value = idea ? idea.tag || '' : '';
+  $('ideaStatus').value = idea ? idea.status || '' : (type === 'project' ? '' : 'Idea');
+  $('ideaDate').value = idea ? idea.date || '' : (type === 'project' ? '' : new Date().toISOString().slice(0, 10));
+  const editor = $('ideaEditor');
+  editor.hidden = false;
+  editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  $('ideaTitle').focus();
+}
+
+function saveIdea() {
+  const title = $('ideaTitle').value.trim();
+  if (!title) { alert('Please write a name.'); return; }
+  const idea = {};
+  if ($('ideaKind').value === 'project') idea.kind = 'project';
+  idea.title = title;
+  const note = $('ideaNoteText').value.trim();
+  const tag = $('ideaTag').value.trim();
+  const status = $('ideaStatus').value;
+  const date = $('ideaDate').value.trim();
+  if (note) idea.note = note;
+  if (tag) idea.tag = tag;
+  if (status) idea.status = status;
+  if (date) idea.date = date;
+  if (editingIdea >= 0) ideas[editingIdea] = idea;
+  else ideas.push(idea);
+  editingIdea = -1;
+  $('ideaEditor').hidden = true;
+  ideasChanged();
+}
+
+$('newIdeaButton').addEventListener('click', () => openIdeaEditor(-1, 'idea'));
+$('newFutureButton').addEventListener('click', () => openIdeaEditor(-1, 'project'));
+$('saveIdeaButton').addEventListener('click', saveIdea);
+$('cancelIdeaButton').addEventListener('click', () => { editingIdea = -1; $('ideaEditor').hidden = true; });
+$('copyIdeasButton').addEventListener('click', async () => {
+  const code = 'const ideas = ' + JSON.stringify(ideas, null, 2) + ';';
+  const button = $('copyIdeasButton');
+  try {
+    await navigator.clipboard.writeText(code);
+    button.textContent = 'Copied ✓';
+    setTimeout(() => { button.textContent = 'Copy ideas code'; }, 2000);
+  } catch (err) {
+    prompt('Copy this code and paste it over the ideas list in your file:', code);
+  }
+});
+
+drawIdeas();
 
 /* ---------- Image viewer ---------- */
 
@@ -3016,16 +4748,21 @@ function stopVideo() {
    A picture with a video: the video first, then the pictures (the cover and the extra views). */
 function viewsFor(entry) {
   if (entry.type === 'video') {
-    return [{ kind: 'video', src: entry.srcs[0], thumb: entry.poster || '', label: '' }];
+    return [{ kind: 'video', src: entry.srcs[0], thumb: entry.poster || '', poster: entry.poster || '', label: '' }];
   }
   const list = entry.srcs.map((src, i) => ({
     kind: 'image', src, thumb: src, label: (entry.labels && entry.labels[i]) || ''
   }));
-  if (entry.video) list.unshift({ kind: 'video', src: entry.video, thumb: entry.srcs[0], label: '' });
+  if (entry.video) list.unshift({ kind: 'video', src: entry.video, thumb: entry.srcs[0], poster: entry.srcs[0], label: '' });
+  // related videos come after the pictures
+  (entry.extraVideos || []).forEach((v) => list.push({
+    kind: 'video', src: v.src, thumb: v.poster || '', poster: v.poster || '', label: v.label || ''
+  }));
   return list;
 }
 
 function renderViewer() {
+  $('viewerMain').classList.remove('zoomed');            // a new picture starts at the size that fits the screen
   const entry = seq[cur];
   const views = viewsFor(entry);
   if (viewNo >= views.length) viewNo = 0;
@@ -3035,7 +4772,7 @@ function renderViewer() {
     vImg.hidden = true;
     vImg.removeAttribute('src');
     vVideo.hidden = false;
-    vVideo.poster = entry.type === 'video' ? (entry.poster || '') : entry.srcs[0];
+    vVideo.poster = shown.poster || '';
     vVideo.src = shown.src;
     vVideo.setAttribute('aria-label', entry.alt);
     const started = vVideo.play();                       // the visitor just clicked, so this is allowed
@@ -3086,6 +4823,13 @@ function renderViewer() {
         img.src = view.thumb;
         img.alt = '';
         button.append(img);
+      } else if (view.kind === 'video') {
+        const clip = document.createElement('video');            // no picture given: the first frame of the video
+        clip.src = view.src + '#t=0.1';
+        clip.muted = true;
+        clip.preload = 'metadata';
+        clip.playsInline = true;
+        button.append(clip);
       }
       button.addEventListener('click', (e) => { e.stopPropagation(); viewNo = i; renderViewer(); });
       relatedList.append(button);
@@ -3134,6 +4878,9 @@ function closeViewer() {
   if (opener && opener.isConnected) opener.focus();
 }
 
+// Click the picture: real size (scroll to read the small text). Click again: back to fit the screen.
+vImg.addEventListener('click', (e) => { e.stopPropagation(); $('viewerMain').classList.toggle('zoomed'); });
+
 $('vClose').addEventListener('click', closeViewer);
 $('vPrev').addEventListener('click', () => go(-1));
 $('vNext').addEventListener('click', () => go(1));
@@ -3157,7 +4904,7 @@ document.addEventListener('keydown', (e) => {
 
 let touchStart = null;
 viewer.addEventListener('touchstart', (e) => {
-  if (e.target === vVideo || e.target.closest('.viewer-edit')) { touchStart = null; return; }       // dragging the video's controls is not a swipe
+  if (e.target === vVideo || e.target.closest('.viewer-edit') || $('viewerMain').classList.contains('zoomed')) { touchStart = null; return; }       // dragging the video's controls is not a swipe
   touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
 }, { passive: true });
 viewer.addEventListener('touchend', (e) => {
@@ -3171,7 +4918,7 @@ viewer.addEventListener('touchend', (e) => {
 
 /* ---------- Switching pages (the address changes to #projects, #collections, #about, ...) ---------- */
 
-const pages = ['projects', 'collections', 'progress', 'about', 'contact'];
+const pages = ['projects', 'collections', 'progress', 'about', 'contact', 'case'];
 
 function showPage() {
   const [page, sub, sub2] = location.hash.slice(1).split('/');
@@ -3188,21 +4935,40 @@ function showPage() {
 
   /* Progress has two views: the list of cases, and one case (#progress/its-id) */
   const theCase = id === 'progress' && sub ? cases.find((c) => c.id === sub) : null;
+  $('updateEditor').hidden = true;
+  $('caseEditor').hidden = true;
   $('progressList').hidden = !!theCase;
   $('progressView').hidden = !theCase;
   if (theCase) drawCase(theCase);
 
+  /* A case study has its own page (#case/its-id) */
+  if (id === 'case') {
+    const study = sub ? caseStudies.find((c) => c.id === sub) : null;
+    if (!study) { location.hash = '#projects'; return; }
+    drawCaseStudy(study);
+  }
+
   document.querySelectorAll('.site nav a').forEach((a) => {
-    if (a.getAttribute('href') === '#' + id) a.setAttribute('aria-current', 'page');
+    if (a.getAttribute('href') === '#' + (id === 'case' ? 'projects' : id)) a.setAttribute('aria-current', 'page');
     else a.removeAttribute('aria-current');
   });
 
   if (id === 'projects' && worksGallery) layoutGallery(worksGallery, true);
+
+  // #about/figma opens the About page and shows the card of that program
+  const target = id === 'about' && sub ? $('about-' + sub) : null;
+  document.querySelectorAll('.can-card').forEach((card) => card.classList.toggle('is-target', card === target));
   window.scrollTo(0, 0);
+  if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: 'smooth', block: 'center' }));
 }
 
 window.addEventListener('hashchange', showPage);
 showPage();
 </script>
+<div class="tool-tip" id="toolTip" role="tooltip" aria-hidden="true">
+  <strong class="tool-tip-name" id="toolTipName"></strong>
+  <div class="tool-tip-level" id="toolTipLevel"></div>
+</div>
+
 </body>
 </html>
