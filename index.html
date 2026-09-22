@@ -75,7 +75,55 @@
     letter-spacing: -0.01em;
   }
 
-  .site nav { display: flex; flex-wrap: wrap; gap: .25rem 1.75rem; }
+  .site nav { display: flex; flex-wrap: wrap; gap: .25rem 1.75rem; margin-left: auto; }
+
+  /* The language switch: a pill with a gold knob that slides between EN and NL */
+  .lang-switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    align-self: center;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--soft);
+    user-select: none;
+    touch-action: pan-y;                  /* a sideways swipe on the switch is ours, scrolling up and down still works */
+    cursor: grab;
+  }
+  .lang-knob {
+    position: absolute;
+    z-index: 0;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: 2.6rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    box-shadow: 0 2px 6px rgba(200, 150, 26, .35);
+    transition: transform .3s cubic-bezier(.4, .1, .2, 1);
+  }
+  .lang-switch.is-nl .lang-knob { transform: translateX(100%); }
+  .lang-switch button {
+    position: relative;
+    z-index: 1;
+    width: 2.6rem;
+    padding: .3rem 0;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: color .2s ease;
+  }
+  .lang-switch button[aria-pressed="true"] { color: var(--ink); }
+  .lang-switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-radius: 999px; }
+  body.lang-leaving main, body.lang-leaving footer { opacity: 0; transition: opacity .3s ease; }
+  @keyframes lang-in { from { opacity: 0; } to { opacity: 1; } }
+  body.lang-arrived main, body.lang-arrived footer { animation: lang-in .4s ease; }
   .site nav a {
     color: var(--ink);
     text-decoration: none;
@@ -203,8 +251,8 @@
     padding: 0;
     display: flex;
     align-items: flex-end;
-    gap: .6rem;
-    --k: .9rem;                             /* one unit of stick height: the heights in the script are multiples of it */
+    gap: .45rem;
+    --k: .72rem;                            /* one unit of stick height: the heights in the script are multiples of it */
   }
   .banner.has-photo .banner-sticks { right: calc(var(--pad) + var(--photo) + clamp(1rem, 2vw, 2rem)); }
   .banner-sticks:empty { display: none; }
@@ -214,16 +262,16 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    width: 3.3rem;
+    width: 2.65rem;
     height: calc(var(--h, 4.5) * var(--k));
     padding: .3rem 0;
     border: 1px solid var(--pink);
     border-bottom: 0;
-    border-radius: 14px 14px 0 0;
+    border-radius: 11px 11px 0 0;
     background: linear-gradient(to top, var(--pink), #FF9BD0);   /* pink */
     transition: transform .15s ease;
   }
-  .stick:hover, .stick:focus-within { transform: translateY(-5px); }
+  .stick:hover, .stick:focus-within { transform: translateY(-4px); }
 
   /* The pop-up that says how much I know of a program (shows when you rest the mouse on a stick) */
   .tool-tip {
@@ -232,12 +280,12 @@
     left: 0;
     top: 0;
     width: max-content;
-    max-width: min(16rem, calc(100vw - 1.5rem));
-    padding: .85rem 1rem .9rem;
+    max-width: min(12rem, calc(100vw - 1.5rem));
+    padding: .5rem .75rem .55rem;
     border: 1px solid #C8961A;
-    border-radius: 14px;
+    border-radius: 10px;
     background: linear-gradient(to bottom, var(--gold-light), var(--gold));   /* gold */
-    box-shadow: 0 14px 32px rgba(200, 150, 26, .4), 0 4px 12px rgba(0, 0, 0, .15);
+    box-shadow: 0 8px 20px rgba(200, 150, 26, .4), 0 3px 8px rgba(0, 0, 0, .15);
     color: var(--ink);
     opacity: 0;
     transform: translateY(6px);
@@ -249,35 +297,59 @@
     content: "";
     position: absolute;
     left: var(--arrow, 50%);
-    bottom: -7px;
-    width: 12px;
-    height: 12px;
-    margin-left: -6px;
+    bottom: -5px;
+    width: 9px;
+    height: 9px;
+    margin-left: -4.5px;
     background: var(--gold);
     border-right: 1px solid #C8961A;
     border-bottom: 1px solid #C8961A;
     transform: rotate(45deg);
   }
-  .tool-tip.below::after { bottom: auto; top: -7px; background: var(--gold-light); transform: rotate(225deg); }
-  .tool-tip { padding: .75rem 1rem .8rem; }
-  .tool-tip-name { display: block; font-size: 1rem; font-weight: 800; }
-  .tool-tip-level { display: flex; align-items: center; gap: .6rem; margin-top: .45rem; font-size: .85rem; font-weight: 600; }
-  .tool-tip-bars { display: flex; gap: 4px; }
-  .tool-tip-bars i { width: 1.4rem; height: .4rem; border-radius: 999px; background: rgba(0, 0, 0, .16); }
+  .tool-tip.below::after { bottom: auto; top: -5px; background: var(--gold-light); transform: rotate(225deg); }
+  .tool-tip-name { display: block; font-size: .8rem; font-weight: 800; line-height: 1.2; }
+  .tool-tip-level { display: flex; align-items: center; gap: .45rem; margin-top: .3rem; font-size: .7rem; font-weight: 600; line-height: 1.2; }
+  .tool-tip-bars { display: flex; gap: 3px; }
+  .tool-tip-bars i { width: 1rem; height: .28rem; border-radius: 999px; background: rgba(0, 0, 0, .16); }
   .tool-tip-bars i.on { background: var(--ink); }
   .stick.is-logo { justify-content: flex-start; padding: 0; }
-  .stick-link { display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; padding: .4rem 0 0; color: inherit; }
-  .stick-link:focus-visible { outline: 2px solid #fff; outline-offset: -4px; border-radius: 12px 12px 0 0; }
-  .sticks-label {
-    align-self: flex-end;
-    margin: 0 .3rem 1rem 0;
-    color: #fff;
-    font-size: 1.15rem;
-    font-weight: 600;
-    letter-spacing: .02em;
-    white-space: nowrap;
+  /* The stick man at the end of the row of sticks. When the page opens he throws a ball for every program:
+     the ball lands and that stick pops up. When all of them are there he stands still. (See playSticksIntro.) */
+  .stick { transform-origin: 50% 100%; }
+  .stick.pending { opacity: 0; pointer-events: none; }
+  .stick-man { flex: none; align-self: flex-end; width: 2.6rem; height: 3.5rem; pointer-events: none; }
+  .stick-man svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
-  .stick .software-icon { flex: none; width: 2.5rem; height: 2.5rem; border-radius: 13px; font-size: .9rem; }
+  .stick-man .man-torso, .stick-man .man-arm { transform-box: view-box; }
+  .stick-man .man-torso { transform-origin: 30px 46px; }
+  .stick-man .man-arm { transform-origin: 30px 28px; transform: rotate(22deg); }   /* the arm at rest */
+  .stick-man .man-hand { fill: #fff; stroke: none; }
+  .intro-ball {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    width: .6rem;
+    height: .6rem;
+    border-radius: 50%;
+    pointer-events: none;
+    will-change: transform;
+  }
+  .intro-ball.gold { background: radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold)); }
+  .intro-ball.white { background: radial-gradient(circle at 35% 30%, #fff, #E4DCFF); }
+  @media (max-width: 1000px) { .stick-man { display: none; } }
+  .stick-link { display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; padding: .3rem 0 0; color: inherit; }
+  .stick-link:focus-visible { outline: 2px solid #fff; outline-offset: -4px; border-radius: 12px 12px 0 0; }
+  .stick .software-icon { flex: none; width: 2rem; height: 2rem; border-radius: 10px; font-size: .75rem; }
   .stick-name {
     writing-mode: vertical-rl;
     transform: rotate(180deg);              /* reads from the bottom up */
@@ -320,17 +392,14 @@
       right: auto;
       justify-self: center;
       margin-bottom: calc(-1 * var(--pad));
-      --k: .7rem;
+      --k: .6rem;
     }
     .banner-photo { order: -1; }
     .banner-photo img { width: 9rem; }
     /* the sticks get narrower on a small screen so all of them fit next to each other */
-    .banner-sticks { gap: clamp(.25rem, 1.6vw, .6rem); }
-    .stick { width: clamp(1.9rem, 9.4vw, 3.3rem); }
-    .stick .software-icon { width: calc(100% - .5rem); height: auto; aspect-ratio: 1; font-size: .75rem; }
-  }
-  @media (max-width: 520px) {
-    .sticks-label { display: none; }
+    .banner-sticks { gap: clamp(.2rem, 1.4vw, .45rem); }
+    .stick { width: clamp(1.7rem, 8.6vw, 2.65rem); }
+    .stick .software-icon { width: calc(100% - .4rem); height: auto; aspect-ratio: 1; font-size: .65rem; }
   }
 
   /* ---------- Gallery (projects page + collection pages) ----------
@@ -958,7 +1027,8 @@
   .can-head .software-icon { flex: none; width: 2.75rem; height: 2.75rem; border-radius: 13px; font-size: .95rem; }
   .can-name { margin: 0; font-size: 1.15rem; font-weight: 800; line-height: 1.2; }
   .can-level { display: flex; align-items: center; gap: .5rem; margin-top: .3rem; color: var(--muted); font-size: .8rem; font-weight: 600; }
-  .can-level .tool-tip-bars i { background: var(--soft); }
+  .can-level .tool-tip-bars { gap: 4px; }
+  .can-level .tool-tip-bars i { width: 1.4rem; height: .4rem; background: var(--soft); }
   .can-level .tool-tip-bars i.on { background: linear-gradient(90deg, var(--purple), var(--accent)); }
   .can-list { margin: 0; padding-left: 1.1rem; font-weight: 300; }
   .can-list li { margin: .4rem 0; }
@@ -1232,6 +1302,12 @@
     <a href="#about">about</a>
     <a href="#contact">contact</a>
   </nav>
+  <!-- Language: click EN or NL, or swipe the switch. The Dutch words are in nlDictionary at the bottom of the script. -->
+  <div class="lang-switch" id="langSwitch" role="group" aria-label="Language">
+    <span class="lang-knob" aria-hidden="true"></span>
+    <button type="button" data-lang="en" lang="en" title="English" aria-pressed="true">EN</button>
+    <button type="button" data-lang="nl" lang="nl" title="Nederlands" aria-pressed="false">NL</button>
+  </div>
 </header>
 
 <main>
@@ -1748,6 +1824,9 @@ const worksPhotos = [
     category: 'Storytelling / Movies' },
   { type: 'video', src: 'video/ai-video.mp4',
     title: 'AI video',
+    category: 'Storytelling / Movies' },
+  { type: 'video', src: 'video/model.mp4',
+    title: 'Model',
     category: 'Storytelling / Movies' },
 
   { src: 'img/works-11.png',   category: 'UX/UI' },
@@ -2387,6 +2466,38 @@ const ideas = [
 
 const $ = (id) => document.getElementById(id);
 const editMode = new URLSearchParams(location.search).has('edit');
+
+/* ---------- Language: English or Dutch ---------- */
+/* The switch in the header (EN | NL) remembers the choice. A first-time visitor whose browser is set to Dutch
+   gets Dutch. You can also open the site with ?lang=nl or ?lang=en. All the Dutch words are in the function
+   nlDictionary at the very bottom of this file: the English text on the left, the Dutch on the right. */
+function readLang() {
+  try {
+    const asked = new URLSearchParams(location.search).get('lang');
+    if (asked === 'nl' || asked === 'en') return asked;
+    const saved = localStorage.getItem('lang');
+    if (saved === 'nl' || saved === 'en') return saved;
+  } catch (err) { /* no storage: use the browser language below */ }
+  return String(navigator.language || '').toLowerCase().startsWith('nl') ? 'nl' : 'en';
+}
+const lang = readLang();
+document.documentElement.lang = lang;
+
+// Coming back after the language was switched: stay at the same place and skip the opening of the banner
+let switchedScroll = null;
+try { switchedScroll = sessionStorage.getItem('langSwitched'); sessionStorage.removeItem('langSwitched'); } catch (err) { /* nothing */ }
+const arrivedByLanguageSwitch = switchedScroll !== null;
+
+let nlWords = null;
+const squash = (text) => String(text).replace(/\s+/g, ' ').trim();
+
+/* The Dutch for a piece of English text (or the same text when there is no Dutch for it) */
+function tr(text) {
+  if (lang !== 'nl' || !text) return text;
+  nlWords = nlWords || nlDictionary();
+  const found = nlWords[squash(text)];
+  return found === undefined ? text : found;
+}
 
 /* ---------- Loading images (we read the real size of every image first) ---------- */
 
@@ -3340,9 +3451,9 @@ function showToolTip(stick, item) {
   const height = tip.offsetHeight;
   const centre = box.left + box.width / 2;
   const left = Math.min(Math.max(8, centre - width / 2), window.innerWidth - width - 8);
-  const below = box.top - height - 14 < 8;
+  const below = box.top - height - 10 < 8;
   tip.style.left = left + 'px';
-  tip.style.top = (below ? box.bottom + 14 : box.top - height - 14) + 'px';
+  tip.style.top = (below ? box.bottom + 10 : box.top - height - 10) + 'px';
   tip.style.setProperty('--arrow', Math.min(width - 16, Math.max(16, centre - left)) + 'px');
   tip.classList.toggle('below', below);
   tip.setAttribute('aria-hidden', 'false');
@@ -3360,6 +3471,109 @@ window.addEventListener('scroll', hideToolTip, { passive: true });
 const softwareSlug = (item) => item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 /* ---------- The sticks in the banner: the software logos, or the qualities ---------- */
+
+/* The stick man (drawn with lines). His moves are made in playSticksIntro below. */
+function makeThrower() {
+  const man = document.createElement('li');
+  man.className = 'stick-man';
+  man.setAttribute('aria-hidden', 'true');
+  man.innerHTML = '<svg viewBox="0 0 60 80" focusable="false">' +
+    '<path d="M30 46 L22 68 L16 68 M30 46 L39 68 L45 68"/>' +                       // the legs and feet
+    '<g class="man-torso">' +
+      '<circle cx="30" cy="13" r="8"/>' +                                            // the head
+      '<path d="M30 21 L30 46"/>' +                                                  // the body
+      '<path d="M30 28 L38 39"/>' +                                                  // the arm that does not throw
+      '<g class="man-arm"><path d="M30 28 L30 46"/><circle class="man-hand" cx="30" cy="46" r="2"/></g>' +
+    '</g></svg>';
+  return man;
+}
+
+const prefersReducedMotion = () => window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* A stick pops up: it grows from the bottom, a little too far, and settles */
+function popStick(stick) {
+  stick.classList.remove('pending');
+  if (!stick.animate) return;
+  stick.animate([
+    { transform: 'scaleY(.05)', opacity: 0 },
+    { transform: 'scaleY(1.12)', opacity: 1, offset: .6 },
+    { transform: 'scaleY(.97)', offset: .82 },
+    { transform: 'scaleY(1)', opacity: 1 }
+  ], { duration: 460, easing: 'cubic-bezier(.2, .8, .3, 1)' });
+}
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/* The opening of the page: the stick man throws a ball for every program, and where a ball lands
+   that stick pops up. Then he stands still. It plays once every time the page is opened or reloaded. */
+async function playSticksIntro() {
+  const banner = $('banner');
+  const sticks = [...document.querySelectorAll('#bannerSticks .stick.pending')];
+  if (!sticks.length) return;
+  const man = document.querySelector('#bannerSticks .stick-man');
+  const manShown = man && getComputedStyle(man).display !== 'none';
+
+  // No stick man on the screen (phones, tablets) or no animation possible: the sticks just pop up one after another
+  if (!manShown || !man.querySelector('.man-arm').animate) {
+    for (const stick of sticks) { popStick(stick); await sleep(110); }
+    return;
+  }
+
+  const arm = man.querySelector('.man-arm');
+  const torso = man.querySelector('.man-torso');
+  const beat = 660;                                   // one throw takes this many milliseconds
+  const armMoves = [
+    { transform: 'rotate(22deg)', offset: 0 },
+    { transform: 'rotate(-125deg)', offset: .35 },    // swings the arm back
+    { transform: 'rotate(-132deg)', offset: .4 },
+    { transform: 'rotate(-230deg)', offset: .48 },    // over the top: the ball leaves the hand here
+    { transform: 'rotate(-300deg)', offset: .6 },
+    { transform: 'rotate(-338deg)', offset: 1 }       // and back to rest
+  ];
+  const torsoMoves = [
+    { transform: 'rotate(0deg)', offset: 0 },
+    { transform: 'rotate(7deg)', offset: .35 },
+    { transform: 'rotate(7deg)', offset: .4 },
+    { transform: 'rotate(-9deg)', offset: .48 },
+    { transform: 'rotate(-5deg)', offset: .6 },
+    { transform: 'rotate(0deg)', offset: 1 }
+  ];
+
+  const flying = [];
+  for (let i = 0; i < sticks.length; i++) {
+    arm.animate(armMoves, { duration: beat, easing: 'ease-in-out' });
+    torso.animate(torsoMoves, { duration: beat, easing: 'ease-in-out' });
+    await sleep(beat * .48);                          // the moment the ball leaves the hand
+
+    // From the hand to the top of the stick where this program belongs, in an arc
+    const b = banner.getBoundingClientRect();
+    const m = man.getBoundingClientRect();
+    const t = sticks[i].getBoundingClientRect();
+    const size = 10;
+    const x0 = m.left + m.width * .27 - b.left - size / 2;
+    const y0 = m.top + m.height * .2 - b.top - size / 2;
+    const x1 = t.left + t.width / 2 - b.left - size / 2;
+    const y1 = t.top - b.top - size / 2;
+    const lift = 46 + Math.abs(x1 - x0) * .12;        // how high the arc goes
+    const steps = 18;
+    const frames = [];
+    for (let s = 0; s <= steps; s++) {
+      const p = s / steps;
+      frames.push({ transform: 'translate(' + (x0 + (x1 - x0) * p).toFixed(1) + 'px, ' + (y0 + (y1 - y0) * p - lift * 4 * p * (1 - p)).toFixed(1) + 'px)' });
+    }
+    const ball = document.createElement('span');
+    ball.className = 'intro-ball ' + (i % 2 ? 'white' : 'gold');
+    ball.setAttribute('aria-hidden', 'true');
+    ball.style.transform = frames[0].transform;
+    banner.append(ball);
+    const flight = ball.animate(frames, { duration: 420 + Math.abs(x1 - x0) * .45, easing: 'linear', fill: 'forwards' });
+    const stick = sticks[i];
+    flying.push(flight.finished.catch(() => {}).then(() => { ball.remove(); popStick(stick); }));
+
+    await sleep(beat * .52);                          // the rest of this throw, then the next one starts
+  }
+  await Promise.all(flying);                          // the last ball lands, then everything stands still
+}
 
 function drawSticks() {
   const sticks = $('bannerSticks');
@@ -3380,14 +3594,11 @@ function drawSticks() {
   } else {
     // A logo on top of every stick. Every stick has a different height, like a skyline.
     // The name shows when you rest the mouse on a stick.
-    const title = document.createElement('li');
-    title.className = 'sticks-label';
-    title.textContent = 'Tools';
-    sticks.append(title);
     const heights = [5.6, 6.6, 6.0, 7.6, 6.4, 7.2, 6.0, 6.8];   // in rem (at the biggest size of the banner)
+    const intro = !prefersReducedMotion() && !arrivedByLanguageSwitch;   // the sticks wait for the stick man to throw them
     software.forEach((item, i) => {
       const li = document.createElement('li');
-      li.className = 'stick is-logo';
+      li.className = 'stick is-logo' + (intro ? ' pending' : '');
       if (item.level) {
         li.addEventListener('mouseenter', () => showToolTip(li, item));
         li.addEventListener('mouseleave', hideToolTip);
@@ -3404,16 +3615,29 @@ function drawSticks() {
       link.href = '#about/' + softwareSlug(item);
       const label = document.createElement('span');
       label.className = 'sr-only';
-      label.textContent = item.name + (item.level ? ', ' + levelNames[item.level - 1] : '') + ', see what I can do';
+      label.textContent = item.name + (item.level ? ', ' + tr(levelNames[item.level - 1]) : '') + ', ' + tr('see what I can do');
       link.append(makeSoftwareIcon(item, i), label);
       li.append(link);
       sticks.append(li);
     });
+    if (!prefersReducedMotion()) sticks.append(makeThrower());    // the stick man stands at the end of the row
   }
   $('banner').classList.toggle('has-sticks', sticks.querySelector('.stick') !== null);
 }
 
 drawSticks();
+
+// It starts when the banner is really on the screen (so it is not lost when the page opens on another page)
+if ('IntersectionObserver' in window) {
+  const watcher = new IntersectionObserver((entries) => {
+    if (!entries.some((e) => e.isIntersecting)) return;
+    watcher.disconnect();
+    setTimeout(playSticksIntro, 500);
+  }, { threshold: 0.4 });
+  watcher.observe($('banner'));
+} else {
+  setTimeout(playSticksIntro, 500);
+}
 
 /* ---------- About page: What I can do (one card for every program) ---------- */
 
@@ -3502,10 +3726,10 @@ function projectInfoLine(p) {
   const kids = p.children ? p.children.length : 0;
   if (kids) {
     const label = p.childLabel || 'collections';
-    parts.push(kids + ' ' + (kids === 1 ? label.replace(/s$/, '') : label));
+    parts.push(kids + ' ' + tr(kids === 1 ? label.replace(/s$/, '') : label));
   } else {
     const count = p.items ? p.items.length : 0;
-    parts.push(count + (count === 1 ? ' item' : ' items'));
+    parts.push(count + ' ' + tr(count === 1 ? 'item' : 'items'));
   }
   return parts.filter(Boolean).join(' · ');
 }
@@ -3772,7 +3996,7 @@ async function drawProject(p, child) {
   const back = document.createElement('a');
   back.className = 'back';
   back.href = child ? '#collections/' + p.id : '#collections';
-  back.textContent = child ? '\u2190 ' + p.title : '\u2190 all collections';
+  back.textContent = child ? '\u2190 ' + tr(p.title) : '\u2190 all collections';
 
   const title = document.createElement('h1');
   title.textContent = current.title;
@@ -3890,7 +4114,7 @@ async function drawCaseStudy(study) {
 
   const meta = document.createElement('p');
   meta.className = 'project-meta';
-  meta.textContent = ['Case study', study.category].filter(Boolean).join(' \u00b7 ');
+  meta.textContent = [tr('Case study'), study.category].filter(Boolean).join(' \u00b7 ');
 
   view.append(back, title, meta);
 
@@ -4018,7 +4242,7 @@ async function drawCaseStudy(study) {
 function formatDate(d) {
   if (!d) return '';
   const t = new Date(d + 'T00:00:00');
-  return isNaN(t) ? String(d) : t.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  return isNaN(t) ? String(d) : t.toLocaleDateString(lang === 'nl' ? 'nl-NL' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 const newestFirst = (a, b) => String(b.date || '').localeCompare(String(a.date || ''));
@@ -4091,14 +4315,14 @@ function makeCaseCard(c) {
 
   const info = document.createElement('p');
   info.className = 'project-info';
-  info.textContent = [c.type, c.status].filter(Boolean).join(' \u00b7 ');
+  info.textContent = [c.type, tr(c.status)].filter(Boolean).join(' \u00b7 ');
 
   link.append(cover, name, info);
 
   const updates = c.updates || [];
   const newest = [...updates].filter((u) => u.date).sort(newestFirst)[0];
-  const line = [updates.length ? updates.length + (updates.length === 1 ? ' update' : ' updates') : '',
-    newest ? 'latest ' + formatDate(newest.date) : ''].filter(Boolean).join(' \u00b7 ');
+  const line = [updates.length ? updates.length + ' ' + tr(updates.length === 1 ? 'update' : 'updates') : '',
+    newest ? tr('latest') + ' ' + formatDate(newest.date) : ''].filter(Boolean).join(' \u00b7 ');
   if (line) {
     const latest = document.createElement('p');
     latest.className = 'project-info';
@@ -4293,8 +4517,8 @@ async function drawCase(c) {
   const meta = document.createElement('p');
   meta.className = 'project-meta';
   const dates = (c.updates || []).filter((u) => u.date).map((u) => u.date).sort();
-  meta.textContent = [c.type, c.status, dates.length ? 'started ' + formatDate(dates[0]) : '',
-    (c.updates || []).length ? (c.updates.length + (c.updates.length === 1 ? ' update' : ' updates')) : ''].filter(Boolean).join(' \u00b7 ');
+  meta.textContent = [c.type, tr(c.status), dates.length ? tr('started') + ' ' + formatDate(dates[0]) : '',
+    (c.updates || []).length ? (c.updates.length + ' ' + tr(c.updates.length === 1 ? 'update' : 'updates')) : ''].filter(Boolean).join(' \u00b7 ');
 
   view.append(back, title, meta);
 
@@ -4367,7 +4591,7 @@ async function drawCase(c) {
       chip.textContent = name;
       if (info.first) {
         const since = document.createElement('small');
-        since.textContent = 'since ' + formatDate(info.first);
+        since.textContent = tr('since') + ' ' + formatDate(info.first);
         chip.append(since);
       }
       row.append(chip);
@@ -4964,6 +5188,443 @@ function showPage() {
 
 window.addEventListener('hashchange', showPage);
 showPage();
+
+/* ---------- Language: turning the page into Dutch, and the switch ---------- */
+
+/* Every text on the page is looked up in the dictionary, also the texts that appear later (pictures that
+   load, pages that are opened, the pop-up). Attributes like alt and aria-label are translated too. */
+function startTranslator() {
+  if (lang !== 'nl') return;
+  nlWords = nlWords || nlDictionary();
+  const attrs = ['alt', 'title', 'placeholder', 'aria-label'];
+  const skip = new Set(['SCRIPT', 'STYLE', 'TEXTAREA', 'NOSCRIPT']);
+
+  const doText = (node) => {
+    const raw = node.nodeValue;
+    if (!raw || node.__nl === raw || !raw.trim()) return;      // nothing there, or we already made it Dutch
+    const found = nlWords[squash(raw)];
+    if (found === undefined) return;
+    const done = raw.match(/^\s*/)[0] + found + raw.match(/\s*$/)[0];
+    node.__nl = done;
+    node.nodeValue = done;
+  };
+  const doAttr = (el, name) => {
+    const raw = el.getAttribute(name);
+    if (!raw) return;
+    el.__nlAttrs = el.__nlAttrs || {};
+    if (el.__nlAttrs[name] === raw) return;
+    const found = nlWords[squash(raw)];
+    if (found === undefined) return;
+    el.__nlAttrs[name] = found;
+    el.setAttribute(name, found);
+  };
+  const doNode = (node) => {
+    if (node.nodeType === 3) { if (!skip.has(node.parentNode && node.parentNode.tagName)) doText(node); return; }
+    if (node.nodeType !== 1 || skip.has(node.tagName)) return;
+    attrs.forEach((a) => { if (node.hasAttribute(a)) doAttr(node, a); });
+    node.childNodes.forEach(doNode);
+  };
+
+  doNode(document.body);
+  document.title = tr(document.title);
+
+  const watcher = new MutationObserver((records) => {
+    records.forEach((r) => {
+      if (r.type === 'childList') r.addedNodes.forEach(doNode);
+      else if (r.type === 'characterData') doNode(r.target);
+      else if (r.type === 'attributes') doAttr(r.target, r.attributeName);
+    });
+    watcher.takeRecords();                                     // forget the changes we just made ourselves
+  });
+  watcher.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: attrs });
+}
+
+/* Choose a language: the knob slides, the page fades out and opens again in that language */
+function setLang(next) {
+  if (next === lang) return;
+  const box = $('langSwitch');
+  if (box) {
+    box.classList.toggle('is-nl', next === 'nl');
+    box.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === next)));
+  }
+  try {
+    localStorage.setItem('lang', next);
+    sessionStorage.setItem('langSwitched', String(Math.round(window.scrollY)));
+  } catch (err) { /* the address below still works */ }
+  document.body.classList.add('lang-leaving');
+  setTimeout(() => {
+    const url = new URL(location.href);
+    if (url.searchParams.has('lang')) { url.searchParams.delete('lang'); history.replaceState(null, '', url.toString()); }
+    location.reload();
+  }, 320);
+}
+
+function initLanguageSwitch() {
+  const box = $('langSwitch');
+  if (!box) return;
+  box.classList.toggle('is-nl', lang === 'nl');
+  let startX = null;
+  let swiped = false;
+  box.querySelectorAll('button').forEach((button) => {
+    button.setAttribute('aria-pressed', String(button.dataset.lang === lang));
+    button.addEventListener('click', () => { if (swiped) { swiped = false; return; } setLang(button.dataset.lang); });
+  });
+  // Swipe (or drag) the switch to the right for Dutch and to the left for English
+  box.addEventListener('pointerdown', (e) => { startX = e.clientX; swiped = false; });
+  box.addEventListener('pointerup', (e) => {
+    if (startX === null) return;
+    const dx = e.clientX - startX;
+    startX = null;
+    if (Math.abs(dx) > 12) { swiped = true; setLang(dx > 0 ? 'nl' : 'en'); }
+  });
+  box.addEventListener('pointercancel', () => { startX = null; });
+  box.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') setLang('nl');
+    if (e.key === 'ArrowLeft') setLang('en');
+  });
+}
+
+if (arrivedByLanguageSwitch) {
+  document.body.classList.add('lang-arrived');
+  window.addEventListener('load', () => setTimeout(() => window.scrollTo(0, Number(switchedScroll) || 0), 350));
+}
+initLanguageSwitch();
+startTranslator();
+
+/* ------------------------------------------------------------------
+   DUTCH (nl): the English text on the left, the Dutch on the right.
+   To change a Dutch text, change the part after the colon. To translate something new (for example a new
+   idea or a new case study), add a line: 'the English text exactly as it is on the page': 'the Dutch text'.
+   Where the English text has an empty line between paragraphs, use \n\n in the Dutch text too.
+------------------------------------------------------------------- */
+function nlDictionary() {
+  return {
+    "projects": "projecten",
+    "collections": "collecties",
+    "progress": "voortgang",
+    "about": "over mij",
+    "UI/UX designer, curious about AI and technology.": "UI/UX-designer, nieuwsgierig naar AI en technologie.",
+    "I design and build digital products, and I explore AI through short films and realistic avatar art.": "Ik ontwerp en bouw digitale producten en verken AI met korte films en realistische avatarkunst.",
+    "Get in touch": "Neem contact op",
+    "Projects": "Projecten",
+    "Nothing here yet.": "Hier staat nog niets.",
+    "No images found. Check that the file names in the list at the bottom of this file match the files in your img folder.": "Geen afbeeldingen gevonden. Controleer of de bestandsnamen in de lijst onderaan dit bestand overeenkomen met de bestanden in je img-map.",
+    "Collections": "Collecties",
+    "Anime AI": "Anime-AI",
+    "AI short movie": "AI-korte film",
+    "Creating realistic art of avatars": "Realistische avatarkunst maken",
+    "Locations": "Locaties",
+    "Learning video editing": "Videobewerking leren",
+    "Progress": "Voortgang",
+    "Recently": "Recent",
+    "Example case (replace me)": "Voorbeeldcase (vervang mij)",
+    "Second round of changes": "Tweede ronde wijzigingen",
+    "First sketches": "Eerste schetsen",
+    "Currently working on": "Waar ik nu aan werk",
+    "Finished": "Afgerond",
+    "Ideas": "Ideeën",
+    "Idea": "Idee",
+    "Trying": "Bezig",
+    "Done": "Klaar",
+    "Build template AI portfolio": "Een template voor een AI-portfolio bouwen",
+    "Testing out Blender with AI": "Blender uitproberen met AI",
+    "Redesigning my resume": "Mijn cv opnieuw ontwerpen",
+    "Working on a fashion AI": "Werken aan een mode-AI",
+    "Creating a stage zoeker": "Een stagezoeker maken",
+    "Create Uganda Airlines voiceover": "Een voice-over voor Uganda Airlines maken",
+    "Voiceover": "Voice-over",
+    "No ideas yet.": "Nog geen ideeën.",
+    "Projects I still want to post on my portfolio": "Projecten die ik nog op mijn portfolio wil plaatsen",
+    "Portfolio of Cello": "Portfolio van Cello",
+    "Party tent rentals": "Partytentverhuur",
+    "Fit log": "Fitlog",
+    "Finance app": "Financiële app",
+    "Reminder": "Herinnering",
+    "No projects yet.": "Nog geen projecten.",
+    "What I made": "Wat ik maakte",
+    "How it's going": "Hoe het gaat",
+    "What I learned": "Wat ik heb geleerd",
+    "About": "Over mij",
+    "Write one or two sentences here about who you are and the kind of work you love doing.": "Schrijf hier een of twee zinnen over wie je bent en het soort werk dat je graag doet.",
+    "Add a few more lines about your experience: editorial, commercial, runway, brands you have worked with.": "Voeg nog een paar regels toe over je ervaring: editorial, commercieel, catwalk, merken waarvoor je hebt gewerkt.",
+    "Say where you are based and where you are happy to travel.": "Vertel waar je woont en waarheen je graag reist.",
+    "What I can do": "Wat ik kan",
+    "Basics": "Basis",
+    "Design app screens: low-fi wireframes and hi-fi screens": "App-schermen ontwerpen: low-fi wireframes en hi-fi schermen",
+    "Make site maps and user flows": "Sitemaps en userflows maken",
+    "Build clickable prototypes": "Klikbare prototypes bouwen",
+    "Build web pages and small apps": "Webpagina’s en kleine apps bouwen",
+    "Structure a page so it is easy to read and navigate": "Een pagina zo opbouwen dat hij makkelijk te lezen en te navigeren is",
+    "Style pages so they look like my designs": "Pagina’s vormgeven zodat ze eruitzien als mijn ontwerpen",
+    "Make layouts that work on phones and computers": "Lay-outs maken die werken op telefoons en computers",
+    "Add small animations": "Kleine animaties toevoegen",
+    "Make pages interactive, for example buttons, filters and pop-ups": "Pagina’s interactief maken, bijvoorbeeld met knoppen, filters en pop-ups",
+    "Make short AI videos from pictures and prompts": "Korte AI-video’s maken van afbeeldingen en prompts",
+    "Create AI characters and images": "AI-personages en afbeeldingen maken",
+    "Edit videos and put clips together": "Video’s bewerken en clips aan elkaar monteren",
+    "Draw simple shapes, icons and illustrations": "Eenvoudige vormen, iconen en illustraties tekenen",
+    "Let's work together": "Laten we samenwerken",
+    "Open for editorial, commercial and runway bookings. Send a message with the date, the location and a few words about the shoot.": "Open voor editorial-, commerciële en catwalkboekingen. Stuur een bericht met de datum, de locatie en een paar woorden over de shoot.",
+    "Email me": "Mail mij",
+    "Email": "E-mail",
+    "Agency": "Bureau",
+    "Add your agency here": "Voeg hier je bureau toe",
+    "private": "privé",
+    "Related": "Gerelateerd",
+    "Pages": "Pagina’s",
+    "About me": "Over mij",
+    "Software I work with": "Software waarmee ik werk",
+    "Portrait of Lisa Vandros Tendo": "Portret van Lisa Vandros Tendo",
+    "Cover photo of Creating realistic art of avatars": "Omslagfoto van Realistische avatarkunst maken",
+    "Image viewer": "Afbeeldingsviewer",
+    "Close image": "Afbeelding sluiten",
+    "Previous image": "Vorige afbeelding",
+    "Next image": "Volgende afbeelding",
+    "All": "Alles",
+    "Real-characters": "Realistische personages",
+    "Storytelling / Movies": "Storytelling / Films",
+    "Writing": "Schrijven",
+    "← all collections": "← alle collecties",
+    "A collection of my anime AI images.": "Een verzameling van mijn anime-AI-afbeeldingen.",
+    "No images in this collection yet.": "Nog geen afbeeldingen in deze collectie.",
+    "An overview of the scenes of my AI short movie. Choose a scene to see its images and videos.": "Een overzicht van de scènes van mijn AI-korte film. Kies een scène om de afbeeldingen en video’s te zien.",
+    "Scene 1": "Scène 1",
+    "Describe what happens in this scene.": "Beschrijf wat er in deze scène gebeurt.",
+    "Scene 2": "Scène 2",
+    "Scene 3": "Scène 3",
+    "Images": "Afbeeldingen",
+    "← AI short movie": "← AI-korte film",
+    "Realistic art of avatars. Choose an avatar to see its collection.": "Realistische avatarkunst. Kies een avatar om de collectie te zien.",
+    "← Creating realistic art of avatars": "← Realistische avatarkunst maken",
+    "A collection of locations.": "Een verzameling locaties.",
+    "What I am learning about video editing.": "Wat ik leer over videobewerking.",
+    "← all projects": "← alle projecten",
+    "Case study · UX/UI": "Casestudy · UX/UI",
+    "Mobile app design for helping users commit themselves to their goals, keeping each other accountable and challenge one another.": "Ontwerp van een mobiele app die gebruikers helpt zich aan hun doelen te committeren, elkaar verantwoordelijk te houden en elkaar uit te dagen.",
+    "Did you ever had a goal but it felt hard to pursue it? Challengyu helps you to help each other accountable by seeing and registering each other progress.": "Heb je ooit een doel gehad dat moeilijk vol te houden was? Challengyu helpt je om elkaar verantwoordelijk te houden door elkaars voortgang te zien en vast te leggen.",
+    "Problem": "Probleem",
+    "When two or more people are pursuing the same goal it is hard to keep track of the progress of each person. People give up pretty easy when doing things alone when it comes to committing to their own goals.": "Wanneer twee of meer mensen hetzelfde doel nastreven, is het lastig om de voortgang van iedere persoon bij te houden. Mensen geven vrij snel op wanneer ze dingen alleen doen en zich aan hun eigen doelen moeten committeren.",
+    "Solution": "Oplossing",
+    "To create an app that helps them to have accountability when it comes to pursing goals together. Challenging one another and pushing them to achieve their goals together.": "Een app maken die hen helpt verantwoordelijk te blijven bij het samen nastreven van doelen. Elkaar uitdagen en aanmoedigen om samen hun doelen te bereiken.",
+    "Why Challengeyuu?": "Waarom Challengeyuu?",
+    "My friend and I live in two different countries ( America and Europe) and have both different timezones. We wanted to help each other out and make it pretty simple to keep track of our own progress and the progress of each other to push ourselves to the max. Without Challengyu we keep having to make notes on how long we for example we skipped rope and for how many times a week. It took effort to constantly write down the progress, since we both had busy lives.": "Mijn vriend(in) en ik wonen in twee verschillende landen (Amerika en Europa) en hebben allebei een andere tijdzone. We wilden elkaar helpen en het eenvoudig maken om onze eigen voortgang en die van elkaar bij te houden, zodat we onszelf tot het uiterste drijven. Zonder Challengyu moesten we steeds noteren hoe lang we bijvoorbeeld touwtje sprongen en hoe vaak per week. Het kostte moeite om de voortgang constant op te schrijven, omdat we allebei een druk leven hadden.",
+    "The main points that we are focusing on is:": "De belangrijkste punten waar we ons op richten zijn:",
+    "-The app has to be simple -Able to see each others progress -Registering information of the progress -Having a reason why you want to achieve what you want to achieve ( having a visual motivation to keep you going)": "-De app moet eenvoudig zijn\n-Elkaars voortgang kunnen zien\n-Informatie over de voortgang kunnen vastleggen\n-Een reden hebben waarom je wilt bereiken wat je wilt bereiken ( een visuele motivatie om door te gaan)",
+    "Site map": "Sitemap",
+    "Three screens of the Challengyu app: profile, sign up and timer": "Drie schermen van de Challengyu-app: profiel, aanmelden en timer",
+    "Sitemap of Challengyu": "Sitemap van Challengyu",
+    "Screens of the Challengyu app": "Schermen van de Challengyu-app",
+    "Creating a simple way to order your Christmas tree for the winter season!": "Een eenvoudige manier om je kerstboom te bestellen voor de winter!",
+    "Every Christmas almost everyone has or buys a Christmas tree. We created an app for Intratuin to help customers order their own Christmas tree simple and fast. During the process you will see some dutch words since, because it's a Dutch company.": "Bijna iedereen heeft of koopt met Kerstmis een kerstboom. We maakten een app voor Intratuin waarmee klanten hun eigen kerstboom eenvoudig en snel kunnen bestellen. Tijdens het proces zie je Nederlandse woorden, omdat het een Nederlands bedrijf is.",
+    "Intratuin is a company that sells things for in the houd, garden and pets in Netherlands.": "Intratuin is een bedrijf in Nederland dat spullen verkoopt voor in huis, tuin en voor huisdieren.",
+    "Goal": "Doel",
+    "To create a simple app the can be used for ordering Christmas tree during the winter season.": "Een eenvoudige app maken waarmee je in de winter een kerstboom kunt bestellen.",
+    "Sketch of wireframes": "Schets van wireframes",
+    "Down below you can view the lofi screens.": "Hieronder zie je de lo-fi schermen.",
+    "Mefi screens": "Mefi-schermen",
+    "Down below you can view the final screens that we made for Intratuin.": "Hieronder zie je de definitieve schermen die we voor Intratuin hebben gemaakt.",
+    "The start screen of the Intratuin app on a tablet": "Het startscherm van de Intratuin-app op een tablet",
+    "Paper sketches of the wireframes": "Papieren schetsen van de wireframes",
+    "Site map of the Intratuin screens": "Sitemap van de Intratuin-schermen",
+    "Paper sketches of the lofi screens": "Papieren schetsen van de lo-fi schermen",
+    "Mefi screens of the Intratuin app": "Mefi-schermen van de Intratuin-app",
+    "Final screens of the Intratuin app": "Definitieve schermen van de Intratuin-app",
+    "Nashville number system app": "Nashville-nummersysteem-app",
+    "Designing app for musicians, singers and for anyone who wants to know the number system.": "Een app ontwerpen voor muzikanten, zangers en iedereen die het nummersysteem wil leren kennen.",
+    "Did you ever want to play a song spontan with your band? But didn't know the chords? That's where we use the Nashville number system that helps musicians, singers to play any song at any time.": "Wilde je ooit spontaan een nummer spelen met je band, maar kende je de akkoorden niet? Daarvoor gebruiken we het Nashville-nummersysteem, dat muzikanten en zangers helpt elk nummer op elk moment te spelen.",
+    "Project overview": "Projectoverzicht",
+    "What is the problem?": "Wat is het probleem?",
+    "Musicans and singers find it hard to learn the Nash number system because of busyness of life and practices.": "Muzikanten en zangers vinden het moeilijk om het Nashville-nummersysteem te leren door hun drukke leven en repetities.",
+    "What is the goal?": "Wat is het doel?",
+    "Create a learning app that helps musicians, singers and anyone who want to learn the number system. Help them recognize the Nashville numbers faster by heart and mind.": "Een leer-app maken die muzikanten, zangers en iedereen die het nummersysteem wil leren helpt. Help hen de Nashville-nummers sneller te herkennen, met hart en verstand.",
+    "Getting to know our users": "Onze gebruikers leren kennen",
+    "We have thought of the category of users we would like to interview for this interview. We thought of musicians, singers and people who are interested in learning new things. We interviewed 5-10 people and were focused on asking these questions: 2.What type of learner are you? 3.If there was an app what would have to be in it in able to be succeeding for you?": "We hebben nagedacht over de categorie gebruikers die we voor dit interview wilden interviewen. We dachten aan muzikanten, zangers en mensen die geïnteresseerd zijn in het leren van nieuwe dingen.\n\nWe hebben 5-10 mensen geïnterviewd en ons gericht op deze vragen:\n\n2.Wat voor type leerling ben je?\n\n3.Als er een app zou zijn, wat zou daar dan in moeten zitten om voor jou succesvol te zijn?",
+    "Summary of all interviews:": "Samenvatting van alle interviews:",
+    "They struggled with when it comes to the number system: -To make time, most people have busy schedules ( making time for it ) -They don’t know where to start ( overhelmed) -Don’t know or see the value of learning it ( singers)": "Ze hadden moeite met het nummersysteem:\n\n-Tijd vrijmaken, de meeste mensen hebben een druk schema ( tijd maken ervoor )\n\n-Ze weten niet waar ze moeten beginnen ( overweldigd)\n\n-Ze zien de waarde van het leren niet ( zangers)",
+    "Conclusions": "Conclusies",
+    "Musicians: Want to know more about the number system, to learn it fast, recognize it and implement it right away. Singers: Most singers find it easier to learn it when they learn while learning to play an instrument. People who are interested in learning new things: Find it interesting to learn about it.": "Muzikanten:\n\nWillen meer weten over het nummersysteem, het snel leren, herkennen en meteen toepassen.\n\nZangers:\n\nDe meeste zangers vinden het makkelijker om het te leren terwijl ze leren een instrument te spelen.\n\nMensen die geïnteresseerd zijn in het leren van nieuwe dingen:\n\nVinden het interessant om erover te leren.",
+    "Down below you can find the navigation of the app.": "Hieronder vind je de navigatie van de app.",
+    "Lofi-wireframes": "Lo-fi-wireframes",
+    "Down below are the lofi wireframes of the app.": "Hieronder staan de lo-fi-wireframes van de app.",
+    "Three screens of the Nashville number system app": "Drie schermen van de Nashville-nummersysteem-app",
+    "Lofi wireframes of the Nashville number system app": "Lo-fi-wireframes van de Nashville-nummersysteem-app",
+    "Screens of the Nashville number system app": "Schermen van de Nashville-nummersysteem-app",
+    "The process of redesigning the Momua company app 2026": "Het proces van het herontwerpen van de Momua-bedrijfsapp 2026",
+    "Phrase 0.5 Brainstorming Redesign & stating goals": "Fase 0.5 Brainstormen, herontwerp & doelen stellen",
+    "Introduction:": "Inleiding:",
+    "MOMUA Company is a company based in Ukraine. Mainly Mom’s that one day decided together to try out something new. And that’s how the mom company started to grow as a company that is focused on working from their hearts, purpose- driven and dedicated.": "MOMUA Company is een bedrijf in Oekraïne. Vooral moeders die op een dag samen besloten iets nieuws te proberen. En zo begon het mom-bedrijf te groeien als een bedrijf dat vanuit het hart werkt, doelgericht en toegewijd is.",
+    "Goal:": "Doel:",
+    "To create a mobile redesign of the website and using their current app as a foundation": "Een mobiel herontwerp van de website maken, met hun huidige app als basis",
+    "Personal goals:": "Persoonlijke doelen:",
+    "To work organized": "Georganiseerd werken",
+    "use animations": "animaties gebruiken",
+    "test it out with the company if they have time": "het uitproberen met het bedrijf als zij tijd hebben",
+    "being focused on getting the most important screens done.": "gefocust blijven op het afronden van de belangrijkste schermen.",
+    "Problem:": "Probleem:",
+    "During the years I had noticed that the website that employers use while working was not easy to navigate . For example having a lot of information on one page that makes i t harder for the user to find the information they need. The mobile version existed however the app felt more like an mobile app that was not part of the company .": "Door de jaren heen had ik gemerkt dat de website die medewerkers tijdens hun werk gebruiken niet makkelijk te navigeren was.\nBijvoorbeeld doordat er veel informatie op één pagina staat, wat het voor de gebruiker moeilijker maakt de informatie te vinden die hij nodig heeft.\n\nDe mobiele versie bestond wel, maar de app voelde meer als een mobiele app die geen deel uitmaakte van het bedrijf.",
+    "Design challenges versions": "Versies van de designchallenge",
+    "1.How can we make a better redesign of the current mobile app of MOMUA company? 2.How can we help employers navigate the companies app faster for them to understand how to use it, in able to do their work?": "1.Hoe kunnen we een beter herontwerp maken van de huidige mobiele app van MOMUA company?\n\n2.Hoe kunnen we medewerkers helpen sneller door de app van het bedrijf te navigeren, zodat ze begrijpen hoe ze hem moeten gebruiken om hun werk te doen?",
+    "Design challenge explanation": "Uitleg van de designchallenge",
+    "The first design challenge was not very clear so not very specific. That’s the reason why I decided to change it because it had to be something that was measureable rather then something vague .": "De eerste designchallenge was niet erg duidelijk en dus niet erg specifiek. Daarom besloot ik hem te veranderen, want het moest iets meetbaars zijn in plaats van iets vaags.",
+    "Phrase 1 collecting information about the company": "Fase 1: informatie verzamelen over het bedrijf",
+    "Understanding the people of the company": "De mensen van het bedrijf begrijpen",
+    "Behind every company is a story. Some deep some simple but it matters. Getting to know the people in de company can help us to get a better understanding of what kind of people they are and understand what they actually care about.": "Achter elk bedrijf zit een verhaal. Soms diep, soms eenvoudig, maar het doet ertoe. Door de mensen in het bedrijf te leren kennen, krijgen we een beter begrip van wat voor mensen ze zijn en waar ze echt om geven.",
+    "Momua Company people ( mystery shop professionals part MSP association organisation)": "Momua Company mensen ( mystery shop-professionals, onderdeel van de MSP-vereniging)",
+    "Mom’s ( mom enterepeuners)": "Moeders ( mom-ondernemers)",
+    "love to travel": "reizen graag",
+    "work under pressure": "werken onder druk",
+    "Empathy": "Empathie",
+    "Pictures": "Foto’s",
+    "On the right side you see the members of the mom company. Real people that love to share what they are and are not afraid to post their owns lives .": "Aan de rechterkant zie je de leden van het mom-bedrijf. Echte mensen die graag delen wie ze zijn en niet bang zijn hun eigen leven te posten.",
+    "Momua Company Values": "Waarden van Momua Company",
+    "Unity": "Eenheid",
+    "Realible & global": "Betrouwbaar & wereldwijd",
+    "Trying new things": "Nieuwe dingen proberen",
+    "Meaningful work ( working with their hearts)": "Zinvol werk ( werken met hun hart)",
+    "Focusing on the good (positive)": "Focussen op het goede (positief)",
+    "Down below": "Hieronder",
+    "Down below you get to view the companies opinions, story and who they actually are.": "Hieronder zie je de meningen van het bedrijf, hun verhaal en wie ze echt zijn.",
+    "Meaningful work & Unity Trying new things Risktakers Realible & global": "Zinvol werk & eenheid\nNieuwe dingen proberen\nRisico’s durven nemen\nBetrouwbaar & wereldwijd",
+    "What does the company do?": "Wat doet het bedrijf?",
+    "Around the whole world Momua company helps companies to improve their customer service by sending mystery shoppers into their companies to evalute them.": "Over de hele wereld helpt Momua company bedrijven hun klantenservice te verbeteren door mystery shoppers naar hun bedrijven te sturen om ze te beoordelen.",
+    "“World of Mompreneurs: Where Business Meets Maternal Magic!”": "“Wereld van Mompreneurs: waar zaken en moederlijke magie samenkomen!”",
+    "Momua Company services ( data collection & validation)": "Momua Company diensten ( gegevensverzameling & validatie)",
+    "High-quality data collection and verification services on a global scale that will make your business thrive": "Hoogwaardige gegevensverzameling en verificatiediensten op wereldwijde schaal waar uw bedrijf van gaat bloeien",
+    "Operate on different continents": "Actief op verschillende continenten",
+    "Momua Company Aim when working with other Companies": "Doel van Momua Company bij het werken met andere bedrijven",
+    "To improve the customer experience of companies": "De klantervaring van bedrijven verbeteren",
+    "Deliver fast and great work": "Snel en goed werk leveren",
+    "Understanding the company ( while keeeping redesign in mind)": "Het bedrijf begrijpen ( met het herontwerp in gedachten)",
+    "In order to make a redesign it is always good to take a look at the companies brand. I looked at their Instagram, Linkedin and their own website to get a feel for the atmosphere of their company.": "Om een herontwerp te maken is het altijd goed om naar het merk van het bedrijf te kijken. Ik keek naar hun Instagram, LinkedIn en hun eigen website om een gevoel te krijgen voor de sfeer van het bedrijf.",
+    "Socials of the company": "Socials van het bedrijf",
+    "On the right side you can view their socials.": "Aan de rechterkant kun je hun socials bekijken.",
+    "Momua Company Social media": "Momua Company social media",
+    "Instagram of Momua Company fonts": "Lettertypen van Momua Company op Instagram",
+    "What I have noticed": "Wat mij opviel",
+    "The company feels very alive on instagram . The blue colour is very dominant. They use patterns, such as flowers, wavey icons and emphasize what they stand for.": "Het bedrijf voelt heel levendig op Instagram. De blauwe kleur is erg dominant. Ze gebruiken patronen, zoals bloemen en golvende iconen, en benadrukken waar ze voor staan.",
+    "Inspiration for the mobile design & showcase instagram page, linkedln": "Inspiratie voor het mobiele ontwerp\n& showcase van de Instagram-pagina, LinkedIn",
+    "The company feels uses more colour such, as pink, green and purple that matches the brand of the company.": "Het bedrijf gebruikt meer kleur, zoals roze, groen en paars, die passen bij het merk van het bedrijf.",
+    "Conclusion after research": "Conclusie na onderzoek",
+    "The company needs more of their own brand in the mobile app the create that atmosphere MOM ( loving ) energy in combination with staying professional using the blue dominant colour. Important key words that that said throughout the Instagram posts are: realiable, global,meaningful, purpose, driven by data, and meaningful.": "Het bedrijf heeft meer van zijn eigen merk nodig in de mobiele app om die sfeer te creëren.\nMOM ( liefdevolle ) energie in combinatie met professioneel blijven, met de dominante blauwe kleur.\n\nBelangrijke sleutelwoorden die in de Instagram-posts steeds terugkomen zijn:\nbetrouwbaar, wereldwijd, zinvol, doelgericht, datagedreven en zinvol.",
+    "Old Goal:": "Oud doel:",
+    "New Goal:": "Nieuw doel:",
+    "To create a mobile redesign of the website and using their current app as a foundation combining their companies brand in the mobile design": "Een mobiel herontwerp van de website maken, met hun huidige app als basis en met het merk van het bedrijf verwerkt in het mobiele ontwerp",
+    "Preview into their own current website": "Voorbeeld van hun huidige website",
+    "Mobile design": "Mobiel ontwerp",
+    "Mobile app:": "Mobiele app:",
+    "This mobile app is an app that can be used by any mystershopper company. Personalization is missing here.": "Deze mobiele app is een app die door elk mystery shopper-bedrijf gebruikt kan worden. Personalisatie ontbreekt hier.",
+    "Site map of the website": "Sitemap van de website",
+    "Login Shoplog My apps My profile Job board Help": "Inloggen\nShoplog\nMijn apps\nMijn profiel\nJobboard\nHulp",
+    "User account": "Gebruikersaccount",
+    "Login My apps": "Inloggen\nMijn apps",
+    "User account & site of the website": "Gebruikersaccount & site van de website",
+    "The site of the user accounts looks professional, however colour is missing. Because fo the placement of information and colour it does not help the user to get excited or make the navigating easier ( scannable).": "De site van de gebruikersaccounts ziet er professioneel uit, maar er ontbreekt kleur. Door de plaatsing van informatie en de kleur helpt het de gebruiker niet enthousiast te worden of makkelijker te navigeren ( scanbaar).",
+    "Shop log Job board": "Shoplog\nJobboard",
+    "Changes placement of information": "Wijzigingen in de plaatsing van informatie",
+    "Not every word or page is pretty logical when mentioned. I want to take a look at it and and change some pages preferable the name.": "Niet elk woord of elke pagina is vrij logisch als je het noemt. Ik wil ernaar kijken en een paar pagina’s aanpassen, bij voorkeur de naam.",
+    "My profile Help": "Mijn profiel\nHulp",
+    "Ideas/ inspiration that can make the app better": "Ideeën / inspiratie die de app beter kunnen maken",
+    "Feedback": "Feedback",
+    "The app was confusing": "De app was verwarrend",
+    "The user found it hard to understand why the app was made and with which goal. Without reading the process of the app it became hard to navigate the app.": "De gebruiker vond het moeilijk te begrijpen waarom de app was gemaakt en met welk doel. Zonder het proces van de app te lezen werd het moeilijk om door de app te navigeren.",
+    "The app should be easy and simple to understand even if the user has not seen or read the process behind it.": "De app moet makkelijk en eenvoudig te begrijpen zijn, ook als de gebruiker het proces erachter niet heeft gezien of gelezen.",
+    "Ideas of functions - giving more information such as introduction": "Ideeën voor functies - meer informatie geven, zoals een introductie",
+    "The app did not trigger or motivate or trigger the user as much as hoped.": "De app triggerde of motiveerde de gebruiker niet zo veel als gehoopt.",
+    "The user just clicked on anything they thought was right or clickable. But without real aim. it was more guess work.": "De gebruiker klikte op alles wat hij dacht dat goed of klikbaar was. Maar zonder echt doel. Het was meer gokken.",
+    "The ap should have functions that encourage the user to do something without the user having to do much.": "De app moet functies hebben die de gebruiker aanmoedigen iets te doen zonder dat de gebruiker daar veel voor hoeft te doen.",
+    "Screen global on the app seemed confusing": "Het scherm “global” in de app leek verwarrend",
+    "which made the user use words as: What do I need to do here?": "waardoor de gebruiker woorden gebruikte als: Wat moet ik hier doen?",
+    "Direction rather then choosing interfaces that are challenging to make.": "Richting in plaats van interfaces kiezen die lastig te maken zijn.",
+    "Feedback breakdown and other things that where said": "Uitsplitsing van de feedback en andere dingen die werden gezegd",
+    "Focus on: -Companies values and how that can be brought back in the app of the design. -Guide the user through the app -Choose simplicity over complexitiy especially when it takes over the priority of the users needs. In this case it’s guidance and simplicity. -Go deeper into the app so expand on certain features making most clickable": "Focus op:\n\n-De waarden van het bedrijf en hoe die terug kunnen komen in de app en het ontwerp.\n-De gebruiker door de app leiden\n-Kies eenvoud boven complexiteit, vooral wanneer complexiteit de prioriteit van de behoeften van de gebruiker overneemt. In dit geval zijn dat begeleiding en eenvoud.\n-Dieper de app in gaan, zodat bepaalde functies worden uitgebreid en het meeste klikbaar wordt",
+    "Rebranding research": "Onderzoek naar rebranding",
+    "Currently the Momua company does not use an app, but only a survey website what the mystery shoppers can use to submit all their , work and submit everything.": "Momua company gebruikt op dit moment geen app, maar alleen een enquêtewebsite waar de mystery shoppers al hun werk kunnen indienen en alles kunnen insturen.",
+    "The current problems with the website is that:": "De huidige problemen met de website zijn:",
+    "-Color: They only used the color grey, white and black. -Identity: It does not much reflect the companies identity -Users: The website does not motivate users to do something. -Users: Confusing to use The website does not help you to navigate where things are ot what certain features mean. -Emotion: Feels boring": "-Kleur: Ze gebruikten alleen grijs, wit en zwart.\n\n-Identiteit: Het weerspiegelt de identiteit van het bedrijf niet erg.\n\n-Gebruikers: De website motiveert gebruikers niet om iets te doen.\n\n-Gebruikers: Verwarrend in gebruik\nDe website helpt je niet te navigeren waar dingen staan of wat bepaalde functies betekenen.\n\n-Emotie: Voelt saai",
+    "Rebranding the app of the Momua Company.": "De app van Momua Company rebranden.",
+    "I realized I did not know what rebranding quite meant according to the given feedback. i thought rebranding only meant changing the colour. But it is far more then that.": "Ik realiseerde me dat ik niet goed wist wat rebranding precies betekende, gezien de gekregen feedback. Ik dacht dat rebranding alleen het veranderen van de kleur was.\nMaar het is veel meer dan dat.",
+    "Google’s definination of rebranding:": "Google’s definitie van rebranding:",
+    "In its simplest terms, rebranding is the process of changing the corporate image or \"personality\" of an established brand to influence how it is perceived by the public.": "In de eenvoudigste bewoordingen is rebranding het proces van het veranderen van het bedrijfsimago of de “persoonlijkheid” van een gevestigd merk om te beïnvloeden hoe het door het publiek wordt gezien.",
+    "Examples how peeple rebranded a companies identity": "Voorbeelden van hoe mensen de identiteit van een bedrijf hebben gerebrand",
+    "The companies values has changed from: Retro camera, simple photo app 📸 To being focused on: colorful, modern, video-focused 🎥": "De waarden van het bedrijf zijn veranderd van: Retrocamera, eenvoudige foto-app 📸\n\nNaar gericht op:\nkleurrijk, modern, videogericht 🎥",
+    "Same company though DIFFERENT feeling": "Hetzelfde bedrijf, maar een ANDER gevoel",
+    "Unity Inviting them in a group": "Eenheid\nHen uitnodigen in een groep",
+    "Realible & global Showing with how many partners they worked and how many mystery shoppers they have over the world.": "Betrouwbaar & wereldwijd\nLaten zien met hoeveel partners ze hebben gewerkt en hoeveel mystery shoppers ze over de hele wereld hebben.",
+    "Trying new things Suggesting new places the mystery shoppers can do or suggest new missions": "Nieuwe dingen proberen\nNieuwe plekken voorstellen die de mystery shoppers kunnen doen, of nieuwe missies voorstellen",
+    "Meaningful work ( working with their hearts) Messages ( announcements/ feedback messages": "Zinvol werk ( werken met hun hart)\nBerichten ( aankondigingen / feedbackberichten",
+    "Focusing on the good (positive) Color": "Focussen op het goede (positief)\nKleur",
+    "Mystery shopper Values": "Waarden van de mystery shopper",
+    "Easy to navigate": "Makkelijk te navigeren",
+    "Fun and rewarding": "Leuk en belonend",
+    "Motivated": "Gemotiveerd",
+    "Simple": "Eenvoudig",
+    "Easy to navigate using icons": "Makkelijk te navigeren\nmet iconen",
+    "Fun and rewarding Colour, forms & Messages": "Leuk en belonend\nKleur, vormen & berichten",
+    "Motivated Messages": "Gemotiveerd\nBerichten",
+    "Simple Colour, forms": "Eenvoudig\nKleur, vormen",
+    "The core questions before starting the rebrand a companies designs:": "De kernvragen voordat je begint met het rebranden van het ontwerp van een bedrijf:",
+    "Who are they now? Who are they trying to reach? What feeling do they want?": "Wie zijn ze nu?\nWie proberen ze te bereiken?\nWelk gevoel willen ze?",
+    "What is really needed ( with the users values):": "Wat is echt nodig ( met de waarden van de gebruikers):",
+    "-Guidance & direction ( easy to navigate) -Triggering the user -Simplicity and professionalism -Fun and rewarding": "-Begeleiding & richting ( makkelijk te navigeren)\n-De gebruiker triggeren\n-Eenvoud en professionaliteit\n-Leuk en belonend",
+    "Core of the new idenitity of Momua is professionalism and motivation": "De kern van de nieuwe identiteit van Momua is professionaliteit en motivatie",
+    "Structure in the current": "Structuur in het huidige",
+    "The companies perspective:": "Het perspectief van het bedrijf:",
+    "Empathy, work under pressure, can balance work and personal things, positive, travel together and value spending time with other people especially their own family.": "Empathie, werken onder druk, werk en privé in balans kunnen houden, positief, samen reizen en het waarderen van tijd doorbrengen met andere mensen, vooral hun eigen gezin.",
+    "Employers: Want to have work but not having a feeling that they are working well having.": "Werknemers: Willen werk hebben, maar hebben niet het gevoel dat ze goed werk leveren.",
+    "The companies perspective: They are trying to reach companies that who want to improve their customer service": "Het perspectief van het bedrijf: Ze proberen bedrijven te bereiken die hun klantenservice willen verbeteren",
+    "Employers: They are trying to work with employers who are dedicated, punctional, realiable": "Werknemers: Ze proberen te werken met werknemers die toegewijd, punctueel en betrouwbaar zijn",
+    "professional, fun and purposeful": "professioneel, leuk en doelgericht",
+    "Employers: Fun, easy to navigate, rewarding": "Werknemers: Leuk, makkelijk te navigeren, belonend",
+    "1. Fix the structure FIRST": "1. Repareer EERST de structuur",
+    "Ask:": "Vraag:",
+    "Is the home screen clear? Can I find a mission in 2 seconds? Is earning money obvious?": "Is het startscherm duidelijk?\nKan ik in 2 seconden een missie vinden?\nIs het duidelijk dat je geld verdient?",
+    "For who is this app": "Voor wie is deze app",
+    "Current page names": "Huidige paginanamen",
+    "1.Local jobs 2.Global jobs 3.My jobs 4.My profile": "1.Lokale jobs\n2.Wereldwijde jobs\n3.Mijn jobs\n4.Mijn profiel",
+    "Changed page names": "Gewijzigde paginanamen",
+    "1.Adding a home screen 2.Home missions 3.Global missions 4.My Assignments 5.My profile": "1.Een startscherm toevoegen\n2.Thuismissies\n3.Wereldwijde missies\n4.Mijn opdrachten\n5.Mijn profiel",
+    "Why changing the names of the pages?": "Waarom de namen van de pagina’s veranderen?",
+    "By changing the names we make it for the user more clear what each page means and make it fun and rewarding which are the values of the mystery shopper.": "Door de namen te veranderen maken we voor de gebruiker duidelijker wat elke pagina betekent en maken we het leuk en belonend, wat de waarden zijn van\nde mystery shopper.",
+    "The redesign for the Momua company app is souly focused on for the people who work at the Momua company, the workers.": "Het herontwerp van de app van Momua company\nis uitsluitend gericht op de mensen die\nbij Momua company werken, de werknemers.",
+    "These workers ( mystery shoppers) are they ones who get hired by the Momua company to evaluate ( by doing tasks, report and uploading proof) the customer service of other companies such as hotels and spa in different countries of the world.": "Deze werknemers ( mystery shoppers) zijn degenen die door Momua company worden ingehuurd om de klantenservice van andere bedrijven, zoals hotels en spa’s, in verschillende landen van de wereld te beoordelen ( door taken uit te voeren, verslag te doen en bewijs te uploaden).",
+    "Inspiration on other game apps based on keeping the ore values in mind.": "Inspiratie van andere game-apps, gebaseerd op het in gedachten houden van de kernwaarden.",
+    "Clickable prototype of the Mystery shopper app": "Klikbaar prototype van de Mystery shopper-app",
+    "A page of the document about redesigning the Momua company app": "Een pagina van het document over het herontwerpen van de Momua-bedrijfsapp",
+    "A short description of what this case is about and what you are working on right now.": "Een korte beschrijving van waar deze case over gaat en waar je nu aan werkt.",
+    "Skills so far": "Vaardigheden tot nu toe",
+    "Sketching": "Schetsen",
+    "Timeline": "Tijdlijn",
+    "Newest first": "Nieuwste eerst",
+    "Oldest first": "Oudste eerst",
+    "What changed this time, and why.": "Wat er deze keer veranderde, en waarom.",
+    "How it’s going": "Hoe het gaat",
+    "What goes well and what is still difficult.": "Wat goed gaat en wat nog moeilijk is.",
+    "What I learned from this round.": "Wat ik van deze ronde heb geleerd.",
+    "Where this started.": "Waar het begon.",
+    "Case study": "Casestudy",
+    "In progress": "In uitvoering",
+    "Intermediate": "Gemiddeld",
+    "Expert": "Expert",
+    "see what I can do": "bekijk wat ik kan",
+    "started": "gestart op",
+    "since": "sinds",
+    "latest": "laatste",
+    "update": "update",
+    "updates": "updates",
+    "item": "item",
+    "items": "items",
+    "scene": "scène",
+    "scenes": "scènes",
+    "avatar": "avatar",
+    "avatars": "avatars",
+    "collection": "collectie",
+    "Woman drinking": "Vrouw die drinkt",
+    "Portfolio video": "Portfoliovideo",
+    "Portfolio video 2": "Portfoliovideo 2",
+    "AI video": "AI-video",
+    "Language": "Taal"
+  };
+}
 </script>
 <div class="tool-tip" id="toolTip" role="tooltip" aria-hidden="true">
   <strong class="tool-tip-name" id="toolTipName"></strong>
