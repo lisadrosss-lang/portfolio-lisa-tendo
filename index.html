@@ -1917,7 +1917,7 @@ const worksPhotos = [
   // and the extra pictures (the look-alikes) are the views you see when you open it.
   // CHANGE the file names to your real ones (the ending .jpg / .png can be left out).
   { src: 'img/woman-drinking',
-    video: 'video/woman-drinking.mp4',
+    video: 'video/Woman-drinking',   // capital W, like the file in your video folder
     views: ['img/woman-drinking.2', 'img/woman-drinking.3', 'img/woman-drinking.4'],
     title: 'Woman drinking',
     category: 'Storytelling / Movies' },
@@ -1947,6 +1947,10 @@ const worksPhotos = [
 
   { src: 'img/works-8.jpeg',   category: 'UX/UI' },
   { src: 'img/works-9.png',    category: 'UX/UI' },
+    { src: 'img/makeup.jpeg',    category: 'Real-characters' },
+        { src: 'img/makeup2.jpeg',    category: 'Real-characters' },
+
+
 
   // Two videos on their own. The file ending (.mp4, .webm, .mov) can be left out.
   { type: 'video', src: 'video/portfolio-video',
@@ -1955,12 +1959,47 @@ const worksPhotos = [
   { type: 'video', src: 'video/portfolio-video-2',
     title: 'Portfolio video 2',
     category: 'Storytelling / Movies' },
-  { type: 'video', src: 'video/ai-video.mp4',
-    title: 'AI video',
-    category: 'Storytelling / Movies' },
+  // There is no ai-video file in your video folder yet. Remove the // when you add it.
+  // { type: 'video', src: 'video/ai-video.mp4',
+  //   title: 'AI video',
+  //   category: 'Storytelling / Movies' },
   { type: 'video', src: 'video/model.mp4',
     title: 'Model',
     category: 'Storytelling / Movies' },
+  { type: 'video', src: 'video/beauty.mp4',
+    title: 'Beauty',
+    category: 'Storytelling / Movies' },
+
+  // The two voice-over videos. VS Code cut their names off, so type the full file names here
+  // (look in your video folder), then remove the // in front of the lines.
+  // { type: 'video', src: 'video/VOICE-OVER-FILE-NAME',
+  //   title: 'Voice over',
+  //   category: 'Storytelling / Movies' },
+  // { type: 'video', src: 'video/VOICEOVER-ANIMATION-FILE-NAME',
+  //   title: 'Voice over animation',
+  //   category: 'Storytelling / Movies' },
+
+  // ---- NEW PICTURES ----
+  // The model shoot: one tile with the other two shots as views.
+  { src: 'img/model .jpeg', category: 'Real-characters', solo: true,
+    title: 'Model',
+    views: [
+      'img/model2.jpeg',
+      'img/model6.jpeg'
+    ] },
+
+  // The dresses, each its own tile.
+  { src: 'img/blue-dreeee.jpeg',  category: 'Real-characters', solo: true, title: 'Blue dress' },
+  { src: 'img/green-dress.jpeg',  category: 'Real-characters', solo: true, title: 'Green dress' },
+  { src: 'img/whit-.jpeg',        category: 'Real-characters', solo: true, title: 'White dress' },
+
+  // The broccoli dresses: the finished design is the cover, the process shots are the views.
+  { src: 'img/brocolidresses.png', category: 'Real-characters', solo: true,
+    title: 'Broccoli dresses',
+    views: [
+      { src: 'img/brocolli-proces1.png', label: 'Process' },
+      { src: 'img/procesbrocolli.png',   label: 'Process' }
+    ] },
 
   // A YouTube video: shown as a tile with its thumbnail; clicking it opens YouTube in a new tab.
   { src: 'https://img.youtube.com/vi/D2MOR07Brcw/hqdefault.jpg', category: 'Storytelling / Movies', solo: true,
